@@ -1,0 +1,2821 @@
+{
+ "source": "Paper Copilot lists (github.com/papercopilot/paperlists), downloaded 2026-10-30",
+ "validation": {
+  "move_labels_vs_hand": {
+   "sentences": 485,
+   "heldout_accuracy": 0.855,
+   "heldout_kappa": 0.798,
+   "all_accuracy": 0.874,
+   "all_kappa": 0.824
+  }
+ },
+ "abstracts": {
+  "core_types": {
+   "method": 930,
+   "dataset_benchmark": 56,
+   "analysis": 1
+  },
+  "core_method_overall": {
+   "label": "core method papers",
+   "n": 930,
+   "has_G": 70.2,
+   "gap_before_method": 69.1,
+   "gap_cause": 23.5,
+   "insight": 21.2,
+   "quant_result": 27.2,
+   "sota_claim": 55.2,
+   "general_claim": 29.7,
+   "effic_claim": 39.2,
+   "code_release": 35.7,
+   "extensive_phrase": 24.4,
+   "first_claim": 10.2,
+   "realworld": 26.3,
+   "named_in_abstract": 61.3,
+   "bench_named": 25.1,
+   "title_colon_name": 58.4,
+   "method_first_sentence": 18.0,
+   "has_R": 93.1,
+   "has_C": 36.3,
+   "has_B": 66.6,
+   "any_question": 1.9,
+   "any_hedge": 11.8,
+   "any_weak": 8.5,
+   "words": {
+    "median": 178.0,
+    "q1": 156.0,
+    "q3": 201.25,
+    "mean": 180.04
+   },
+   "n_sent": {
+    "median": 8.0,
+    "q1": 7.0,
+    "q3": 9.0,
+    "mean": 8.0
+   },
+   "words_per_sent": {
+    "median": 22.67,
+    "q1": 20.38,
+    "q3": 25.26,
+    "mean": 23.0
+   },
+   "n_numbers": {
+    "median": 0.0,
+    "q1": 0.0,
+    "q3": 0.0,
+    "mean": 0.41
+   },
+   "hedge_n": {
+    "median": 0.0,
+    "q1": 0.0,
+    "q3": 0.0,
+    "mean": 0.13
+   },
+   "weak_n": {
+    "median": 0.0,
+    "q1": 0.0,
+    "q3": 0.0,
+    "mean": 0.09
+   },
+   "title_words": {
+    "median": 9.0,
+    "q1": 8.0,
+    "q3": 11.0,
+    "mean": 9.26
+   },
+   "first_M_pos": {
+    "median": 0.33,
+    "q1": 0.17,
+    "q3": 0.43,
+    "mean": 0.3
+   },
+   "n_M": {
+    "median": 4.0,
+    "q1": 3.0,
+    "q3": 5.0,
+    "mean": 4.04
+   },
+   "n_G": {
+    "median": 1.0,
+    "q1": 0.0,
+    "q3": 2.0,
+    "mean": 1.09
+   },
+   "n_B": {
+    "median": 1.0,
+    "q1": 0.0,
+    "q3": 2.0,
+    "mean": 1.07
+   },
+   "n_R": {
+    "median": 1.0,
+    "q1": 1.0,
+    "q3": 2.0,
+    "mean": 1.41
+   },
+   "we_n": {
+    "median": 3.0,
+    "q1": 2.0,
+    "q3": 4.0,
+    "mean": 2.83
+   },
+   "moves_top": [
+    [
+     "BGMR",
+     147
+    ],
+    [
+     "BGMRC",
+     71
+    ],
+    [
+     "MR",
+     62
+    ],
+    [
+     "GMR",
+     60
+    ],
+    [
+     "MRC",
+     44
+    ],
+    [
+     "BMR",
+     43
+    ],
+    [
+     "BGMRM",
+     28
+    ],
+    [
+     "GMRC",
+     27
+    ],
+    [
+     "BGBMR",
+     22
+    ],
+    [
+     "GBGMR",
+     21
+    ]
+   ],
+   "first_move": {
+    "G": 23.1,
+    "M": 18.0,
+    "B": 58.1,
+    "R": 0.6,
+    "C": 0.2
+   },
+   "title_lead": [
+    [
+     "learning",
+     21
+    ],
+    [
+     "towards",
+     7
+    ],
+    [
+     "beyond",
+     3
+    ],
+    [
+     "rethinking",
+     3
+    ],
+    [
+     "what",
+     3
+    ],
+    [
+     "real-time",
+     2
+    ],
+    [
+     "improving",
+     2
+    ],
+    [
+     "exploring",
+     2
+    ]
+   ]
+  },
+  "core_method_by_field": {
+   "pano": {
+    "label": "pano",
+    "n": 214,
+    "has_G": 66.8,
+    "gap_before_method": 66.4,
+    "gap_cause": 28.0,
+    "insight": 13.6,
+    "quant_result": 24.3,
+    "sota_claim": 58.9,
+    "general_claim": 24.8,
+    "effic_claim": 31.3,
+    "code_release": 32.2,
+    "extensive_phrase": 29.9,
+    "first_claim": 12.6,
+    "realworld": 19.6,
+    "named_in_abstract": 55.1,
+    "bench_named": 13.6,
+    "title_colon_name": 62.1,
+    "method_first_sentence": 19.6,
+    "has_R": 92.5,
+    "has_C": 32.2,
+    "has_B": 66.4,
+    "any_question": 0.0,
+    "any_hedge": 7.5,
+    "any_weak": 5.1,
+    "words": {
+     "median": 174.0,
+     "q1": 150.75,
+     "q3": 202.25,
+     "mean": 176.9
+    },
+    "n_sent": {
+     "median": 8.0,
+     "q1": 7.0,
+     "q3": 9.0,
+     "mean": 8.06
+    },
+    "words_per_sent": {
+     "median": 22.13,
+     "q1": 19.97,
+     "q3": 24.43,
+     "mean": 22.35
+    },
+    "n_numbers": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.34
+    },
+    "hedge_n": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.08
+    },
+    "weak_n": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.05
+    },
+    "title_words": {
+     "median": 9.0,
+     "q1": 8.0,
+     "q3": 11.0,
+     "mean": 9.48
+    },
+    "first_M_pos": {
+     "median": 0.29,
+     "q1": 0.14,
+     "q3": 0.4,
+     "mean": 0.28
+    },
+    "n_M": {
+     "median": 4.0,
+     "q1": 3.0,
+     "q3": 5.0,
+     "mean": 4.43
+    },
+    "n_G": {
+     "median": 1.0,
+     "q1": 0.0,
+     "q3": 1.0,
+     "mean": 0.98
+    },
+    "n_B": {
+     "median": 1.0,
+     "q1": 0.0,
+     "q3": 1.25,
+     "mean": 1.0
+    },
+    "n_R": {
+     "median": 1.0,
+     "q1": 1.0,
+     "q3": 2.0,
+     "mean": 1.31
+    },
+    "we_n": {
+     "median": 3.0,
+     "q1": 2.0,
+     "q3": 4.0,
+     "mean": 2.86
+    },
+    "moves_top": [
+     [
+      "BGMR",
+      35
+     ],
+     [
+      "BGMRC",
+      18
+     ],
+     [
+      "MR",
+      15
+     ],
+     [
+      "GMR",
+      14
+     ],
+     [
+      "BMR",
+      12
+     ],
+     [
+      "MRC",
+      9
+     ],
+     [
+      "BGMRMR",
+      7
+     ],
+     [
+      "BGMRM",
+      7
+     ],
+     [
+      "MRM",
+      7
+     ],
+     [
+      "BMRC",
+      6
+     ]
+    ],
+    "first_move": {
+     "G": 18.2,
+     "M": 19.6,
+     "B": 61.2,
+     "R": 0.9
+    },
+    "title_lead": [
+     [
+      "beyond",
+      2
+     ],
+     [
+      "rethinking",
+      2
+     ],
+     [
+      "real-time",
+      1
+     ],
+     [
+      "what",
+      1
+     ],
+     [
+      "learning",
+      1
+     ]
+    ]
+   },
+   "render": {
+    "label": "render",
+    "n": 246,
+    "has_G": 63.0,
+    "gap_before_method": 62.2,
+    "gap_cause": 19.5,
+    "insight": 20.7,
+    "quant_result": 25.2,
+    "sota_claim": 50.0,
+    "general_claim": 26.4,
+    "effic_claim": 49.2,
+    "code_release": 32.1,
+    "extensive_phrase": 27.2,
+    "first_claim": 6.1,
+    "realworld": 23.6,
+    "named_in_abstract": 68.3,
+    "bench_named": 11.8,
+    "title_colon_name": 64.6,
+    "method_first_sentence": 26.4,
+    "has_R": 93.1,
+    "has_C": 33.3,
+    "has_B": 59.3,
+    "any_question": 0.8,
+    "any_hedge": 10.2,
+    "any_weak": 8.5,
+    "words": {
+     "median": 178.5,
+     "q1": 157.0,
+     "q3": 198.75,
+     "mean": 179.41
+    },
+    "n_sent": {
+     "median": 8.0,
+     "q1": 7.0,
+     "q3": 9.0,
+     "mean": 7.77
+    },
+    "words_per_sent": {
+     "median": 23.19,
+     "q1": 21.0,
+     "q3": 26.11,
+     "mean": 23.56
+    },
+    "n_numbers": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.33
+    },
+    "hedge_n": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.11
+    },
+    "weak_n": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.09
+    },
+    "title_words": {
+     "median": 9.0,
+     "q1": 7.0,
+     "q3": 11.0,
+     "mean": 9.09
+    },
+    "first_M_pos": {
+     "median": 0.3,
+     "q1": 0.0,
+     "q3": 0.43,
+     "mean": 0.28
+    },
+    "n_M": {
+     "median": 4.0,
+     "q1": 3.0,
+     "q3": 5.0,
+     "mean": 4.07
+    },
+    "n_G": {
+     "median": 1.0,
+     "q1": 0.0,
+     "q3": 2.0,
+     "mean": 0.97
+    },
+    "n_B": {
+     "median": 1.0,
+     "q1": 0.0,
+     "q3": 2.0,
+     "mean": 1.0
+    },
+    "n_R": {
+     "median": 1.0,
+     "q1": 1.0,
+     "q3": 2.0,
+     "mean": 1.38
+    },
+    "we_n": {
+     "median": 3.0,
+     "q1": 2.0,
+     "q3": 4.0,
+     "mean": 2.88
+    },
+    "moves_top": [
+     [
+      "BGMR",
+      35
+     ],
+     [
+      "MR",
+      28
+     ],
+     [
+      "GMR",
+      18
+     ],
+     [
+      "MRC",
+      16
+     ],
+     [
+      "BGMRC",
+      13
+     ],
+     [
+      "BMR",
+      12
+     ],
+     [
+      "GBGMR",
+      9
+     ],
+     [
+      "GMRMR",
+      7
+     ],
+     [
+      "BGMRMRC",
+      6
+     ],
+     [
+      "BGBMR",
+      6
+     ]
+    ],
+    "first_move": {
+     "M": 26.4,
+     "B": 49.6,
+     "G": 22.8,
+     "R": 1.2
+    },
+    "title_lead": [
+     [
+      "learning",
+      3
+     ],
+     [
+      "improving",
+      2
+     ],
+     [
+      "real-time",
+      1
+     ]
+    ]
+   },
+   "lidar": {
+    "label": "lidar",
+    "n": 238,
+    "has_G": 76.5,
+    "gap_before_method": 74.8,
+    "gap_cause": 28.6,
+    "insight": 15.1,
+    "quant_result": 35.3,
+    "sota_claim": 70.2,
+    "general_claim": 27.3,
+    "effic_claim": 36.1,
+    "code_release": 40.8,
+    "extensive_phrase": 31.5,
+    "first_claim": 16.0,
+    "realworld": 18.1,
+    "named_in_abstract": 60.5,
+    "bench_named": 54.6,
+    "title_colon_name": 61.8,
+    "method_first_sentence": 13.9,
+    "has_R": 97.1,
+    "has_C": 41.2,
+    "has_B": 73.1,
+    "any_question": 2.5,
+    "any_hedge": 10.9,
+    "any_weak": 14.3,
+    "words": {
+     "median": 179.0,
+     "q1": 158.75,
+     "q3": 200.25,
+     "mean": 181.47
+    },
+    "n_sent": {
+     "median": 8.0,
+     "q1": 7.0,
+     "q3": 10.0,
+     "mean": 8.37
+    },
+    "words_per_sent": {
+     "median": 21.8,
+     "q1": 19.38,
+     "q3": 24.43,
+     "mean": 22.18
+    },
+    "n_numbers": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 1.0,
+     "mean": 0.58
+    },
+    "hedge_n": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.12
+    },
+    "weak_n": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.15
+    },
+    "title_words": {
+     "median": 9.0,
+     "q1": 8.0,
+     "q3": 11.0,
+     "mean": 9.58
+    },
+    "first_M_pos": {
+     "median": 0.33,
+     "q1": 0.22,
+     "q3": 0.43,
+     "mean": 0.31
+    },
+    "n_M": {
+     "median": 4.0,
+     "q1": 3.0,
+     "q3": 5.0,
+     "mean": 4.09
+    },
+    "n_G": {
+     "median": 1.0,
+     "q1": 1.0,
+     "q3": 2.0,
+     "mean": 1.19
+    },
+    "n_B": {
+     "median": 1.0,
+     "q1": 0.0,
+     "q3": 2.0,
+     "mean": 1.19
+    },
+    "n_R": {
+     "median": 1.0,
+     "q1": 1.0,
+     "q3": 2.0,
+     "mean": 1.46
+    },
+    "we_n": {
+     "median": 3.0,
+     "q1": 2.0,
+     "q3": 4.0,
+     "mean": 2.76
+    },
+    "moves_top": [
+     [
+      "BGMR",
+      45
+     ],
+     [
+      "BGMRC",
+      24
+     ],
+     [
+      "MRC",
+      15
+     ],
+     [
+      "GMR",
+      11
+     ],
+     [
+      "GMRC",
+      11
+     ],
+     [
+      "BGMRM",
+      11
+     ],
+     [
+      "BMR",
+      10
+     ],
+     [
+      "MR",
+      8
+     ],
+     [
+      "BGBMR",
+      8
+     ],
+     [
+      "BGMRMR",
+      7
+     ]
+    ],
+    "first_move": {
+     "B": 63.0,
+     "G": 22.7,
+     "M": 13.9,
+     "R": 0.4
+    },
+    "title_lead": [
+     [
+      "learning",
+      5
+     ],
+     [
+      "towards",
+      4
+     ],
+     [
+      "exploring",
+      2
+     ],
+     [
+      "is",
+      2
+     ],
+     [
+      "boosting",
+      2
+     ],
+     [
+      "revisiting",
+      2
+     ],
+     [
+      "beyond",
+      1
+     ],
+     [
+      "rethinking",
+      1
+     ]
+    ]
+   },
+   "robot": {
+    "label": "robot",
+    "n": 232,
+    "has_G": 74.6,
+    "gap_before_method": 73.3,
+    "gap_cause": 18.5,
+    "insight": 34.9,
+    "quant_result": 23.7,
+    "sota_claim": 41.8,
+    "general_claim": 40.1,
+    "effic_claim": 39.2,
+    "code_release": 37.5,
+    "extensive_phrase": 9.1,
+    "first_claim": 6.5,
+    "realworld": 44.0,
+    "named_in_abstract": 60.3,
+    "bench_named": 19.4,
+    "title_colon_name": 44.8,
+    "method_first_sentence": 11.6,
+    "has_R": 89.7,
+    "has_C": 38.4,
+    "has_B": 67.7,
+    "any_question": 4.3,
+    "any_hedge": 18.5,
+    "any_weak": 5.6,
+    "words": {
+     "median": 179.0,
+     "q1": 156.0,
+     "q3": 206.75,
+     "mean": 182.12
+    },
+    "n_sent": {
+     "median": 8.0,
+     "q1": 7.0,
+     "q3": 9.0,
+     "mean": 7.82
+    },
+    "words_per_sent": {
+     "median": 23.25,
+     "q1": 20.88,
+     "q3": 26.0,
+     "mean": 23.84
+    },
+    "n_numbers": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.39
+    },
+    "hedge_n": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.21
+    },
+    "weak_n": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.06
+    },
+    "title_words": {
+     "median": 9.0,
+     "q1": 7.0,
+     "q3": 11.0,
+     "mean": 8.91
+    },
+    "first_M_pos": {
+     "median": 0.33,
+     "q1": 0.2,
+     "q3": 0.5,
+     "mean": 0.34
+    },
+    "n_M": {
+     "median": 3.0,
+     "q1": 2.0,
+     "q3": 5.0,
+     "mean": 3.62
+    },
+    "n_G": {
+     "median": 1.0,
+     "q1": 0.0,
+     "q3": 2.0,
+     "mean": 1.21
+    },
+    "n_B": {
+     "median": 1.0,
+     "q1": 0.0,
+     "q3": 2.0,
+     "mean": 1.1
+    },
+    "n_R": {
+     "median": 1.0,
+     "q1": 1.0,
+     "q3": 2.0,
+     "mean": 1.49
+    },
+    "we_n": {
+     "median": 3.0,
+     "q1": 2.0,
+     "q3": 4.0,
+     "mean": 2.81
+    },
+    "moves_top": [
+     [
+      "BGMR",
+      32
+     ],
+     [
+      "GMR",
+      17
+     ],
+     [
+      "BGMRC",
+      16
+     ],
+     [
+      "MR",
+      11
+     ],
+     [
+      "GMRM",
+      10
+     ],
+     [
+      "BMR",
+      9
+     ],
+     [
+      "GMRMC",
+      8
+     ],
+     [
+      "BGMRM",
+      7
+     ],
+     [
+      "BMRC",
+      6
+     ],
+     [
+      "BGMRMC",
+      6
+     ]
+    ],
+    "first_move": {
+     "B": 59.1,
+     "M": 11.6,
+     "G": 28.4,
+     "C": 0.9
+    },
+    "title_lead": [
+     [
+      "learning",
+      12
+     ],
+     [
+      "towards",
+      3
+     ],
+     [
+      "what",
+      2
+     ],
+     [
+      "on the",
+      1
+     ],
+     [
+      "toward",
+      1
+     ],
+     [
+      "when",
+      1
+     ]
+    ]
+   }
+  },
+  "core_method_by_group": {
+   "CV": {
+    "label": "CV",
+    "n": 450,
+    "has_G": 65.3,
+    "gap_before_method": 64.0,
+    "gap_cause": 21.3,
+    "insight": 17.3,
+    "quant_result": 28.2,
+    "sota_claim": 63.6,
+    "general_claim": 26.4,
+    "effic_claim": 33.8,
+    "code_release": 36.2,
+    "extensive_phrase": 26.4,
+    "first_claim": 11.6,
+    "realworld": 18.0,
+    "named_in_abstract": 60.2,
+    "bench_named": 27.1,
+    "title_colon_name": 65.6,
+    "method_first_sentence": 23.6,
+    "has_R": 93.1,
+    "has_C": 36.7,
+    "has_B": 62.2,
+    "any_question": 0.7,
+    "any_hedge": 9.3,
+    "any_weak": 6.7,
+    "words": {
+     "median": 173.0,
+     "q1": 153.0,
+     "q3": 198.25,
+     "mean": 176.72
+    },
+    "n_sent": {
+     "median": 8.0,
+     "q1": 7.0,
+     "q3": 9.0,
+     "mean": 7.98
+    },
+    "words_per_sent": {
+     "median": 22.27,
+     "q1": 20.08,
+     "q3": 24.72,
+     "mean": 22.7
+    },
+    "n_numbers": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.49
+    },
+    "hedge_n": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.11
+    },
+    "weak_n": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.07
+    },
+    "title_words": {
+     "median": 9.0,
+     "q1": 8.0,
+     "q3": 11.0,
+     "mean": 9.21
+    },
+    "first_M_pos": {
+     "median": 0.29,
+     "q1": 0.11,
+     "q3": 0.4,
+     "mean": 0.27
+    },
+    "n_M": {
+     "median": 4.0,
+     "q1": 3.0,
+     "q3": 5.0,
+     "mean": 4.28
+    },
+    "n_G": {
+     "median": 1.0,
+     "q1": 0.0,
+     "q3": 2.0,
+     "mean": 0.98
+    },
+    "n_B": {
+     "median": 1.0,
+     "q1": 0.0,
+     "q3": 1.0,
+     "mean": 0.98
+    },
+    "n_R": {
+     "median": 1.0,
+     "q1": 1.0,
+     "q3": 2.0,
+     "mean": 1.34
+    },
+    "we_n": {
+     "median": 3.0,
+     "q1": 2.0,
+     "q3": 4.0,
+     "mean": 2.87
+    },
+    "moves_top": [
+     [
+      "BGMR",
+      74
+     ],
+     [
+      "MR",
+      38
+     ],
+     [
+      "BGMRC",
+      36
+     ],
+     [
+      "GMR",
+      30
+     ],
+     [
+      "MRC",
+      27
+     ],
+     [
+      "BMR",
+      23
+     ],
+     [
+      "GMRC",
+      17
+     ],
+     [
+      "BMRC",
+      11
+     ],
+     [
+      "BGMRM",
+      11
+     ],
+     [
+      "MRM",
+      11
+     ]
+    ],
+    "first_move": {
+     "G": 20.9,
+     "B": 54.7,
+     "M": 23.6,
+     "R": 0.9
+    },
+    "title_lead": [
+     [
+      "learning",
+      7
+     ],
+     [
+      "beyond",
+      3
+     ],
+     [
+      "rethinking",
+      3
+     ],
+     [
+      "towards",
+      2
+     ],
+     [
+      "real-time",
+      1
+     ],
+     [
+      "what",
+      1
+     ],
+     [
+      "improving",
+      1
+     ],
+     [
+      "is",
+      1
+     ]
+    ]
+   },
+   "ML": {
+    "label": "ML",
+    "n": 290,
+    "has_G": 77.6,
+    "gap_before_method": 76.9,
+    "gap_cause": 28.6,
+    "insight": 22.8,
+    "quant_result": 24.1,
+    "sota_claim": 52.1,
+    "general_claim": 37.6,
+    "effic_claim": 45.5,
+    "code_release": 36.9,
+    "extensive_phrase": 29.7,
+    "first_claim": 10.0,
+    "realworld": 26.6,
+    "named_in_abstract": 69.7,
+    "bench_named": 23.4,
+    "title_colon_name": 56.6,
+    "method_first_sentence": 12.4,
+    "has_R": 95.5,
+    "has_C": 37.9,
+    "has_B": 71.7,
+    "any_question": 4.1,
+    "any_hedge": 12.8,
+    "any_weak": 10.7,
+    "words": {
+     "median": 188.0,
+     "q1": 163.0,
+     "q3": 214.25,
+     "mean": 189.82
+    },
+    "n_sent": {
+     "median": 8.0,
+     "q1": 7.0,
+     "q3": 9.0,
+     "mean": 8.27
+    },
+    "words_per_sent": {
+     "median": 23.0,
+     "q1": 20.71,
+     "q3": 25.57,
+     "mean": 23.47
+    },
+    "n_numbers": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.27
+    },
+    "hedge_n": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.14
+    },
+    "weak_n": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.11
+    },
+    "title_words": {
+     "median": 9.0,
+     "q1": 8.0,
+     "q3": 11.0,
+     "mean": 9.13
+    },
+    "first_M_pos": {
+     "median": 0.33,
+     "q1": 0.22,
+     "q3": 0.43,
+     "mean": 0.33
+    },
+    "n_M": {
+     "median": 4.0,
+     "q1": 3.0,
+     "q3": 5.0,
+     "mean": 3.92
+    },
+    "n_G": {
+     "median": 1.0,
+     "q1": 1.0,
+     "q3": 2.0,
+     "mean": 1.27
+    },
+    "n_B": {
+     "median": 1.0,
+     "q1": 0.0,
+     "q3": 2.0,
+     "mean": 1.17
+    },
+    "n_R": {
+     "median": 1.0,
+     "q1": 1.0,
+     "q3": 2.0,
+     "mean": 1.51
+    },
+    "we_n": {
+     "median": 3.0,
+     "q1": 2.0,
+     "q3": 4.0,
+     "mean": 2.85
+    },
+    "moves_top": [
+     [
+      "BGMR",
+      50
+     ],
+     [
+      "BGMRC",
+      25
+     ],
+     [
+      "MR",
+      18
+     ],
+     [
+      "GMR",
+      18
+     ],
+     [
+      "BMR",
+      11
+     ],
+     [
+      "MRC",
+      10
+     ],
+     [
+      "BGMRM",
+      10
+     ],
+     [
+      "BGMRMC",
+      8
+     ],
+     [
+      "BGMRMRC",
+      7
+     ],
+     [
+      "BGMRMR",
+      7
+     ]
+    ],
+    "first_move": {
+     "M": 12.4,
+     "B": 61.7,
+     "G": 24.8,
+     "R": 0.7,
+     "C": 0.3
+    },
+    "title_lead": [
+     [
+      "towards",
+      4
+     ],
+     [
+      "learning",
+      4
+     ],
+     [
+      "improving",
+      1
+     ],
+     [
+      "real-time",
+      1
+     ],
+     [
+      "exploring",
+      1
+     ],
+     [
+      "is",
+      1
+     ],
+     [
+      "unified",
+      1
+     ],
+     [
+      "revisiting",
+      1
+     ]
+    ]
+   },
+   "Robotics": {
+    "label": "Robotics",
+    "n": 190,
+    "has_G": 70.5,
+    "gap_before_method": 69.5,
+    "gap_cause": 21.1,
+    "insight": 27.9,
+    "quant_result": 29.5,
+    "sota_claim": 40.0,
+    "general_claim": 25.3,
+    "effic_claim": 42.6,
+    "code_release": 32.6,
+    "extensive_phrase": 11.6,
+    "first_claim": 7.4,
+    "realworld": 45.8,
+    "named_in_abstract": 51.1,
+    "bench_named": 22.6,
+    "title_colon_name": 44.2,
+    "method_first_sentence": 13.2,
+    "has_R": 89.5,
+    "has_C": 33.2,
+    "has_B": 68.9,
+    "any_question": 1.6,
+    "any_hedge": 16.3,
+    "any_weak": 9.5,
+    "words": {
+     "median": 172.0,
+     "q1": 150.0,
+     "q3": 191.25,
+     "mean": 172.95
+    },
+    "n_sent": {
+     "median": 7.5,
+     "q1": 7.0,
+     "q3": 9.0,
+     "mean": 7.65
+    },
+    "words_per_sent": {
+     "median": 22.95,
+     "q1": 20.41,
+     "q3": 25.35,
+     "mean": 22.98
+    },
+    "n_numbers": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.43
+    },
+    "hedge_n": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.17
+    },
+    "weak_n": {
+     "median": 0.0,
+     "q1": 0.0,
+     "q3": 0.0,
+     "mean": 0.1
+    },
+    "title_words": {
+     "median": 9.0,
+     "q1": 8.0,
+     "q3": 11.0,
+     "mean": 9.57
+    },
+    "first_M_pos": {
+     "median": 0.33,
+     "q1": 0.17,
+     "q3": 0.5,
+     "mean": 0.33
+    },
+    "n_M": {
+     "median": 3.0,
+     "q1": 3.0,
+     "q3": 5.0,
+     "mean": 3.65
+    },
+    "n_G": {
+     "median": 1.0,
+     "q1": 0.0,
+     "q3": 2.0,
+     "mean": 1.08
+    },
+    "n_B": {
+     "median": 1.0,
+     "q1": 0.0,
+     "q3": 2.0,
+     "mean": 1.14
+    },
+    "n_R": {
+     "median": 1.0,
+     "q1": 1.0,
+     "q3": 2.0,
+     "mean": 1.44
+    },
+    "we_n": {
+     "median": 3.0,
+     "q1": 2.0,
+     "q3": 4.0,
+     "mean": 2.68
+    },
+    "moves_top": [
+     [
+      "BGMR",
+      23
+     ],
+     [
+      "GMR",
+      12
+     ],
+     [
+      "BGMRC",
+      10
+     ],
+     [
+      "BMR",
+      9
+     ],
+     [
+      "BGBMR",
+      8
+     ],
+     [
+      "BGBMRC",
+      7
+     ],
+     [
+      "MRC",
+      7
+     ],
+     [
+      "BGMRM",
+      7
+     ],
+     [
+      "BGMRMC",
+      6
+     ],
+     [
+      "MR",
+      6
+     ]
+    ],
+    "first_move": {
+     "B": 60.5,
+     "G": 25.8,
+     "M": 13.2,
+     "C": 0.5
+    },
+    "title_lead": [
+     [
+      "learning",
+      10
+     ],
+     [
+      "exploring",
+      1
+     ],
+     [
+      "towards",
+      1
+     ],
+     [
+      "revisiting",
+      1
+     ],
+     [
+      "boosting",
+      1
+     ],
+     [
+      "do",
+      1
+     ],
+     [
+      "what",
+      1
+     ],
+     [
+      "on the",
+      1
+     ]
+    ]
+   }
+  },
+  "top_vs_poster": {
+   "n1": 380,
+   "n0": 2229,
+   "strata": 35,
+   "features": {
+    "has_G": {
+     "diff": -1.73,
+     "ci": [
+      -6.88,
+      3.07
+     ],
+     "p": 0.4939,
+     "mean1": 69.21,
+     "mean0": 72.59,
+     "q": 0.9292
+    },
+    "gap_before_method": {
+     "diff": -2.04,
+     "ci": [
+      -7.55,
+      2.94
+     ],
+     "p": 0.4418,
+     "mean1": 67.89,
+     "mean0": 71.69,
+     "q": 0.9096
+    },
+    "gap_cause": {
+     "diff": -3.21,
+     "ci": [
+      -7.37,
+      1.09
+     ],
+     "p": 0.1463,
+     "mean1": 20.26,
+     "mean0": 23.78,
+     "q": 0.8002
+    },
+    "insight": {
+     "diff": -0.68,
+     "ci": [
+      -4.6,
+      3.93
+     ],
+     "p": 0.7589,
+     "mean1": 23.16,
+     "mean0": 22.21,
+     "q": 0.9292
+    },
+    "quant_result": {
+     "diff": 4.84,
+     "ci": [
+      0.26,
+      9.53
+     ],
+     "p": 0.0391,
+     "mean1": 27.89,
+     "mean0": 25.66,
+     "q": 0.8002
+    },
+    "sota_claim": {
+     "diff": 0.82,
+     "ci": [
+      -4.02,
+      5.45
+     ],
+     "p": 0.7398,
+     "mean1": 50.26,
+     "mean0": 53.43,
+     "q": 0.9292
+    },
+    "general_claim": {
+     "diff": 0.35,
+     "ci": [
+      -4.48,
+      5.29
+     ],
+     "p": 0.8891,
+     "mean1": 35.26,
+     "mean0": 34.86,
+     "q": 0.943
+    },
+    "effic_claim": {
+     "diff": 2.66,
+     "ci": [
+      -2.05,
+      7.62
+     ],
+     "p": 0.3033,
+     "mean1": 42.63,
+     "mean0": 40.69,
+     "q": 0.8002
+    },
+    "code_release": {
+     "diff": 2.92,
+     "ci": [
+      -1.96,
+      8.05
+     ],
+     "p": 0.2476,
+     "mean1": 38.42,
+     "mean0": 37.28,
+     "q": 0.8002
+    },
+    "extensive_phrase": {
+     "diff": -1.92,
+     "ci": [
+      -6.05,
+      2.18
+     ],
+     "p": 0.3708,
+     "mean1": 19.21,
+     "mean0": 24.45,
+     "q": 0.8111
+    },
+    "first_claim": {
+     "diff": 1.01,
+     "ci": [
+      -2.04,
+      4.06
+     ],
+     "p": 0.5212,
+     "mean1": 10.0,
+     "mean0": 9.87,
+     "q": 0.9292
+    },
+    "realworld": {
+     "diff": 2.56,
+     "ci": [
+      -1.89,
+      7.54
+     ],
+     "p": 0.2924,
+     "mean1": 36.58,
+     "mean0": 32.44,
+     "q": 0.8002
+    },
+    "named_in_abstract": {
+     "diff": -0.2,
+     "ci": [
+      -5.14,
+      4.79
+     ],
+     "p": 0.9363,
+     "mean1": 60.0,
+     "mean0": 60.83,
+     "q": 0.948
+    },
+    "bench_named": {
+     "diff": -0.65,
+     "ci": [
+      -4.89,
+      3.83
+     ],
+     "p": 0.7661,
+     "mean1": 22.37,
+     "mean0": 26.69,
+     "q": 0.9292
+    },
+    "title_colon_name": {
+     "diff": 0.41,
+     "ci": [
+      -4.78,
+      5.17
+     ],
+     "p": 0.8723,
+     "mean1": 57.11,
+     "mean0": 58.86,
+     "q": 0.943
+    },
+    "method_first_sentence": {
+     "diff": 0.9,
+     "ci": [
+      -2.94,
+      4.88
+     ],
+     "p": 0.6678,
+     "mean1": 17.89,
+     "mean0": 16.11,
+     "q": 0.9292
+    },
+    "has_R": {
+     "diff": -0.68,
+     "ci": [
+      -3.72,
+      2.01
+     ],
+     "p": 0.6431,
+     "mean1": 92.11,
+     "mean0": 93.32,
+     "q": 0.9292
+    },
+    "has_C": {
+     "diff": 2.35,
+     "ci": [
+      -2.82,
+      7.62
+     ],
+     "p": 0.3674,
+     "mean1": 38.68,
+     "mean0": 38.27,
+     "q": 0.8111
+    },
+    "has_B": {
+     "diff": -2.93,
+     "ci": [
+      -7.8,
+      2.27
+     ],
+     "p": 0.2543,
+     "mean1": 63.16,
+     "mean0": 66.71,
+     "q": 0.8002
+    },
+    "any_question": {
+     "diff": -0.05,
+     "ci": [
+      -1.5,
+      1.48
+     ],
+     "p": 0.948,
+     "mean1": 2.11,
+     "mean0": 2.06,
+     "q": 0.948
+    },
+    "any_hedge": {
+     "diff": 1.93,
+     "ci": [
+      -1.89,
+      5.58
+     ],
+     "p": 0.3118,
+     "mean1": 14.21,
+     "mean0": 11.66,
+     "q": 0.8002
+    },
+    "any_weak": {
+     "diff": -0.58,
+     "ci": [
+      -3.3,
+      2.25
+     ],
+     "p": 0.6679,
+     "mean1": 6.84,
+     "mean0": 8.34,
+     "q": 0.9292
+    },
+    "words": {
+     "diff": 2.06,
+     "ci": [
+      -2.2,
+      5.89
+     ],
+     "p": 0.3135,
+     "mean1": 182.26,
+     "mean0": 181.0,
+     "q": 0.8002
+    },
+    "n_sent": {
+     "diff": -0.03,
+     "ci": [
+      -0.22,
+      0.17
+     ],
+     "p": 0.7865,
+     "mean1": 7.89,
+     "mean0": 8.02,
+     "q": 0.9292
+    },
+    "words_per_sent": {
+     "diff": 0.29,
+     "ci": [
+      -0.14,
+      0.76
+     ],
+     "p": 0.2012,
+     "mean1": 23.56,
+     "mean0": 23.09,
+     "q": 0.8002
+    },
+    "n_numbers": {
+     "diff": 0.07,
+     "ci": [
+      -0.02,
+      0.15
+     ],
+     "p": 0.1378,
+     "mean1": 0.37,
+     "mean0": 0.36,
+     "q": 0.8002
+    },
+    "hedge_n": {
+     "diff": 0.03,
+     "ci": [
+      -0.02,
+      0.08
+     ],
+     "p": 0.3201,
+     "mean1": 0.18,
+     "mean0": 0.14,
+     "q": 0.8002
+    },
+    "weak_n": {
+     "diff": -0.01,
+     "ci": [
+      -0.03,
+      0.02
+     ],
+     "p": 0.586,
+     "mean1": 0.07,
+     "mean0": 0.09,
+     "q": 0.9292
+    },
+    "title_words": {
+     "diff": -0.08,
+     "ci": [
+      -0.36,
+      0.18
+     ],
+     "p": 0.5663,
+     "mean1": 9.0,
+     "mean0": 9.16,
+     "q": 0.9292
+    },
+    "first_M_pos": {
+     "diff": -0.01,
+     "ci": [
+      -0.03,
+      0.01
+     ],
+     "p": 0.3077,
+     "mean1": 0.3,
+     "mean0": 0.31,
+     "q": 0.8002
+    },
+    "n_M": {
+     "diff": 0.03,
+     "ci": [
+      -0.17,
+      0.21
+     ],
+     "p": 0.7964,
+     "mean1": 3.96,
+     "mean0": 3.99,
+     "q": 0.9292
+    },
+    "n_G": {
+     "diff": -0.08,
+     "ci": [
+      -0.17,
+      0.02
+     ],
+     "p": 0.1117,
+     "mean1": 1.04,
+     "mean0": 1.13,
+     "q": 0.8002
+    },
+    "n_B": {
+     "diff": -0.02,
+     "ci": [
+      -0.14,
+      0.11
+     ],
+     "p": 0.7724,
+     "mean1": 1.05,
+     "mean0": 1.08,
+     "q": 0.9292
+    },
+    "n_R": {
+     "diff": 0.01,
+     "ci": [
+      -0.07,
+      0.1
+     ],
+     "p": 0.8296,
+     "mean1": 1.42,
+     "mean0": 1.41,
+     "q": 0.9367
+    },
+    "we_n": {
+     "diff": -0.08,
+     "ci": [
+      -0.23,
+      0.06
+     ],
+     "p": 0.2959,
+     "mean1": 2.81,
+     "mean0": 2.84,
+     "q": 0.8002
+    }
+   }
+  },
+  "accepted_vs_rejected": {
+   "n1": 706,
+   "n0": 945,
+   "strata": 18,
+   "features": {
+    "has_G": {
+     "diff": -1.25,
+     "ci": [
+      -5.62,
+      2.98
+     ],
+     "p": 0.5705,
+     "mean1": 76.77,
+     "mean0": 78.31,
+     "q": 0.8196
+    },
+    "gap_before_method": {
+     "diff": -0.87,
+     "ci": [
+      -5.52,
+      3.12
+     ],
+     "p": 0.6873,
+     "mean1": 75.78,
+     "mean0": 77.14,
+     "q": 0.8196
+    },
+    "gap_cause": {
+     "diff": 0.18,
+     "ci": [
+      -4.12,
+      4.61
+     ],
+     "p": 0.9333,
+     "mean1": 23.65,
+     "mean0": 24.13,
+     "q": 0.9333
+    },
+    "insight": {
+     "diff": 3.39,
+     "ci": [
+      -0.84,
+      7.59
+     ],
+     "p": 0.1194,
+     "mean1": 24.5,
+     "mean0": 20.53,
+     "q": 0.3483
+    },
+    "quant_result": {
+     "diff": 1.18,
+     "ci": [
+      -3.3,
+      5.85
+     ],
+     "p": 0.6,
+     "mean1": 24.22,
+     "mean0": 24.44,
+     "q": 0.8196
+    },
+    "sota_claim": {
+     "diff": 3.24,
+     "ci": [
+      -2.28,
+      8.57
+     ],
+     "p": 0.2455,
+     "mean1": 50.57,
+     "mean0": 49.21,
+     "q": 0.5361
+    },
+    "general_claim": {
+     "diff": 5.13,
+     "ci": [
+      0.15,
+      10.35
+     ],
+     "p": 0.0509,
+     "mean1": 43.2,
+     "mean0": 38.73,
+     "q": 0.1956
+    },
+    "effic_claim": {
+     "diff": 8.08,
+     "ci": [
+      3.02,
+      13.67
+     ],
+     "p": 0.0027,
+     "mean1": 48.16,
+     "mean0": 41.27,
+     "q": 0.0156
+    },
+    "code_release": {
+     "diff": 13.36,
+     "ci": [
+      8.7,
+      17.85
+     ],
+     "p": 0.0,
+     "mean1": 36.54,
+     "mean0": 23.07,
+     "q": 0.0
+    },
+    "extensive_phrase": {
+     "diff": 3.32,
+     "ci": [
+      -1.55,
+      8.11
+     ],
+     "p": 0.1666,
+     "mean1": 26.77,
+     "mean0": 25.5,
+     "q": 0.4205
+    },
+    "first_claim": {
+     "diff": -1.68,
+     "ci": [
+      -4.96,
+      1.51
+     ],
+     "p": 0.3021,
+     "mean1": 10.06,
+     "mean0": 12.06,
+     "q": 0.5671
+    },
+    "realworld": {
+     "diff": 8.28,
+     "ci": [
+      3.53,
+      13.02
+     ],
+     "p": 0.0007,
+     "mean1": 40.51,
+     "mean0": 31.53,
+     "q": 0.006
+    },
+    "named_in_abstract": {
+     "diff": -2.49,
+     "ci": [
+      -7.02,
+      2.35
+     ],
+     "p": 0.3121,
+     "mean1": 68.27,
+     "mean0": 68.47,
+     "q": 0.5671
+    },
+    "bench_named": {
+     "diff": -2.44,
+     "ci": [
+      -6.71,
+      1.86
+     ],
+     "p": 0.2604,
+     "mean1": 21.53,
+     "mean0": 25.71,
+     "q": 0.5361
+    },
+    "title_colon_name": {
+     "diff": 0.91,
+     "ci": [
+      -4.26,
+      5.83
+     ],
+     "p": 0.7283,
+     "mean1": 57.51,
+     "mean0": 57.35,
+     "q": 0.8196
+    },
+    "method_first_sentence": {
+     "diff": 0.18,
+     "ci": [
+      -3.51,
+      3.55
+     ],
+     "p": 0.9186,
+     "mean1": 13.03,
+     "mean0": 12.8,
+     "q": 0.9333
+    },
+    "has_R": {
+     "diff": 3.49,
+     "ci": [
+      0.97,
+      5.82
+     ],
+     "p": 0.0052,
+     "mean1": 94.48,
+     "mean0": 92.28,
+     "q": 0.0261
+    },
+    "has_C": {
+     "diff": 13.14,
+     "ci": [
+      8.28,
+      17.9
+     ],
+     "p": 0.0,
+     "mean1": 37.54,
+     "mean0": 24.87,
+     "q": 0.0
+    },
+    "has_B": {
+     "diff": 0.98,
+     "ci": [
+      -4.1,
+      6.05
+     ],
+     "p": 0.6951,
+     "mean1": 66.86,
+     "mean0": 64.44,
+     "q": 0.8196
+    },
+    "any_question": {
+     "diff": 1.78,
+     "ci": [
+      0.1,
+      3.77
+     ],
+     "p": 0.0559,
+     "mean1": 3.26,
+     "mean0": 1.59,
+     "q": 0.1956
+    },
+    "any_hedge": {
+     "diff": -0.73,
+     "ci": [
+      -3.86,
+      2.32
+     ],
+     "p": 0.6545,
+     "mean1": 12.32,
+     "mean0": 11.32,
+     "q": 0.8196
+    },
+    "any_weak": {
+     "diff": -0.52,
+     "ci": [
+      -3.29,
+      2.12
+     ],
+     "p": 0.7121,
+     "mean1": 6.94,
+     "mean0": 7.83,
+     "q": 0.8196
+    },
+    "words": {
+     "diff": 2.64,
+     "ci": [
+      -1.15,
+      6.36
+     ],
+     "p": 0.173,
+     "mean1": 189.67,
+     "mean0": 187.27,
+     "q": 0.4205
+    },
+    "n_sent": {
+     "diff": 0.19,
+     "ci": [
+      -0.01,
+      0.38
+     ],
+     "p": 0.0539,
+     "mean1": 8.23,
+     "mean0": 8.06,
+     "q": 0.1956
+    },
+    "words_per_sent": {
+     "diff": -0.31,
+     "ci": [
+      -0.76,
+      0.13
+     ],
+     "p": 0.1802,
+     "mean1": 23.51,
+     "mean0": 23.76,
+     "q": 0.4205
+    },
+    "n_numbers": {
+     "diff": 0.02,
+     "ci": [
+      -0.06,
+      0.1
+     ],
+     "p": 0.6249,
+     "mean1": 0.27,
+     "mean0": 0.27,
+     "q": 0.8196
+    },
+    "hedge_n": {
+     "diff": -0.01,
+     "ci": [
+      -0.05,
+      0.03
+     ],
+     "p": 0.7493,
+     "mean1": 0.15,
+     "mean0": 0.13,
+     "q": 0.8196
+    },
+    "weak_n": {
+     "diff": -0.0,
+     "ci": [
+      -0.04,
+      0.02
+     ],
+     "p": 0.7978,
+     "mean1": 0.07,
+     "mean0": 0.08,
+     "q": 0.8461
+    },
+    "title_words": {
+     "diff": -0.49,
+     "ci": [
+      -0.72,
+      -0.23
+     ],
+     "p": 0.0001,
+     "mean1": 8.95,
+     "mean0": 9.42,
+     "q": 0.0017
+    },
+    "first_M_pos": {
+     "diff": -0.01,
+     "ci": [
+      -0.03,
+      0.01
+     ],
+     "p": 0.324,
+     "mean1": 0.31,
+     "mean0": 0.32,
+     "q": 0.5671
+    },
+    "n_M": {
+     "diff": -0.07,
+     "ci": [
+      -0.26,
+      0.1
+     ],
+     "p": 0.4324,
+     "mean1": 3.99,
+     "mean0": 4.1,
+     "q": 0.7207
+    },
+    "n_G": {
+     "diff": -0.03,
+     "ci": [
+      -0.12,
+      0.07
+     ],
+     "p": 0.5984,
+     "mean1": 1.23,
+     "mean0": 1.25,
+     "q": 0.8196
+    },
+    "n_B": {
+     "diff": 0.03,
+     "ci": [
+      -0.08,
+      0.14
+     ],
+     "p": 0.6257,
+     "mean1": 1.07,
+     "mean0": 1.01,
+     "q": 0.8196
+    },
+    "n_R": {
+     "diff": 0.13,
+     "ci": [
+      0.05,
+      0.22
+     ],
+     "p": 0.0023,
+     "mean1": 1.54,
+     "mean0": 1.42,
+     "q": 0.0156
+    },
+    "we_n": {
+     "diff": 0.14,
+     "ci": [
+      -0.01,
+      0.3
+     ],
+     "p": 0.0636,
+     "mean1": 2.79,
+     "mean0": 2.65,
+     "q": 0.2024
+    }
+   }
+  },
+  "cited_top_vs_bottom_quartile": {
+   "n1": 1115,
+   "n0": 1317,
+   "strata": 45,
+   "features": {
+    "has_G": {
+     "diff": 1.28,
+     "ci": [
+      -2.44,
+      4.8
+     ],
+     "p": 0.501,
+     "mean1": 65.56,
+     "mean0": 63.93,
+     "q": 0.5656
+    },
+    "gap_before_method": {
+     "diff": 1.78,
+     "ci": [
+      -2.12,
+      5.78
+     ],
+     "p": 0.3652,
+     "mean1": 63.68,
+     "mean0": 61.43,
+     "q": 0.4565
+    },
+    "gap_cause": {
+     "diff": -0.24,
+     "ci": [
+      -3.22,
+      2.7
+     ],
+     "p": 0.8725,
+     "mean1": 18.3,
+     "mean0": 17.92,
+     "q": 0.915
+    },
+    "insight": {
+     "diff": 4.13,
+     "ci": [
+      1.07,
+      6.96
+     ],
+     "p": 0.0053,
+     "mean1": 20.0,
+     "mean0": 15.34,
+     "q": 0.0109
+    },
+    "quant_result": {
+     "diff": 8.27,
+     "ci": [
+      4.89,
+      11.69
+     ],
+     "p": 0.0,
+     "mean1": 29.15,
+     "mean0": 21.11,
+     "q": 0.0
+    },
+    "sota_claim": {
+     "diff": 7.6,
+     "ci": [
+      4.16,
+      11.22
+     ],
+     "p": 0.0,
+     "mean1": 43.59,
+     "mean0": 32.57,
+     "q": 0.0001
+    },
+    "general_claim": {
+     "diff": 6.17,
+     "ci": [
+      2.95,
+      9.47
+     ],
+     "p": 0.0002,
+     "mean1": 28.25,
+     "mean0": 21.41,
+     "q": 0.0005
+    },
+    "effic_claim": {
+     "diff": 7.16,
+     "ci": [
+      3.47,
+      10.97
+     ],
+     "p": 0.0002,
+     "mean1": 43.41,
+     "mean0": 36.22,
+     "q": 0.0007
+    },
+    "code_release": {
+     "diff": 20.21,
+     "ci": [
+      16.83,
+      23.63
+     ],
+     "p": 0.0,
+     "mean1": 44.22,
+     "mean0": 22.48,
+     "q": 0.0
+    },
+    "extensive_phrase": {
+     "diff": 3.82,
+     "ci": [
+      1.16,
+      6.26
+     ],
+     "p": 0.0037,
+     "mean1": 16.59,
+     "mean0": 11.01,
+     "q": 0.0099
+    },
+    "first_claim": {
+     "diff": 2.75,
+     "ci": [
+      0.76,
+      5.03
+     ],
+     "p": 0.0107,
+     "mean1": 9.42,
+     "mean0": 6.61,
+     "q": 0.019
+    },
+    "realworld": {
+     "diff": 12.45,
+     "ci": [
+      8.83,
+      16.2
+     ],
+     "p": 0.0,
+     "mean1": 35.7,
+     "mean0": 24.3,
+     "q": 0.0
+    },
+    "named_in_abstract": {
+     "diff": 1.71,
+     "ci": [
+      -2.04,
+      5.98
+     ],
+     "p": 0.3938,
+     "mean1": 59.82,
+     "mean0": 57.48,
+     "q": 0.4753
+    },
+    "bench_named": {
+     "diff": 7.73,
+     "ci": [
+      5.08,
+      10.37
+     ],
+     "p": 0.0,
+     "mean1": 24.13,
+     "mean0": 15.11,
+     "q": 0.0
+    },
+    "title_colon_name": {
+     "diff": 22.5,
+     "ci": [
+      18.55,
+      26.22
+     ],
+     "p": 0.0,
+     "mean1": 58.03,
+     "mean0": 32.12,
+     "q": 0.0
+    },
+    "method_first_sentence": {
+     "diff": 0.03,
+     "ci": [
+      -3.04,
+      3.23
+     ],
+     "p": 0.9844,
+     "mean1": 20.0,
+     "mean0": 19.36,
+     "q": 0.9844
+    },
+    "has_R": {
+     "diff": 4.07,
+     "ci": [
+      1.14,
+      6.84
+     ],
+     "p": 0.0053,
+     "mean1": 86.46,
+     "mean0": 80.64,
+     "q": 0.0109
+    },
+    "has_C": {
+     "diff": 19.39,
+     "ci": [
+      15.62,
+      22.86
+     ],
+     "p": 0.0,
+     "mean1": 44.66,
+     "mean0": 23.92,
+     "q": 0.0
+    },
+    "has_B": {
+     "diff": -0.61,
+     "ci": [
+      -4.49,
+      3.11
+     ],
+     "p": 0.7497,
+     "mean1": 66.46,
+     "mean0": 67.43,
+     "q": 0.82
+    },
+    "any_question": {
+     "diff": 1.66,
+     "ci": [
+      0.64,
+      2.88
+     ],
+     "p": 0.0041,
+     "mean1": 2.69,
+     "mean0": 1.14,
+     "q": 0.0103
+    },
+    "any_hedge": {
+     "diff": -3.63,
+     "ci": [
+      -6.42,
+      -0.86
+     ],
+     "p": 0.0108,
+     "mean1": 12.38,
+     "mean0": 16.48,
+     "q": 0.019
+    },
+    "any_weak": {
+     "diff": 2.44,
+     "ci": [
+      0.41,
+      4.38
+     ],
+     "p": 0.0206,
+     "mean1": 9.15,
+     "mean0": 6.15,
+     "q": 0.0328
+    },
+    "words": {
+     "diff": 2.76,
+     "ci": [
+      0.04,
+      5.62
+     ],
+     "p": 0.058,
+     "mean1": 177.99,
+     "mean0": 175.22,
+     "q": 0.0812
+    },
+    "n_sent": {
+     "diff": 0.11,
+     "ci": [
+      -0.04,
+      0.26
+     ],
+     "p": 0.1292,
+     "mean1": 7.94,
+     "mean0": 7.81,
+     "q": 0.1674
+    },
+    "words_per_sent": {
+     "diff": -0.02,
+     "ci": [
+      -0.35,
+      0.32
+     ],
+     "p": 0.8888,
+     "mean1": 22.92,
+     "mean0": 23.0,
+     "q": 0.915
+    },
+    "n_numbers": {
+     "diff": 0.08,
+     "ci": [
+      0.01,
+      0.14
+     ],
+     "p": 0.0251,
+     "mean1": 0.42,
+     "mean0": 0.35,
+     "q": 0.0382
+    },
+    "hedge_n": {
+     "diff": -0.05,
+     "ci": [
+      -0.09,
+      -0.02
+     ],
+     "p": 0.0044,
+     "mean1": 0.15,
+     "mean0": 0.21,
+     "q": 0.0104
+    },
+    "weak_n": {
+     "diff": 0.03,
+     "ci": [
+      0.01,
+      0.05
+     ],
+     "p": 0.0121,
+     "mean1": 0.1,
+     "mean0": 0.06,
+     "q": 0.0202
+    },
+    "title_words": {
+     "diff": -0.53,
+     "ci": [
+      -0.73,
+      -0.32
+     ],
+     "p": 0.0,
+     "mean1": 9.44,
+     "mean0": 10.12,
+     "q": 0.0
+    },
+    "first_M_pos": {
+     "diff": -0.01,
+     "ci": [
+      -0.03,
+      0.0
+     ],
+     "p": 0.1159,
+     "mean1": 0.29,
+     "mean0": 0.3,
+     "q": 0.1561
+    },
+    "n_M": {
+     "diff": -0.15,
+     "ci": [
+      -0.3,
+      -0.0
+     ],
+     "p": 0.0476,
+     "mean1": 4.01,
+     "mean0": 4.16,
+     "q": 0.0694
+    },
+    "n_G": {
+     "diff": 0.03,
+     "ci": [
+      -0.05,
+      0.1
+     ],
+     "p": 0.4503,
+     "mean1": 0.99,
+     "mean0": 0.95,
+     "q": 0.5254
+    },
+    "n_B": {
+     "diff": -0.14,
+     "ci": [
+      -0.24,
+      -0.03
+     ],
+     "p": 0.0086,
+     "mean1": 1.15,
+     "mean0": 1.31,
+     "q": 0.0168
+    },
+    "n_R": {
+     "diff": 0.15,
+     "ci": [
+      0.08,
+      0.21
+     ],
+     "p": 0.0,
+     "mean1": 1.32,
+     "mean0": 1.15,
+     "q": 0.0
+    },
+    "we_n": {
+     "diff": 0.43,
+     "ci": [
+      0.32,
+      0.55
+     ],
+     "p": 0.0,
+     "mean1": 2.81,
+     "mean0": 2.31,
+     "q": 0.0
+    }
+   }
+  },
+  "trend": {
+   "2021": {
+    "n": 305,
+    "gap_before_method": 57.0,
+    "gap_cause": 17.0,
+    "insight": 30.2,
+    "quant_result": 17.4,
+    "sota_claim": 49.5,
+    "general_claim": 25.9,
+    "effic_claim": 37.0,
+    "code_release": 25.9,
+    "title_colon_name": 41.3,
+    "named_in_abstract": 53.4,
+    "realworld": 19.3,
+    "first_claim": 9.8,
+    "any_hedge": 15.7,
+    "words_median": 174.0
+   },
+   "2022": {
+    "n": 476,
+    "gap_before_method": 61.6,
+    "gap_cause": 15.8,
+    "insight": 25.2,
+    "quant_result": 21.8,
+    "sota_claim": 50.4,
+    "general_claim": 27.5,
+    "effic_claim": 29.0,
+    "code_release": 33.6,
+    "title_colon_name": 45.8,
+    "named_in_abstract": 55.0,
+    "realworld": 27.1,
+    "first_claim": 11.6,
+    "any_hedge": 14.5,
+    "words_median": 176.0
+   },
+   "2023": {
+    "n": 696,
+    "gap_before_method": 68.7,
+    "gap_cause": 24.3,
+    "insight": 24.9,
+    "quant_result": 28.4,
+    "sota_claim": 53.7,
+    "general_claim": 31.0,
+    "effic_claim": 35.2,
+    "code_release": 40.7,
+    "title_colon_name": 55.2,
+    "named_in_abstract": 64.2,
+    "realworld": 28.4,
+    "first_claim": 10.2,
+    "any_hedge": 13.2,
+    "words_median": 180.0
+   },
+   "2024": {
+    "n": 2891,
+    "gap_before_method": 63.0,
+    "gap_cause": 18.6,
+    "insight": 15.0,
+    "quant_result": 24.2,
+    "sota_claim": 35.1,
+    "general_claim": 23.1,
+    "effic_claim": 39.0,
+    "code_release": 31.5,
+    "title_colon_name": 42.3,
+    "named_in_abstract": 57.8,
+    "realworld": 30.1,
+    "first_claim": 7.5,
+    "any_hedge": 14.1,
+    "words_median": 175.0
+   },
+   "2025": {
+    "n": 1318,
+    "gap_before_method": 76.1,
+    "gap_cause": 27.6,
+    "insight": 15.6,
+    "quant_result": 27.6,
+    "sota_claim": 54.2,
+    "general_claim": 40.0,
+    "effic_claim": 45.2,
+    "code_release": 31.2,
+    "title_colon_name": 65.6,
+    "named_in_abstract": 57.9,
+    "realworld": 37.9,
+    "first_claim": 10.2,
+    "any_hedge": 8.4,
+    "words_median": 178.5
+   },
+   "2026": {
+    "n": 248,
+    "gap_before_method": 79.8,
+    "gap_cause": 19.4,
+    "insight": 23.8,
+    "quant_result": 27.8,
+    "sota_claim": 58.9,
+    "general_claim": 50.4,
+    "effic_claim": 52.0,
+    "code_release": 31.9,
+    "title_colon_name": 58.1,
+    "named_in_abstract": 65.3,
+    "realworld": 47.2,
+    "first_claim": 10.1,
+    "any_hedge": 9.3,
+    "words_median": 189.0
+   }
+  }
+ },
+ "fulltext_sample": {
+  "n_ok": 77,
+  "n_sampled": 80,
+  "intro_paragraphs": {
+   "median": 5,
+   "q1": 4.5,
+   "q3": 6.0,
+   "n": 77
+  },
+  "n_contributions": {
+   "median": 3,
+   "q1": 3.0,
+   "q3": 3.0,
+   "n": 77
+  },
+  "n_main_baselines": {
+   "median": 5,
+   "q1": 3.0,
+   "q3": 6.0,
+   "n": 77
+  },
+  "n_datasets": {
+   "median": 2,
+   "q1": 2.0,
+   "q3": 4.0,
+   "n": 77
+  },
+  "n_ablation_tables": {
+   "median": 1,
+   "q1": 1.0,
+   "q3": 3.0,
+   "n": 77
+  },
+  "n_equations_method": {
+   "median": 6,
+   "q1": 4.0,
+   "q3": 9.0,
+   "n": 77
+  },
+  "gap_stated_as_mechanism": 92.2,
+  "method_opens_with_overview": 71.4,
+  "method_name_in_title": 67.5,
+  "has_pseudocode": 26.0,
+  "has_efficiency_table": 45.5,
+  "has_limitations_section": 64.9,
+  "has_failure_cases": 46.8,
+  "uses_questions_in_body": 22.1,
+  "experiments_open_with_research_questions": 7.8,
+  "conclusion_mentions_limitations": 39.0,
+  "fig1_type": {
+   "teaser-results": 37,
+   "pipeline": 20,
+   "other": 5,
+   "comparison": 10,
+   "failure-of-prior": 5
+  },
+  "contrib_format": {
+   "bulleted": 40,
+   "numbered": 9,
+   "paragraph": 23,
+   "none": 5
+  },
+  "limitations_location": {
+   "main": 43,
+   "appendix": 9,
+   "none": 25
+  }
+ }
+}

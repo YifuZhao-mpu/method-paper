@@ -1,0 +1,12 @@
+{
+  "effortLevel": "xhigh",
+  "permissions": {
+    "allow": [
+      "Bash(codex exec *)",
+      "Bash(method-paper-pipeline *)",
+      "Bash(method-paper-lineage *)",
+      "Bash(python ~/.claude/skills/method-paper/scripts/pipeline.py *)",
+      "Bash(python ~/.claude/skills/method-paper/scripts/code_lineage.py *)"
+    ]
+  }
+}

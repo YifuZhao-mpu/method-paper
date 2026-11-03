@@ -1,0 +1,6646 @@
+{
+ "source": "Paper Copilot lists, accepted (tier top|poster) method papers 2021-2026 in the four sub-fields with a GitHub repo in the list's github field or in the abstract (887 of 5934); stratified random sample, seed 7 (all 34 panorama repos, about 110 per other field); analysed with scripts/code_lineage.py on 2026-10-30",
+ "papers_accepted_method": 5934,
+ "papers_with_github_link": 887,
+ "sampled_unique": 363,
+ "cloned": 350,
+ "clone_failures": [
+  [
+   "PerceptionRobotique/libPeRbase",
+   "git clone -q --depth 1 --filter=blob:none --no-checkout https://github.com/PerceptionRobotique/libPeRbase repos/Percepti"
+  ],
+  [
+   "ZhipengCai/L-MAGIC-code-release",
+   "git clone -q --depth 1 --filter=blob:none --no-checkout https://github.com/ZhipengCai/L-MAGIC-code-release repos/Zhipeng"
+  ],
+  [
+   "jibo27/3DGS",
+   "git clone -q --depth 1 --filter=blob:none --no-checkout https://github.com/jibo27/3DGS repos/jibo27__3DGS: fatal: could "
+  ],
+  [
+   "zyqz97/Aerial",
+   "git clone -q --depth 1 --filter=blob:none --no-checkout https://github.com/zyqz97/Aerial repos/zyqz97__Aerial: fatal: co"
+  ],
+  [
+   "daniel03c1/masked",
+   "git clone -q --depth 1 --filter=blob:none --no-checkout https://github.com/daniel03c1/masked repos/daniel03c1__masked: f"
+  ],
+  [
+   "boilcy/Distributed-NeRF",
+   "git -C repos/boilcy__Distributed-NeRF checkout -q: fatal: You are on a branch yet to be born"
+  ],
+  [
+   "JoeWang-0519/CVPR25",
+   "git clone -q --depth 1 --filter=blob:none --no-checkout https://github.com/JoeWang-0519/CVPR25 repos/JoeWang-0519__CVPR2"
+  ],
+  [
+   "SehwanChoi0307/Mask",
+   "git clone -q --depth 1 --filter=blob:none --no-checkout https://github.com/SehwanChoi0307/Mask repos/SehwanChoi0307__Mas"
+  ],
+  [
+   "samsunglabs/fcaf3d",
+   "git clone -q --depth 1 --filter=blob:none --no-checkout https://github.com/samsunglabs/fcaf3d repos/samsunglabs__fcaf3d:"
+  ],
+  [
+   "sail-sg/ILDGER",
+   "git clone -q --depth 1 --filter=blob:none --no-checkout https://github.com/sail-sg/ILDGER repos/sail-sg__ILDGER: fatal: "
+  ],
+  [
+   "YONEX4090/MultiSafeHand",
+   "git clone -q --depth 1 --filter=blob:none --no-checkout https://github.com/YONEX4090/MultiSafeHand repos/YONEX4090__Mult"
+  ],
+  [
+   "pvskand/pcwm",
+   "git clone -q --depth 1 --filter=blob:none --no-checkout https://github.com/pvskand/pcwm repos/pvskand__pcwm: fatal: coul"
+  ],
+  [
+   "library87/OpenRoboExp",
+   "git clone -q --depth 1 --filter=blob:none --no-checkout https://github.com/library87/OpenRoboExp repos/library87__OpenRo"
+  ]
+ ],
+ "placeholder_lt300_lines_or_lt3_files": 42,
+ "with_code": 308,
+ "sample_years": {
+  "2025": 76,
+  "2024": 177,
+  "2023": 52,
+  "2022": 44,
+  "2026": 8,
+  "2021": 6
+ },
+ "fields": {
+  "pano": {
+   "n": 28,
+   "category": {
+    "readme_declared_only": 15,
+    "unidentified": 10,
+    "vendored": 2,
+    "dependency": 1
+   },
+   "vendored_bases": [
+    [
+     "diff-gaussian-rasterization",
+     2
+    ],
+    [
+     "gaussian-splatting",
+     1
+    ]
+   ],
+   "dependency_bases": [
+    [
+     "habitat",
+     1
+    ],
+    [
+     "tiny-cuda-nn",
+     1
+    ]
+   ],
+   "sources_ge2_share": 0.286,
+   "sources_0_share": 0.357,
+   "top_pairs": [
+    [
+     [
+      "gangweix/fast-acvnet",
+      "matsuren/omnimvs_pytorch"
+     ],
+     1
+    ],
+    [
+     [
+      "interdigitalinc/compressai",
+      "microsoft/dcvc"
+     ],
+     1
+    ],
+    [
+     [
+      "interdigitalinc/compressai",
+      "zhihaohu/pytorchvideocompression"
+     ],
+     1
+    ],
+    [
+     [
+      "microsoft/dcvc",
+      "zhihaohu/pytorchvideocompression"
+     ],
+     1
+    ],
+    [
+     [
+      "limuhit/panoramic_video_scanpath",
+      "limuhit/vr-video-quality-in-the-wild"
+     ],
+     1
+    ],
+    [
+     [
+      "danims-zgz/scangan360",
+      "pyro-ppl/pyro"
+     ],
+     1
+    ],
+    [
+     [
+      "skyy93/sample4geo",
+      "yujiaoshi/boosting3dofaccuracy"
+     ],
+     1
+    ],
+    [
+     [
+      "airsplay/r2r-envdrop",
+      "cshizhe/vln-duet"
+     ],
+     1
+    ]
+   ],
+   "new_loc_median": 6009.0,
+   "new_loc_q1": 1921,
+   "new_loc_q3": 10653,
+   "ros": 2
+  },
+  "render": {
+   "n": 90,
+   "category": {
+    "vendored": 37,
+    "unidentified": 13,
+    "dependency": 18,
+    "readme_declared_only": 22
+   },
+   "vendored_bases": [
+    [
+     "gaussian-splatting",
+     20
+    ],
+    [
+     "diff-gaussian-rasterization",
+     17
+    ],
+    [
+     "nerf-pytorch",
+     5
+    ],
+    [
+     "threestudio",
+     2
+    ],
+    [
+     "multinerf",
+     1
+    ],
+    [
+     "Pointcept",
+     1
+    ],
+    [
+     "torch-ngp",
+     1
+    ],
+    [
+     "mmdetection3d",
+     1
+    ],
+    [
+     "BEVDet",
+     1
+    ],
+    [
+     "robomimic",
+     1
+    ]
+   ],
+   "dependency_bases": [
+    [
+     "tiny-cuda-nn",
+     11
+    ],
+    [
+     "gsplat",
+     4
+    ],
+    [
+     "nerfstudio",
+     4
+    ],
+    [
+     "spconv",
+     3
+    ],
+    [
+     "detectron2",
+     2
+    ],
+    [
+     "mmdetection",
+     2
+    ],
+    [
+     "threestudio",
+     2
+    ],
+    [
+     "habitat",
+     1
+    ],
+    [
+     "MinkowskiEngine",
+     1
+    ],
+    [
+     "dust3r",
+     1
+    ]
+   ],
+   "sources_ge2_share": 0.589,
+   "sources_0_share": 0.144,
+   "top_pairs": [
+    [
+     [
+      "nerfstudio",
+      "tiny-cuda-nn"
+     ],
+     4
+    ],
+    [
+     [
+      "gaussian-splatting",
+      "hbb1/2d-gaussian-splatting"
+     ],
+     3
+    ],
+    [
+     [
+      "gsplat",
+      "nerfstudio"
+     ],
+     2
+    ],
+    [
+     [
+      "gsplat",
+      "tiny-cuda-nn"
+     ],
+     2
+    ],
+    [
+     [
+      "city-super/scaffold-gs",
+      "gaussian-splatting"
+     ],
+     2
+    ],
+    [
+     [
+      "ashawkey/diff-gaussian-rasterization",
+      "gaussian-splatting"
+     ],
+     2
+    ],
+    [
+     [
+      "ashawkey/diff-gaussian-rasterization",
+      "torch-ngp"
+     ],
+     2
+    ],
+    [
+     [
+      "gaussian-splatting",
+      "torch-ngp"
+     ],
+     2
+    ]
+   ],
+   "new_loc_median": 5443.0,
+   "new_loc_q1": 2963,
+   "new_loc_q3": 11365,
+   "ros": 1
+  },
+  "lidar": {
+   "n": 94,
+   "category": {
+    "unidentified": 17,
+    "readme_declared_only": 24,
+    "dependency": 35,
+    "vendored": 18
+   },
+   "vendored_bases": [
+    [
+     "OpenPCDet",
+     7
+    ],
+    [
+     "mmdetection3d",
+     4
+    ],
+    [
+     "Pointcept",
+     2
+    ],
+    [
+     "BEVDet",
+     2
+    ],
+    [
+     "BEVFormer",
+     2
+    ],
+    [
+     "CenterPoint",
+     1
+    ],
+    [
+     "bevfusion-mit",
+     1
+    ]
+   ],
+   "dependency_bases": [
+    [
+     "mmdetection",
+     23
+    ],
+    [
+     "mmdetection3d",
+     15
+    ],
+    [
+     "spconv",
+     13
+    ],
+    [
+     "detectron2",
+     6
+    ],
+    [
+     "MinkowskiEngine",
+     5
+    ],
+    [
+     "OpenPCDet",
+     2
+    ],
+    [
+     "gsplat",
+     1
+    ],
+    [
+     "habitat",
+     1
+    ],
+    [
+     "CenterPoint",
+     1
+    ],
+    [
+     "stable-baselines3",
+     1
+    ]
+   ],
+   "sources_ge2_share": 0.574,
+   "sources_0_share": 0.181,
+   "top_pairs": [
+    [
+     [
+      "mmdetection",
+      "mmdetection3d"
+     ],
+     18
+    ],
+    [
+     [
+      "mmdetection",
+      "spconv"
+     ],
+     5
+    ],
+    [
+     [
+      "BEVFormer",
+      "mmdetection"
+     ],
+     4
+    ],
+    [
+     [
+      "mmdetection3d",
+      "spconv"
+     ],
+     4
+    ],
+    [
+     [
+      "BEVFormer",
+      "mmdetection3d"
+     ],
+     4
+    ],
+    [
+     [
+      "BEVDet",
+      "mmdetection"
+     ],
+     3
+    ],
+    [
+     [
+      "autonomousvision/transfuser",
+      "bradyz/2020_carla_challenge"
+     ],
+     2
+    ],
+    [
+     [
+      "autonomousvision/transfuser",
+      "carla-simulator/leaderboard"
+     ],
+     2
+    ]
+   ],
+   "new_loc_median": 8314.0,
+   "new_loc_q1": 3323,
+   "new_loc_q3": 15630,
+   "ros": 3
+  },
+  "robot": {
+   "n": 96,
+   "category": {
+    "unidentified": 34,
+    "dependency": 35,
+    "readme_declared_only": 20,
+    "vendored": 7
+   },
+   "vendored_bases": [
+    [
+     "diffusion_policy",
+     3
+    ],
+    [
+     "act",
+     2
+    ],
+    [
+     "octo",
+     1
+    ],
+    [
+     "nerf-pytorch",
+     1
+    ],
+    [
+     "openvla",
+     1
+    ],
+    [
+     "openpi",
+     1
+    ],
+    [
+     "legged_gym",
+     1
+    ],
+    [
+     "rsl_rl",
+     1
+    ],
+    [
+     "robomimic",
+     1
+    ]
+   ],
+   "dependency_bases": [
+    [
+     "isaac",
+     12
+    ],
+    [
+     "detectron2",
+     8
+    ],
+    [
+     "habitat",
+     6
+    ],
+    [
+     "robosuite",
+     6
+    ],
+    [
+     "robomimic",
+     5
+    ],
+    [
+     "mmdetection",
+     4
+    ],
+    [
+     "diffusion_policy",
+     3
+    ],
+    [
+     "stable-baselines3",
+     3
+    ],
+    [
+     "tiny-cuda-nn",
+     2
+    ],
+    [
+     "deoxys",
+     2
+    ]
+   ],
+   "sources_ge2_share": 0.438,
+   "sources_0_share": 0.354,
+   "top_pairs": [
+    [
+     [
+      "robomimic",
+      "robosuite"
+     ],
+     4
+    ],
+    [
+     [
+      "detectron2",
+      "habitat"
+     ],
+     3
+    ],
+    [
+     [
+      "detectron2",
+      "mmdetection"
+     ],
+     2
+    ],
+    [
+     [
+      "diffusion_policy",
+      "robomimic"
+     ],
+     2
+    ],
+    [
+     [
+      "deoxys",
+      "isaac"
+     ],
+     2
+    ],
+    [
+     [
+      "detectron2",
+      "facebookresearch/home-robot"
+     ],
+     1
+    ],
+    [
+     [
+      "detectron2",
+      "spconv"
+     ],
+     1
+    ],
+    [
+     [
+      "facebookresearch/home-robot",
+      "habitat"
+     ],
+     1
+    ]
+   ],
+   "new_loc_median": 7558.5,
+   "new_loc_q1": 3888,
+   "new_loc_q3": 16531,
+   "ros": 18
+  },
+  "all": {
+   "n": 308,
+   "category": {
+    "readme_declared_only": 81,
+    "unidentified": 74,
+    "vendored": 64,
+    "dependency": 89
+   },
+   "vendored_bases": [
+    [
+     "gaussian-splatting",
+     21
+    ],
+    [
+     "diff-gaussian-rasterization",
+     19
+    ],
+    [
+     "OpenPCDet",
+     7
+    ],
+    [
+     "nerf-pytorch",
+     6
+    ],
+    [
+     "mmdetection3d",
+     5
+    ],
+    [
+     "Pointcept",
+     3
+    ],
+    [
+     "BEVDet",
+     3
+    ],
+    [
+     "diffusion_policy",
+     3
+    ],
+    [
+     "threestudio",
+     2
+    ],
+    [
+     "robomimic",
+     2
+    ]
+   ],
+   "dependency_bases": [
+    [
+     "mmdetection",
+     29
+    ],
+    [
+     "spconv",
+     17
+    ],
+    [
+     "detectron2",
+     16
+    ],
+    [
+     "mmdetection3d",
+     15
+    ],
+    [
+     "tiny-cuda-nn",
+     14
+    ],
+    [
+     "isaac",
+     12
+    ],
+    [
+     "habitat",
+     9
+    ],
+    [
+     "MinkowskiEngine",
+     7
+    ],
+    [
+     "nerfstudio",
+     6
+    ],
+    [
+     "robosuite",
+     6
+    ]
+   ],
+   "sources_ge2_share": 0.51,
+   "sources_0_share": 0.24,
+   "top_pairs": [
+    [
+     [
+      "mmdetection",
+      "mmdetection3d"
+     ],
+     19
+    ],
+    [
+     [
+      "mmdetection",
+      "spconv"
+     ],
+     7
+    ],
+    [
+     [
+      "BEVFormer",
+      "mmdetection"
+     ],
+     5
+    ],
+    [
+     [
+      "nerfstudio",
+      "tiny-cuda-nn"
+     ],
+     4
+    ],
+    [
+     [
+      "BEVDet",
+      "mmdetection"
+     ],
+     4
+    ],
+    [
+     [
+      "mmdetection3d",
+      "spconv"
+     ],
+     4
+    ],
+    [
+     [
+      "BEVFormer",
+      "mmdetection3d"
+     ],
+     4
+    ],
+    [
+     [
+      "robomimic",
+      "robosuite"
+     ],
+     4
+    ]
+   ],
+   "new_loc_median": 6969.5,
+   "new_loc_q1": 3211,
+   "new_loc_q3": 14553,
+   "ros": 24
+  }
+ },
+ "bases": {
+  "gaussian-splatting": {
+   "n": 21,
+   "added_median": 423,
+   "added_q1": 294,
+   "added_q3": 826,
+   "deleted_median": 118,
+   "modified_files_median": 11,
+   "unchanged_share_median": 0.38,
+   "new_files_inside_median": 1,
+   "new_files_inside_loc_median": 305,
+   "wiring_share_of_added_median": 0.122,
+   "commit_years": {
+    "2023": 18,
+    "2024": 3
+   },
+   "hotspots": [
+    [
+     "arguments/__init__.py",
+     21,
+     1.0,
+     15
+    ],
+    [
+     "gaussian_renderer/__init__.py",
+     20,
+     0.95,
+     29.5
+    ],
+    [
+     "scene/dataset_readers.py",
+     19,
+     0.9,
+     112
+    ],
+    [
+     "scene/__init__.py",
+     19,
+     0.9,
+     23
+    ],
+    [
+     "scene/gaussian_model.py",
+     18,
+     0.86,
+     87.5
+    ],
+    [
+     "scene/cameras.py",
+     17,
+     0.81,
+     21
+    ],
+    [
+     "utils/camera_utils.py",
+     17,
+     0.81,
+     20
+    ],
+    [
+     "utils/loss_utils.py",
+     15,
+     0.71,
+     43
+    ],
+    [
+     "train.py",
+     13,
+     0.62,
+     124
+    ],
+    [
+     "render.py",
+     13,
+     0.62,
+     79
+    ],
+    [
+     "utils/general_utils.py",
+     13,
+     0.62,
+     17
+    ],
+    [
+     "utils/image_utils.py",
+     10,
+     0.48,
+     30.0
+    ]
+   ],
+   "new_dirs": [
+    [
+     "utils",
+     12
+    ],
+    [
+     "scene",
+     7
+    ],
+    [
+     "gaussian_renderer",
+     1
+    ]
+   ]
+  },
+  "diff-gaussian-rasterization": {
+   "n": 19,
+   "added_median": 137,
+   "added_q1": 61,
+   "added_q3": 756,
+   "deleted_median": 65,
+   "modified_files_median": 10,
+   "unchanged_share_median": 0.27,
+   "new_files_inside_median": 0,
+   "new_files_inside_loc_median": 0,
+   "wiring_share_of_added_median": 0.0,
+   "commit_years": {
+    "2023": 18,
+    "2024": 1
+   },
+   "hotspots": [
+    [
+     "cuda_rasterizer/forward.cu",
+     17,
+     0.89,
+     46
+    ],
+    [
+     "cuda_rasterizer/rasterizer_impl.cu",
+     17,
+     0.89,
+     30
+    ],
+    [
+     "rasterize_points.cu",
+     16,
+     0.84,
+     29.5
+    ],
+    [
+     "cuda_rasterizer/rasterizer.h",
+     16,
+     0.84,
+     7.5
+    ],
+    [
+     "rasterize_points.h",
+     16,
+     0.84,
+     7.0
+    ],
+    [
+     "cuda_rasterizer/forward.h",
+     16,
+     0.84,
+     6.0
+    ],
+    [
+     "cuda_rasterizer/backward.cu",
+     15,
+     0.79,
+     119
+    ],
+    [
+     "cuda_rasterizer/backward.h",
+     15,
+     0.79,
+     10
+    ],
+    [
+     "cuda_rasterizer/auxiliary.h",
+     9,
+     0.47,
+     33
+    ],
+    [
+     "setup.py",
+     9,
+     0.47,
+     2
+    ],
+    [
+     "diff_gaussian_rasterization/__init__.py",
+     9,
+     0.47,
+     14
+    ],
+    [
+     "cuda_rasterizer/rasterizer_impl.h",
+     8,
+     0.42,
+     3.5
+    ]
+   ],
+   "new_dirs": [
+    [
+     "cuda_rasterizer",
+     2
+    ]
+   ]
+  },
+  "multinerf": {
+   "n": 1,
+   "added_median": 0,
+   "added_q1": 0,
+   "added_q3": 0,
+   "deleted_median": 0,
+   "modified_files_median": 0,
+   "unchanged_share_median": 0.0,
+   "new_files_inside_median": 0,
+   "new_files_inside_loc_median": 0,
+   "wiring_share_of_added_median": 0.0,
+   "commit_years": {
+    "2022": 1
+   },
+   "hotspots": [],
+   "new_dirs": []
+  },
+  "Pointcept": {
+   "n": 3,
+   "added_median": 333,
+   "added_q1": 333,
+   "added_q3": 966,
+   "deleted_median": 92,
+   "modified_files_median": 12,
+   "unchanged_share_median": 0.52,
+   "new_files_inside_median": 7,
+   "new_files_inside_loc_median": 2600,
+   "wiring_share_of_added_median": 0.003,
+   "commit_years": {
+    "2024": 2,
+    "2023": 1
+   },
+   "hotspots": [
+    [
+     "pointcept/models/__init__.py",
+     3,
+     1.0,
+     2
+    ],
+    [
+     "pointcept/models/sparse_unet/spconv_unet_v1m1_base.py",
+     2,
+     0.67,
+     74.5
+    ],
+    [
+     "pointcept/datasets/__init__.py",
+     2,
+     0.67,
+     7.0
+    ],
+    [
+     "pointcept/datasets/utils.py",
+     2,
+     0.67,
+     5.0
+    ],
+    [
+     "pointcept/models/sparse_unet/__init__.py",
+     2,
+     0.67,
+     2.0
+    ],
+    [
+     "pointcept/datasets/transform.py",
+     2,
+     0.67,
+     119.0
+    ],
+    [
+     "pointcept/models/default.py",
+     2,
+     0.67,
+     32.0
+    ],
+    [
+     "pointcept/engines/train.py",
+     2,
+     0.67,
+     8.0
+    ],
+    [
+     "pointcept/datasets/defaults.py",
+     2,
+     0.67,
+     3.0
+    ],
+    [
+     "pointcept/models/point_transformer_v3/point_transformer_v3m1_base.py",
+     1,
+     0.33,
+     41
+    ],
+    [
+     "pointcept/engines/launch.py",
+     1,
+     0.33,
+     8
+    ],
+    [
+     "pointcept/datasets/preprocessing/scannet/preprocess_scannet.py",
+     1,
+     0.33,
+     2
+    ]
+   ],
+   "new_dirs": [
+    [
+     "pointcept/datasets",
+     2
+    ],
+    [
+     "configs/semantic_kitti",
+     2
+    ],
+    [
+     "configs/scannet",
+     2
+    ],
+    [
+     "configs/s3dis",
+     2
+    ],
+    [
+     "pointcept/models/point_transformer",
+     1
+    ],
+    [
+     "pointcept/models/point_prompt_training",
+     1
+    ],
+    [
+     "pointcept/models/sparse_unet",
+     1
+    ],
+    [
+     "tools",
+     1
+    ]
+   ]
+  },
+  "torch-ngp": {
+   "n": 1,
+   "added_median": 432,
+   "added_q1": 432,
+   "added_q3": 432,
+   "deleted_median": 392,
+   "modified_files_median": 7,
+   "unchanged_share_median": 0.65,
+   "new_files_inside_median": 10,
+   "new_files_inside_loc_median": 434,
+   "wiring_share_of_added_median": 0.0,
+   "commit_years": {
+    "2022": 1
+   },
+   "hotspots": [
+    [
+     "nerf/utils.py",
+     1,
+     1.0,
+     291
+    ],
+    [
+     "nerf/renderer.py",
+     1,
+     1.0,
+     225
+    ],
+    [
+     "main_nerf.py",
+     1,
+     1.0,
+     141
+    ],
+    [
+     "nerf/provider.py",
+     1,
+     1.0,
+     119
+    ],
+    [
+     "nerf/network_tcnn.py",
+     1,
+     1.0,
+     43
+    ],
+    [
+     "scripts/llff2nerf.py",
+     1,
+     1.0,
+     3
+    ],
+    [
+     "raymarching/backend.py",
+     1,
+     1.0,
+     2
+    ]
+   ],
+   "new_dirs": [
+    [
+     "nerf",
+     1
+    ]
+   ]
+  },
+  "nerf-pytorch": {
+   "n": 6,
+   "added_median": 170.5,
+   "added_q1": 22,
+   "added_q3": 220,
+   "deleted_median": 63.5,
+   "modified_files_median": 2.5,
+   "unchanged_share_median": 0.0,
+   "new_files_inside_median": 0.0,
+   "new_files_inside_loc_median": 0.0,
+   "wiring_share_of_added_median": 0.0,
+   "commit_years": {
+    "2020": 4,
+    "2021": 2
+   },
+   "hotspots": [
+    [
+     "load_llff.py",
+     5,
+     0.83,
+     49
+    ],
+    [
+     "run_nerf.py",
+     3,
+     0.5,
+     429
+    ],
+    [
+     "load_blender.py",
+     2,
+     0.33,
+     81.0
+    ],
+    [
+     "run_nerf_helpers.py",
+     2,
+     0.33,
+     227.5
+    ],
+    [
+     "load_deepvoxels.py",
+     1,
+     0.17,
+     2
+    ]
+   ],
+   "new_dirs": []
+  },
+  "threestudio": {
+   "n": 2,
+   "added_median": 53.5,
+   "added_q1": 13,
+   "added_q3": 94,
+   "deleted_median": 45.5,
+   "modified_files_median": 10.5,
+   "unchanged_share_median": 0.39,
+   "new_files_inside_median": 10.0,
+   "new_files_inside_loc_median": 3114.0,
+   "wiring_share_of_added_median": 0.329,
+   "commit_years": {
+    "2023": 2
+   },
+   "hotspots": [
+    [
+     "launch.py",
+     2,
+     1.0,
+     1.5
+    ],
+    [
+     "threestudio/data/__init__.py",
+     2,
+     1.0,
+     2.0
+    ],
+    [
+     "threestudio/models/guidance/__init__.py",
+     2,
+     1.0,
+     2.0
+    ],
+    [
+     "threestudio/models/prompt_processors/__init__.py",
+     2,
+     1.0,
+     2.0
+    ],
+    [
+     "threestudio/systems/__init__.py",
+     2,
+     1.0,
+     2.0
+    ],
+    [
+     "threestudio/models/materials/neural_radiance_material.py",
+     1,
+     0.5,
+     9
+    ],
+    [
+     "threestudio/models/geometry/__init__.py",
+     1,
+     0.5,
+     2
+    ],
+    [
+     "threestudio/models/materials/__init__.py",
+     1,
+     0.5,
+     2
+    ],
+    [
+     "threestudio/models/renderers/__init__.py",
+     1,
+     0.5,
+     2
+    ],
+    [
+     "threestudio/utils/__init__.py",
+     1,
+     0.5,
+     2
+    ],
+    [
+     "threestudio/utils/ops.py",
+     1,
+     0.5,
+     1
+    ],
+    [
+     "threestudio/models/guidance/controlnet_guidance.py",
+     1,
+     0.5,
+     127
+    ]
+   ],
+   "new_dirs": [
+    [
+     "threestudio/systems",
+     2
+    ],
+    [
+     "threestudio/utils",
+     2
+    ],
+    [
+     "threestudio/models/renderers",
+     2
+    ],
+    [
+     "threestudio/data",
+     2
+    ],
+    [
+     "threestudio/models/materials",
+     1
+    ],
+    [
+     "threestudio/models/geometry",
+     1
+    ],
+    [
+     "threestudio/models/guidance",
+     1
+    ],
+    [
+     "threestudio/models/prompt_processors",
+     1
+    ]
+   ]
+  },
+  "mmdetection3d": {
+   "n": 5,
+   "added_median": 901,
+   "added_q1": 445,
+   "added_q3": 1143,
+   "deleted_median": 48,
+   "modified_files_median": 17,
+   "unchanged_share_median": 0.94,
+   "new_files_inside_median": 8,
+   "new_files_inside_loc_median": 3151,
+   "wiring_share_of_added_median": 0.04,
+   "commit_years": {
+    "2024": 1,
+    "2021": 2,
+    "2023": 1,
+    "2022": 1
+   },
+   "hotspots": [
+    [
+     "tools/train.py",
+     4,
+     0.8,
+     23.0
+    ],
+    [
+     "mmdet3d/datasets/nuscenes_dataset.py",
+     4,
+     0.8,
+     26.0
+    ],
+    [
+     "tools/test.py",
+     3,
+     0.6,
+     13
+    ],
+    [
+     "mmdet3d/datasets/pipelines/loading.py",
+     3,
+     0.6,
+     334
+    ],
+    [
+     "mmdet3d/datasets/__init__.py",
+     3,
+     0.6,
+     6
+    ],
+    [
+     "mmdet3d/datasets/pipelines/formating.py",
+     3,
+     0.6,
+     2
+    ],
+    [
+     "tools/data_converter/nuscenes_converter.py",
+     3,
+     0.6,
+     2
+    ],
+    [
+     "mmdet3d/models/dense_heads/__init__.py",
+     2,
+     0.4,
+     3.5
+    ],
+    [
+     "mmdet3d/datasets/pipelines/__init__.py",
+     2,
+     0.4,
+     7.0
+    ],
+    [
+     "mmdet3d/models/backbones/__init__.py",
+     2,
+     0.4,
+     5.5
+    ],
+    [
+     "mmdet3d/models/middle_encoders/sparse_encoder.py",
+     2,
+     0.4,
+     67.5
+    ],
+    [
+     "setup.py",
+     2,
+     0.4,
+     2.0
+    ]
+   ],
+   "new_dirs": [
+    [
+     "tools",
+     3
+    ],
+    [
+     "mmdet3d/datasets",
+     3
+    ],
+    [
+     "mmdet3d/models/backbones",
+     2
+    ],
+    [
+     "mmdet3d/models/dense_heads",
+     2
+    ],
+    [
+     "mmdet3d/models/losses",
+     2
+    ],
+    [
+     "projects/NeRF-Det/configs",
+     1
+    ],
+    [
+     "projects/NeRF-Det/nerfdet",
+     1
+    ],
+    [
+     "mmdet3d/evaluation/metrics",
+     1
+    ]
+   ]
+  },
+  "BEVDet": {
+   "n": 3,
+   "added_median": 1830,
+   "added_q1": 1830,
+   "added_q3": 3145,
+   "deleted_median": 89,
+   "modified_files_median": 31,
+   "unchanged_share_median": 0.55,
+   "new_files_inside_median": 14,
+   "new_files_inside_loc_median": 4235,
+   "wiring_share_of_added_median": 0.045,
+   "commit_years": {
+    "2022": 2,
+    "2023": 1
+   },
+   "hotspots": [
+    [
+     "mmdet3d/datasets/pipelines/loading.py",
+     3,
+     1.0,
+     331
+    ],
+    [
+     "mmdet3d/models/necks/view_transformer.py",
+     3,
+     1.0,
+     279
+    ],
+    [
+     "mmdet3d/datasets/pipelines/transforms_3d.py",
+     3,
+     1.0,
+     225
+    ],
+    [
+     "mmdet3d/datasets/nuscenes_dataset.py",
+     3,
+     1.0,
+     218
+    ],
+    [
+     "tools/train.py",
+     3,
+     1.0,
+     50
+    ],
+    [
+     "mmdet3d/models/dense_heads/centerpoint_head.py",
+     3,
+     1.0,
+     30
+    ],
+    [
+     "mmdet3d/datasets/pipelines/formating.py",
+     3,
+     1.0,
+     20
+    ],
+    [
+     "tools/data_converter/nuscenes_converter.py",
+     3,
+     1.0,
+     257
+    ],
+    [
+     "tools/analysis_tools/benchmark.py",
+     3,
+     1.0,
+     1
+    ],
+    [
+     "mmdet3d/apis/test.py",
+     2,
+     0.67,
+     123.0
+    ],
+    [
+     "mmdet3d/datasets/pipelines/test_time_aug.py",
+     2,
+     0.67,
+     117.0
+    ],
+    [
+     "mmdet3d/models/middle_encoders/sparse_encoder.py",
+     2,
+     0.67,
+     99.0
+    ]
+   ],
+   "new_dirs": [
+    [
+     "tools/analysis_tools",
+     3
+    ],
+    [
+     "mmdet3d/core/bbox",
+     2
+    ],
+    [
+     "mmdet3d/models/backbones",
+     2
+    ],
+    [
+     "mmdet3d/datasets",
+     2
+    ],
+    [
+     "tools/data_converter",
+     2
+    ],
+    [
+     "mmdet3d/models/detectors",
+     1
+    ],
+    [
+     "mmdet3d/models/losses",
+     1
+    ],
+    [
+     "tools",
+     1
+    ]
+   ]
+  },
+  "robomimic": {
+   "n": 2,
+   "added_median": 242.5,
+   "added_q1": 211,
+   "added_q3": 274,
+   "deleted_median": 24.5,
+   "modified_files_median": 9.5,
+   "unchanged_share_median": 0.88,
+   "new_files_inside_median": 3.0,
+   "new_files_inside_loc_median": 614.5,
+   "wiring_share_of_added_median": 0.0,
+   "commit_years": {
+    "2023": 1,
+    "2022": 1
+   },
+   "hotspots": [
+    [
+     "robomimic/utils/log_utils.py",
+     2,
+     1.0,
+     47.0
+    ],
+    [
+     "robomimic/scripts/train.py",
+     2,
+     1.0,
+     32.5
+    ],
+    [
+     "robomimic/scripts/playback_dataset.py",
+     2,
+     1.0,
+     6.5
+    ],
+    [
+     "robomimic/utils/train_utils.py",
+     2,
+     1.0,
+     18.5
+    ],
+    [
+     "robomimic/models/base_nets.py",
+     1,
+     0.5,
+     97
+    ],
+    [
+     "robomimic/envs/wrappers.py",
+     1,
+     0.5,
+     69
+    ],
+    [
+     "robomimic/scripts/dataset_states_to_obs.py",
+     1,
+     0.5,
+     45
+    ],
+    [
+     "robomimic/macros.py",
+     1,
+     0.5,
+     2
+    ],
+    [
+     "robomimic/utils/dataset.py",
+     1,
+     0.5,
+     72
+    ],
+    [
+     "robomimic/algo/algo.py",
+     1,
+     0.5,
+     12
+    ],
+    [
+     "robomimic/utils/file_utils.py",
+     1,
+     0.5,
+     7
+    ],
+    [
+     "robomimic/utils/obs_utils.py",
+     1,
+     0.5,
+     7
+    ]
+   ],
+   "new_dirs": [
+    [
+     "robomimic/scripts",
+     1
+    ]
+   ]
+  },
+  "OpenPCDet": {
+   "n": 7,
+   "added_median": 953,
+   "added_q1": 950,
+   "added_q3": 3319,
+   "deleted_median": 68,
+   "modified_files_median": 30,
+   "unchanged_share_median": 0.87,
+   "new_files_inside_median": 20,
+   "new_files_inside_loc_median": 5052,
+   "wiring_share_of_added_median": 0.062,
+   "commit_years": {
+    "2023": 3,
+    "2020": 1,
+    "2022": 3
+   },
+   "hotspots": [
+    [
+     "tools/test.py",
+     7,
+     1.0,
+     17
+    ],
+    [
+     "pcdet/datasets/augmentor/data_augmentor.py",
+     6,
+     0.86,
+     50.0
+    ],
+    [
+     "pcdet/utils/loss_utils.py",
+     6,
+     0.86,
+     128.0
+    ],
+    [
+     "tools/train.py",
+     6,
+     0.86,
+     10.0
+    ],
+    [
+     "pcdet/models/detectors/detector3d_template.py",
+     6,
+     0.86,
+     8.5
+    ],
+    [
+     "pcdet/datasets/dataset.py",
+     6,
+     0.86,
+     31.0
+    ],
+    [
+     "pcdet/models/dense_heads/__init__.py",
+     6,
+     0.86,
+     5.5
+    ],
+    [
+     "tools/eval_utils/eval_utils.py",
+     6,
+     0.86,
+     21.5
+    ],
+    [
+     "pcdet/datasets/augmentor/database_sampler.py",
+     5,
+     0.71,
+     123
+    ],
+    [
+     "pcdet/datasets/augmentor/augmentor_utils.py",
+     5,
+     0.71,
+     74
+    ],
+    [
+     "pcdet/datasets/__init__.py",
+     5,
+     0.71,
+     7
+    ],
+    [
+     "pcdet/models/detectors/__init__.py",
+     5,
+     0.71,
+     6
+    ]
+   ],
+   "new_dirs": [
+    [
+     "pcdet/models/dense_heads",
+     6
+    ],
+    [
+     "pcdet/models/detectors",
+     6
+    ],
+    [
+     "pcdet/utils",
+     5
+    ],
+    [
+     "tools",
+     5
+    ],
+    [
+     "pcdet/models/roi_heads",
+     4
+    ],
+    [
+     "pcdet/models/backbones_3d",
+     4
+    ],
+    [
+     "pcdet/models/model_utils",
+     4
+    ],
+    [
+     "pcdet/datasets/augmentor",
+     3
+    ]
+   ]
+  },
+  "CenterPoint": {
+   "n": 1,
+   "added_median": 464,
+   "added_q1": 464,
+   "added_q3": 464,
+   "deleted_median": 94,
+   "modified_files_median": 26,
+   "unchanged_share_median": 0.73,
+   "new_files_inside_median": 9,
+   "new_files_inside_loc_median": 1221,
+   "wiring_share_of_added_median": 0.047,
+   "commit_years": {
+    "2021": 1
+   },
+   "hotspots": [
+    [
+     "det3d/models/losses/centernet_loss.py",
+     1,
+     1.0,
+     214
+    ],
+    [
+     "tools/dist_test.py",
+     1,
+     1.0,
+     72
+    ],
+    [
+     "det3d/models/detectors/point_pillars.py",
+     1,
+     1.0,
+     57
+    ],
+    [
+     "det3d/ops/dcn/src/deform_conv_cuda.cpp",
+     1,
+     1.0,
+     42
+    ],
+    [
+     "det3d/datasets/waymo/waymo_common.py",
+     1,
+     1.0,
+     23
+    ],
+    [
+     "det3d/datasets/pipelines/loading.py",
+     1,
+     1.0,
+     20
+    ],
+    [
+     "det3d/models/backbones/scn.py",
+     1,
+     1.0,
+     20
+    ],
+    [
+     "tools/train.py",
+     1,
+     1.0,
+     20
+    ],
+    [
+     "det3d/torchie/trainer/hooks/optimizer.py",
+     1,
+     1.0,
+     11
+    ],
+    [
+     "tools/simple_inference_waymo.py",
+     1,
+     1.0,
+     10
+    ],
+    [
+     "det3d/torchie/trainer/hooks/logger/text.py",
+     1,
+     1.0,
+     9
+    ],
+    [
+     "det3d/datasets/pipelines/preprocess.py",
+     1,
+     1.0,
+     8
+    ]
+   ],
+   "new_dirs": [
+    [
+     "det3d/models/detectors",
+     1
+    ],
+    [
+     "tools",
+     1
+    ],
+    [
+     "configs/nusc/pp",
+     1
+    ],
+    [
+     "det3d/utils",
+     1
+    ],
+    [
+     "det3d/torchie/trainer",
+     1
+    ],
+    [
+     "det3d/models/losses",
+     1
+    ]
+   ]
+  },
+  "BEVFormer": {
+   "n": 2,
+   "added_median": 818.0,
+   "added_q1": 807,
+   "added_q3": 829,
+   "deleted_median": 31.0,
+   "modified_files_median": 18.5,
+   "unchanged_share_median": 0.76,
+   "new_files_inside_median": 14.0,
+   "new_files_inside_loc_median": 7694.5,
+   "wiring_share_of_added_median": 0.0505,
+   "commit_years": {
+    "2022": 2
+   },
+   "hotspots": [
+    [
+     "projects/mmdet3d_plugin/datasets/pipelines/loading.py",
+     2,
+     1.0,
+     345.0
+    ],
+    [
+     "projects/mmdet3d_plugin/datasets/pipelines/transform_3d.py",
+     2,
+     1.0,
+     149.0
+    ],
+    [
+     "projects/mmdet3d_plugin/datasets/__init__.py",
+     2,
+     1.0,
+     5.5
+    ],
+    [
+     "projects/mmdet3d_plugin/models/utils/__init__.py",
+     2,
+     1.0,
+     3.0
+    ],
+    [
+     "projects/mmdet3d_plugin/core/bbox/coders/__init__.py",
+     2,
+     1.0,
+     4.0
+    ],
+    [
+     "projects/mmdet3d_plugin/datasets/pipelines/__init__.py",
+     2,
+     1.0,
+     4.0
+    ],
+    [
+     "projects/mmdet3d_plugin/__init__.py",
+     2,
+     1.0,
+     3.0
+    ],
+    [
+     "projects/mmdet3d_plugin/models/backbones/__init__.py",
+     2,
+     1.0,
+     3.0
+    ],
+    [
+     "projects/mmdet3d_plugin/bevformer/modules/spatial_cross_attention.py",
+     1,
+     0.5,
+     139
+    ],
+    [
+     "projects/mmdet3d_plugin/bevformer/modules/custom_base_transformer_layer.py",
+     1,
+     0.5,
+     138
+    ],
+    [
+     "projects/mmdet3d_plugin/core/bbox/coders/nms_free_coder.py",
+     1,
+     0.5,
+     128
+    ],
+    [
+     "projects/mmdet3d_plugin/bevformer/modules/encoder.py",
+     1,
+     0.5,
+     13
+    ]
+   ],
+   "new_dirs": [
+    [
+     "projects/mmdet3d_plugin/datasets",
+     2
+    ],
+    [
+     "projects/mmdet3d_plugin/models/backbones",
+     2
+    ],
+    [
+     "tools/data_converter",
+     2
+    ],
+    [
+     "projects/mmdet3d_plugin/models/utils",
+     2
+    ],
+    [
+     "projects/mmdet3d_plugin/datasets/pipelines",
+     1
+    ],
+    [
+     "projects/mmdet3d_plugin/core/bbox/coders",
+     1
+    ],
+    [
+     "projects/mmdet3d_plugin/datasets/samplers",
+     1
+    ],
+    [
+     "projects/mmdet3d_plugin/core/evaluation",
+     1
+    ]
+   ]
+  },
+  "bevfusion-mit": {
+   "n": 1,
+   "added_median": 230,
+   "added_q1": 230,
+   "added_q3": 230,
+   "deleted_median": 21,
+   "modified_files_median": 21,
+   "unchanged_share_median": 0.9,
+   "new_files_inside_median": 5,
+   "new_files_inside_loc_median": 850,
+   "wiring_share_of_added_median": 0.252,
+   "commit_years": {
+    "2022": 1
+   },
+   "hotspots": [
+    [
+     "mmdet3d/models/fusion_models/bevfusion.py",
+     1,
+     1.0,
+     122
+    ],
+    [
+     "mmdet3d/datasets/nuscenes_dataset.py",
+     1,
+     1.0,
+     28
+    ],
+    [
+     "mmdet3d/models/builder.py",
+     1,
+     1.0,
+     20
+    ],
+    [
+     "tools/test.py",
+     1,
+     1.0,
+     13
+    ],
+    [
+     "mmdet3d/core/utils/visualize.py",
+     1,
+     1.0,
+     12
+    ],
+    [
+     "mmdet3d/models/vtransforms/__init__.py",
+     1,
+     1.0,
+     10
+    ],
+    [
+     "tools/train.py",
+     1,
+     1.0,
+     10
+    ],
+    [
+     "mmdet3d/models/__init__.py",
+     1,
+     1.0,
+     6
+    ],
+    [
+     "tools/benchmark.py",
+     1,
+     1.0,
+     4
+    ],
+    [
+     "mmdet3d/datasets/custom_3d.py",
+     1,
+     1.0,
+     3
+    ],
+    [
+     "mmdet3d/models/fusion_models/__init__.py",
+     1,
+     1.0,
+     3
+    ],
+    [
+     "mmdet3d/models/utils/flops_counter.py",
+     1,
+     1.0,
+     3
+    ]
+   ],
+   "new_dirs": [
+    [
+     "mmdet3d/models/fusion_models",
+     1
+    ],
+    [
+     "mmdet3d/models/utils",
+     1
+    ],
+    [
+     "mmdet3d/models/vtransforms",
+     1
+    ],
+    [
+     "mmdet3d/models/fusers",
+     1
+    ]
+   ]
+  },
+  "diffusion_policy": {
+   "n": 3,
+   "added_median": 91,
+   "added_q1": 91,
+   "added_q3": 366,
+   "deleted_median": 10,
+   "modified_files_median": 7,
+   "unchanged_share_median": 0.74,
+   "new_files_inside_median": 3,
+   "new_files_inside_loc_median": 600,
+   "wiring_share_of_added_median": 0.0,
+   "commit_years": {
+    "2023": 3
+   },
+   "hotspots": [
+    [
+     "diffusion_policy/common/sampler.py",
+     2,
+     0.67,
+     109.5
+    ],
+    [
+     "diffusion_policy/model/common/rotation_transformer.py",
+     2,
+     0.67,
+     39.0
+    ],
+    [
+     "diffusion_policy/policy/diffusion_unet_image_policy.py",
+     2,
+     0.67,
+     21.0
+    ],
+    [
+     "diffusion_policy/workspace/train_diffusion_unet_image_workspace.py",
+     1,
+     0.33,
+     101
+    ],
+    [
+     "diffusion_policy/shared_memory/shared_memory_queue.py",
+     1,
+     0.33,
+     57
+    ],
+    [
+     "diffusion_policy/dataset/base_dataset.py",
+     1,
+     0.33,
+     19
+    ],
+    [
+     "diffusion_policy/common/timestamp_accumulator.py",
+     1,
+     0.33,
+     15
+    ],
+    [
+     "diffusion_policy/common/normalize_util.py",
+     1,
+     0.33,
+     14
+    ],
+    [
+     "diffusion_policy/env/robomimic/robomimic_image_wrapper.py",
+     1,
+     0.33,
+     9
+    ],
+    [
+     "diffusion_policy/policy/diffusion_unet_hybrid_image_policy.py",
+     1,
+     0.33,
+     9
+    ],
+    [
+     "diffusion_policy/policy/diffusion_transformer_hybrid_image_policy.py",
+     1,
+     0.33,
+     8
+    ],
+    [
+     "diffusion_policy/policy/base_image_policy.py",
+     1,
+     0.33,
+     4
+    ]
+   ],
+   "new_dirs": [
+    [
+     "diffusion_policy/dataset",
+     3
+    ],
+    [
+     "diffusion_policy/env_runner",
+     3
+    ],
+    [
+     "diffusion_policy/workspace",
+     2
+    ],
+    [
+     "diffusion_policy/common",
+     1
+    ],
+    [
+     "diffusion_policy/real_world",
+     1
+    ],
+    [
+     "tests",
+     1
+    ],
+    [
+     "diffusion_policy/model/common",
+     1
+    ],
+    [
+     "diffusion_policy/policy",
+     1
+    ]
+   ]
+  },
+  "octo": {
+   "n": 1,
+   "added_median": 7,
+   "added_q1": 7,
+   "added_q3": 7,
+   "deleted_median": 1,
+   "modified_files_median": 3,
+   "unchanged_share_median": 0.94,
+   "new_files_inside_median": 0,
+   "new_files_inside_loc_median": 0,
+   "wiring_share_of_added_median": 0.0,
+   "commit_years": {
+    "2024": 1
+   },
+   "hotspots": [
+    [
+     "octo/model/components/tokenizers.py",
+     1,
+     1.0,
+     3
+    ],
+    [
+     "octo/model/octo_model.py",
+     1,
+     1.0,
+     3
+    ],
+    [
+     "octo/data/utils/text_processing.py",
+     1,
+     1.0,
+     2
+    ]
+   ],
+   "new_dirs": []
+  },
+  "openpi": {
+   "n": 1,
+   "added_median": 245,
+   "added_q1": 245,
+   "added_q3": 245,
+   "deleted_median": 50,
+   "modified_files_median": 9,
+   "unchanged_share_median": 0.88,
+   "new_files_inside_median": 3,
+   "new_files_inside_loc_median": 616,
+   "wiring_share_of_added_median": 0.0,
+   "commit_years": {
+    "2025": 1
+   },
+   "hotspots": [
+    [
+     "src/openpi/models/pi0.py",
+     1,
+     1.0,
+     143
+    ],
+    [
+     "scripts/train.py",
+     1,
+     1.0,
+     71
+    ],
+    [
+     "src/openpi/training/data_loader.py",
+     1,
+     1.0,
+     26
+    ],
+    [
+     "examples/libero/convert_libero_data_to_lerobot.py",
+     1,
+     1.0,
+     14
+    ],
+    [
+     "src/openpi/training/config.py",
+     1,
+     1.0,
+     13
+    ],
+    [
+     "src/openpi/transforms.py",
+     1,
+     1.0,
+     13
+    ],
+    [
+     "src/openpi/policies/policy_config.py",
+     1,
+     1.0,
+     10
+    ],
+    [
+     "src/openpi/training/utils.py",
+     1,
+     1.0,
+     3
+    ],
+    [
+     "src/openpi/shared/download.py",
+     1,
+     1.0,
+     2
+    ]
+   ],
+   "new_dirs": [
+    [
+     "src/openpi",
+     1
+    ],
+    [
+     "scripts",
+     1
+    ],
+    [
+     "src/openpi/models",
+     1
+    ]
+   ]
+  },
+  "openvla": {
+   "n": 1,
+   "added_median": 298,
+   "added_q1": 298,
+   "added_q3": 298,
+   "deleted_median": 26,
+   "modified_files_median": 3,
+   "unchanged_share_median": 0.78,
+   "new_files_inside_median": 0,
+   "new_files_inside_loc_median": 0,
+   "wiring_share_of_added_median": 0.0,
+   "commit_years": {
+    "2024": 1
+   },
+   "hotspots": [
+    [
+     "vla-scripts/finetune.py",
+     1,
+     1.0,
+     318
+    ],
+    [
+     "prismatic/extern/hf/configuration_prismatic.py",
+     1,
+     1.0,
+     3
+    ],
+    [
+     "prismatic/training/strategies/base_strategy.py",
+     1,
+     1.0,
+     3
+    ]
+   ],
+   "new_dirs": []
+  },
+  "act": {
+   "n": 2,
+   "added_median": 161.0,
+   "added_q1": 60,
+   "added_q3": 262,
+   "deleted_median": 134.0,
+   "modified_files_median": 7.5,
+   "unchanged_share_median": 0.45,
+   "new_files_inside_median": 0.0,
+   "new_files_inside_loc_median": 0.0,
+   "wiring_share_of_added_median": 0.0,
+   "commit_years": {
+    "2023": 2
+   },
+   "hotspots": [
+    [
+     "imitate_episodes.py",
+     2,
+     1.0,
+     162.5
+    ],
+    [
+     "detr/models/detr_vae.py",
+     2,
+     1.0,
+     17.5
+    ],
+    [
+     "detr/models/backbone.py",
+     2,
+     1.0,
+     9.0
+    ],
+    [
+     "policy.py",
+     2,
+     1.0,
+     8.0
+    ],
+    [
+     "detr/main.py",
+     2,
+     1.0,
+     7.5
+    ],
+    [
+     "utils.py",
+     1,
+     0.5,
+     156
+    ],
+    [
+     "sim_env.py",
+     1,
+     0.5,
+     17
+    ],
+    [
+     "constants.py",
+     1,
+     0.5,
+     4
+    ],
+    [
+     "detr/models/position_encoding.py",
+     1,
+     0.5,
+     2
+    ],
+    [
+     "visualize_episodes.py",
+     1,
+     0.5,
+     2
+    ]
+   ],
+   "new_dirs": []
+  },
+  "legged_gym": {
+   "n": 1,
+   "added_median": 1224,
+   "added_q1": 1224,
+   "added_q3": 1224,
+   "deleted_median": 189,
+   "modified_files_median": 12,
+   "unchanged_share_median": 0.43,
+   "new_files_inside_median": 17,
+   "new_files_inside_loc_median": 2907,
+   "wiring_share_of_added_median": 0.016,
+   "commit_years": {
+    "2021": 1
+   },
+   "hotspots": [
+    [
+     "legged_gym/envs/base/legged_robot.py",
+     1,
+     1.0,
+     875
+    ],
+    [
+     "legged_gym/scripts/play.py",
+     1,
+     1.0,
+     303
+    ],
+    [
+     "legged_gym/utils/logger.py",
+     1,
+     1.0,
+     86
+    ],
+    [
+     "legged_gym/utils/helpers.py",
+     1,
+     1.0,
+     36
+    ],
+    [
+     "legged_gym/envs/a1/a1_config.py",
+     1,
+     1.0,
+     32
+    ],
+    [
+     "legged_gym/envs/__init__.py",
+     1,
+     1.0,
+     20
+    ],
+    [
+     "legged_gym/utils/task_registry.py",
+     1,
+     1.0,
+     20
+    ],
+    [
+     "legged_gym/envs/base/base_task.py",
+     1,
+     1.0,
+     17
+    ],
+    [
+     "legged_gym/envs/base/legged_robot_config.py",
+     1,
+     1.0,
+     12
+    ],
+    [
+     "legged_gym/scripts/train.py",
+     1,
+     1.0,
+     7
+    ],
+    [
+     "legged_gym/utils/__init__.py",
+     1,
+     1.0,
+     3
+    ],
+    [
+     "setup.py",
+     1,
+     1.0,
+     2
+    ]
+   ],
+   "new_dirs": [
+    [
+     "legged_gym/envs/a1",
+     1
+    ],
+    [
+     "legged_gym",
+     1
+    ],
+    [
+     "legged_gym/envs/base",
+     1
+    ],
+    [
+     "legged_gym/scripts",
+     1
+    ],
+    [
+     "legged_gym/utils",
+     1
+    ]
+   ]
+  },
+  "rsl_rl": {
+   "n": 1,
+   "added_median": 509,
+   "added_q1": 509,
+   "added_q3": 509,
+   "deleted_median": 142,
+   "modified_files_median": 10,
+   "unchanged_share_median": 0.33,
+   "new_files_inside_median": 19,
+   "new_files_inside_loc_median": 2251,
+   "wiring_share_of_added_median": 0.063,
+   "commit_years": {
+    "2021": 1
+   },
+   "hotspots": [
+    [
+     "rsl_rl/storage/rollout_storage.py",
+     1,
+     1.0,
+     257
+    ],
+    [
+     "rsl_rl/runners/on_policy_runner.py",
+     1,
+     1.0,
+     124
+    ],
+    [
+     "rsl_rl/algorithms/ppo.py",
+     1,
+     1.0,
+     101
+    ],
+    [
+     "rsl_rl/utils/utils.py",
+     1,
+     1.0,
+     95
+    ],
+    [
+     "rsl_rl/modules/actor_critic_recurrent.py",
+     1,
+     1.0,
+     29
+    ],
+    [
+     "rsl_rl/modules/__init__.py",
+     1,
+     1.0,
+     26
+    ],
+    [
+     "rsl_rl/modules/actor_critic.py",
+     1,
+     1.0,
+     11
+    ],
+    [
+     "rsl_rl/runners/__init__.py",
+     1,
+     1.0,
+     4
+    ],
+    [
+     "rsl_rl/algorithms/__init__.py",
+     1,
+     1.0,
+     2
+    ],
+    [
+     "setup.py",
+     1,
+     1.0,
+     2
+    ]
+   ],
+   "new_dirs": [
+    [
+     "rsl_rl/algorithms",
+     1
+    ],
+    [
+     "rsl_rl/runners",
+     1
+    ],
+    [
+     "rsl_rl/modules",
+     1
+    ],
+    [
+     "rsl_rl/utils",
+     1
+    ]
+   ]
+  }
+ },
+ "gaussian_splatting": {
+  "forks": 21,
+  "forks_modifying_rasterizer": 13,
+  "repos_modifying_rasterizer": 19,
+  "rasterizer_added_lines": [
+   28,
+   29,
+   43,
+   61,
+   85,
+   125,
+   130,
+   137,
+   181,
+   234,
+   241,
+   245,
+   276,
+   534,
+   756,
+   761,
+   864,
+   1141,
+   1832
+  ]
+ },
+ "examples": [
+  {
+   "title": "ODGS: 3D Scene Reconstruction from Omnidirectional Images with 3D Gaussian Splattings",
+   "venue": "nips",
+   "year": "2024",
+   "repo": "esw0116/ODGS",
+   "field": "pano",
+   "new_code_loc": 1026,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-07-10",
+     "modified": 13,
+     "added": 341,
+     "deleted": 138,
+     "new_files_inside": 1,
+     "top": [
+      [
+       "train.py",
+       83,
+       41
+      ],
+      [
+       "scene/dataset_readers.py",
+       93,
+       19
+      ],
+      [
+       "scene/gaussian_model.py",
+       57,
+       27
+      ],
+      [
+       "utils/image_utils.py",
+       36,
+       2
+      ],
+      [
+       "scene/colmap_loader.py",
+       17,
+       9
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 11,
+     "added": 276,
+     "deleted": 177,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       105,
+       66
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       55,
+       34
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       48,
+       24
+      ],
+      [
+       "rasterize_points.cu",
+       25,
+       19
+      ],
+      [
+       "cuda_rasterizer/backward.h",
+       11,
+       7
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "OmniSplat: Taming Feed-Forward 3D Gaussian Splatting for Omnidirectional Images with Editable Capabilities",
+   "venue": "cvpr",
+   "year": "2025",
+   "repo": "esw0116/OmniSplat",
+   "field": "pano",
+   "new_code_loc": 13012,
+   "changes": [
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 10,
+     "added": 233,
+     "deleted": 65,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       82,
+       37
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       60,
+       10
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       25,
+       5
+      ],
+      [
+       "cuda_rasterizer/auxiliary.h",
+       21,
+       0
+      ],
+      [
+       "rasterize_points.cu",
+       16,
+       4
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 10,
+     "added": 234,
+     "deleted": 65,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       83,
+       37
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       60,
+       10
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       25,
+       5
+      ],
+      [
+       "cuda_rasterizer/auxiliary.h",
+       21,
+       0
+      ],
+      [
+       "rasterize_points.cu",
+       16,
+       4
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "HDR-GS: Efficient High Dynamic Range Novel View Synthesis at 1000x Speed via Gaussian Splatting",
+   "venue": "nips",
+   "year": "2024",
+   "repo": "caiyuanhao1998/HDR-GS",
+   "field": "render",
+   "new_code_loc": 757,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-09-05",
+     "modified": 10,
+     "added": 826,
+     "deleted": 35,
+     "new_files_inside": 1,
+     "top": [
+      [
+       "scene/dataset_readers.py",
+       549,
+       14
+      ],
+      [
+       "gaussian_renderer/__init__.py",
+       44,
+       4
+      ],
+      [
+       "utils/camera_utils.py",
+       38,
+       2
+      ],
+      [
+       "scene/cameras.py",
+       38,
+       1
+      ],
+      [
+       "scene/gaussian_model.py",
+       35,
+       2
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "High-Fidelity SLAM Using Gaussian Splatting with Rendering-Guided Densification and Regularized Optimization",
+   "venue": "iros",
+   "year": "2024",
+   "repo": "ljjTYJR/HF-SLAM",
+   "field": "render",
+   "new_code_loc": 8160,
+   "changes": [
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-12",
+     "modified": 7,
+     "added": 43,
+     "deleted": 11,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/forward.cu",
+       21,
+       3
+      ],
+      [
+       "rasterize_points.cu",
+       6,
+       2
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       6,
+       1
+      ],
+      [
+       "diff_gaussian_rasterization/__init__.py",
+       3,
+       3
+      ],
+      [
+       "cuda_rasterizer/forward.h",
+       4,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Anti-Aliased 2D Gaussian Splatting",
+   "venue": "nips",
+   "year": "2025",
+   "repo": "maeyounes/AA-2DGS",
+   "field": "render",
+   "new_code_loc": 3493,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-09-05",
+     "modified": 14,
+     "added": 402,
+     "deleted": 81,
+     "new_files_inside": 4,
+     "top": [
+      [
+       "train.py",
+       77,
+       25
+      ],
+      [
+       "scene/gaussian_model.py",
+       74,
+       17
+      ],
+      [
+       "scene/dataset_readers.py",
+       57,
+       1
+      ],
+      [
+       "metrics.py",
+       46,
+       10
+      ],
+      [
+       "gaussian_renderer/__init__.py",
+       30,
+       8
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 11,
+     "added": 864,
+     "deleted": 420,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       430,
+       237
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       209,
+       111
+      ],
+      [
+       "cuda_rasterizer/auxiliary.h",
+       93,
+       4
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       40,
+       26
+      ],
+      [
+       "rasterize_points.cu",
+       47,
+       12
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "MGSR: 2D/3D Mutual-boosted Gaussian Splatting for High-fidelity Surface Reconstruction under Various Light Conditions",
+   "venue": "iccv",
+   "year": "2025",
+   "repo": "TsingyuanChou/MGSR",
+   "field": "render",
+   "new_code_loc": 5170,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-07-13",
+     "modified": 4,
+     "added": 96,
+     "deleted": 20,
+     "new_files_inside": 2,
+     "top": [
+      [
+       "utils/loss_utils.py",
+       43,
+       0
+      ],
+      [
+       "arguments/__init__.py",
+       24,
+       5
+      ],
+      [
+       "gaussian_renderer/__init__.py",
+       18,
+       6
+      ],
+      [
+       "utils/camera_utils.py",
+       11,
+       9
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 11,
+     "added": 756,
+     "deleted": 401,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       356,
+       230
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       190,
+       104
+      ],
+      [
+       "cuda_rasterizer/auxiliary.h",
+       84,
+       3
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       37,
+       24
+      ],
+      [
+       "rasterize_points.cu",
+       49,
+       12
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 10,
+     "added": 469,
+     "deleted": 86,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       166,
+       37
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       83,
+       9
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       65,
+       6
+      ],
+      [
+       "rasterize_points.cu",
+       52,
+       9
+      ],
+      [
+       "diff_gaussian_rasterization/__init__.py",
+       26,
+       16
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "DOGS: Distributed-Oriented Gaussian Splatting for Large-Scale 3D Reconstruction Via Gaussian Consensus",
+   "venue": "nips",
+   "year": "2024",
+   "repo": "AIBluefisher/DOGS",
+   "field": "render",
+   "new_code_loc": 13623,
+   "changes": [
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2024-10-08",
+     "modified": 10,
+     "added": 280,
+     "deleted": 6,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/forward.cu",
+       87,
+       0
+      ],
+      [
+       "rasterize_points.cu",
+       65,
+       3
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       50,
+       0
+      ],
+      [
+       "diff_gaussian_rasterization/__init__.py",
+       23,
+       2
+      ],
+      [
+       "cuda_rasterizer/rasterizer.h",
+       18,
+       0
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 10,
+     "added": 534,
+     "deleted": 36,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       140,
+       5
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       130,
+       3
+      ],
+      [
+       "rasterize_points.cu",
+       113,
+       5
+      ],
+      [
+       "cuda_rasterizer/backward.cu",
+       63,
+       17
+      ],
+      [
+       "cuda_rasterizer/rasterizer.h",
+       33,
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "UniPre3D: Unified Pre-training of 3D Point Cloud Models with Cross-Modal Gaussian Splatting",
+   "venue": "cvpr",
+   "year": "2025",
+   "repo": "wangzy22/UniPre3D",
+   "field": "render",
+   "new_code_loc": 33003,
+   "changes": [
+    {
+     "base": "Pointcept",
+     "commit_date": "2024-05-17",
+     "modified": 9,
+     "added": 110,
+     "deleted": 122,
+     "new_files_inside": 1,
+     "top": [
+      [
+       "pointcept/models/sparse_unet/spconv_unet_v1m1_base.py",
+       62,
+       83
+      ],
+      [
+       "pointcept/models/point_transformer_v3/point_transformer_v3m1_base.py",
+       37,
+       4
+      ],
+      [
+       "pointcept/datasets/__init__.py",
+       0,
+       13
+      ],
+      [
+       "pointcept/models/__init__.py",
+       0,
+       12
+      ],
+      [
+       "pointcept/engines/launch.py",
+       7,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "DiffusioNeRF: Regularizing Neural Radiance Fields With Denoising Diffusion Models",
+   "venue": "cvpr",
+   "year": "2023",
+   "repo": "nianticlabs/diffusionerf",
+   "field": "render",
+   "new_code_loc": 1645,
+   "changes": [
+    {
+     "base": "torch-ngp",
+     "commit_date": "2022-06-16",
+     "modified": 7,
+     "added": 432,
+     "deleted": 392,
+     "new_files_inside": 10,
+     "top": [
+      [
+       "nerf/utils.py",
+       194,
+       97
+      ],
+      [
+       "nerf/renderer.py",
+       53,
+       172
+      ],
+      [
+       "main_nerf.py",
+       59,
+       82
+      ],
+      [
+       "nerf/provider.py",
+       93,
+       26
+      ],
+      [
+       "nerf/network_tcnn.py",
+       30,
+       13
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Poison-splat: Computation Cost Attack on 3D Gaussian Splatting",
+   "venue": "iclr",
+   "year": "2025",
+   "repo": "jiahaolu97/poison-splat",
+   "field": "render",
+   "new_code_loc": 117666,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2024-03-17",
+     "modified": 4,
+     "added": 58,
+     "deleted": 14,
+     "new_files_inside": 1,
+     "top": [
+      [
+       "scene/__init__.py",
+       29,
+       4
+      ],
+      [
+       "scene/dataset_readers.py",
+       14,
+       10
+      ],
+      [
+       "scene/gaussian_model.py",
+       14,
+       0
+      ],
+      [
+       "arguments/__init__.py",
+       1,
+       0
+      ]
+     ]
+    },
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-09-05",
+     "modified": 9,
+     "added": 877,
+     "deleted": 258,
+     "new_files_inside": 2,
+     "top": [
+      [
+       "scene/gaussian_model.py",
+       370,
+       158
+      ],
+      [
+       "train.py",
+       257,
+       40
+      ],
+      [
+       "gaussian_renderer/__init__.py",
+       91,
+       23
+      ],
+      [
+       "arguments/__init__.py",
+       56,
+       10
+      ],
+      [
+       "scene/dataset_readers.py",
+       52,
+       11
+      ]
+     ]
+    },
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-09-05",
+     "modified": 11,
+     "added": 230,
+     "deleted": 32,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "scene/gaussian_model.py",
+       101,
+       7
+      ],
+      [
+       "scene/dataset_readers.py",
+       56,
+       3
+      ],
+      [
+       "train.py",
+       37,
+       2
+      ],
+      [
+       "metrics.py",
+       8,
+       6
+      ],
+      [
+       "render.py",
+       8,
+       6
+      ]
+     ]
+    },
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-09-05",
+     "modified": 7,
+     "added": 167,
+     "deleted": 23,
+     "new_files_inside": 4,
+     "top": [
+      [
+       "utils/loss_utils.py",
+       118,
+       7
+      ],
+      [
+       "scene/__init__.py",
+       7,
+       8
+      ],
+      [
+       "scene/dataset_readers.py",
+       8,
+       5
+      ],
+      [
+       "utils/general_utils.py",
+       12,
+       1
+      ],
+      [
+       "scene/gaussian_model.py",
+       12,
+       0
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 8,
+     "added": 245,
+     "deleted": 3,
+     "new_files_inside": 2,
+     "top": [
+      [
+       "cuda_rasterizer/forward.cu",
+       89,
+       1
+      ],
+      [
+       "rasterize_points.cu",
+       57,
+       0
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       50,
+       1
+      ],
+      [
+       "cuda_rasterizer/rasterizer.h",
+       17,
+       0
+      ],
+      [
+       "cuda_rasterizer/forward.h",
+       15,
+       0
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 9,
+     "added": 102,
+     "deleted": 15,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       45,
+       6
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       22,
+       6
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       11,
+       1
+      ],
+      [
+       "rasterize_points.cu",
+       8,
+       0
+      ],
+      [
+       "cuda_rasterizer/backward.h",
+       5,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "An Exploration with Entropy Constrained 3D Gaussians for 2D Video Compression",
+   "venue": "iclr",
+   "year": "2025",
+   "repo": "actcwlf/GSVC",
+   "field": "render",
+   "new_code_loc": 4512,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-09-05",
+     "modified": 7,
+     "added": 1624,
+     "deleted": 296,
+     "new_files_inside": 16,
+     "top": [
+      [
+       "scene/gaussian_model.py",
+       1245,
+       167
+      ],
+      [
+       "arguments/__init__.py",
+       104,
+       89
+      ],
+      [
+       "gaussian_renderer/__init__.py",
+       152,
+       23
+      ],
+      [
+       "scene/dataset_readers.py",
+       47,
+       8
+      ],
+      [
+       "utils/loss_utils.py",
+       49,
+       3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "DeVRF: Fast Deformable Voxel Radiance Fields for Dynamic Scenes",
+   "venue": "nips",
+   "year": "2022",
+   "repo": "showlab/DeVRF",
+   "field": "render",
+   "new_code_loc": 6379,
+   "changes": [
+    {
+     "base": "nerf-pytorch",
+     "commit_date": "2020-03-19",
+     "modified": 2,
+     "added": 170,
+     "deleted": 53,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "load_llff.py",
+       112,
+       41
+      ],
+      [
+       "load_blender.py",
+       58,
+       12
+      ]
+     ]
+    },
+    {
+     "base": "nerf-pytorch",
+     "commit_date": "2020-03-19",
+     "modified": 2,
+     "added": 74,
+     "deleted": 24,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "load_llff.py",
+       62,
+       17
+      ],
+      [
+       "load_blender.py",
+       12,
+       7
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "HQGS: High-Quality Novel View Synthesis with Gaussian Splatting in Degraded Scenes",
+   "venue": "iclr",
+   "year": "2025",
+   "repo": "linxin0/HQGS",
+   "field": "render",
+   "new_code_loc": 87,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2024-03-17",
+     "modified": 8,
+     "added": 136,
+     "deleted": 23,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "train.py",
+       54,
+       12
+      ],
+      [
+       "scene/gaussian_model.py",
+       55,
+       1
+      ],
+      [
+       "arguments/__init__.py",
+       5,
+       5
+      ],
+      [
+       "render.py",
+       7,
+       1
+      ],
+      [
+       "convert.py",
+       4,
+       2
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Sparse2DGS: Geometry-Prioritized Gaussian Splatting for Surface Reconstruction from Sparse Views",
+   "venue": "cvpr",
+   "year": "2025",
+   "repo": "Wuuu3511/Sparse2DGS",
+   "field": "render",
+   "new_code_loc": 3401,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-09-05",
+     "modified": 14,
+     "added": 498,
+     "deleted": 99,
+     "new_files_inside": 5,
+     "top": [
+      [
+       "train.py",
+       132,
+       35
+      ],
+      [
+       "scene/gaussian_model.py",
+       91,
+       13
+      ],
+      [
+       "render.py",
+       57,
+       22
+      ],
+      [
+       "utils/loss_utils.py",
+       75,
+       0
+      ],
+      [
+       "gaussian_renderer/__init__.py",
+       31,
+       6
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 12,
+     "added": 761,
+     "deleted": 407,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       354,
+       230
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       191,
+       107
+      ],
+      [
+       "cuda_rasterizer/auxiliary.h",
+       90,
+       4
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       42,
+       25
+      ],
+      [
+       "rasterize_points.cu",
+       43,
+       12
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "SCINeRF: Neural Radiance Fields from a Snapshot Compressive Image",
+   "venue": "cvpr",
+   "year": "2024",
+   "repo": "WU-CVGL/SCINeRF",
+   "field": "render",
+   "new_code_loc": 1363,
+   "changes": [
+    {
+     "base": "nerf-pytorch",
+     "commit_date": "2020-03-19",
+     "modified": 3,
+     "added": 228,
+     "deleted": 503,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "run_nerf.py",
+       50,
+       393
+      ],
+      [
+       "run_nerf_helpers.py",
+       148,
+       91
+      ],
+      [
+       "load_llff.py",
+       30,
+       19
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "DiSR-NeRF: Diffusion-Guided View-Consistent Super-Resolution NeRF",
+   "venue": "cvpr",
+   "year": "2024",
+   "repo": "leejielong/DiSR-NeRF",
+   "field": "render",
+   "new_code_loc": 3606,
+   "changes": [
+    {
+     "base": "threestudio",
+     "commit_date": "2023-08-23",
+     "modified": 11,
+     "added": 13,
+     "deleted": 15,
+     "new_files_inside": 11,
+     "top": [
+      [
+       "threestudio/models/materials/neural_radiance_material.py",
+       4,
+       5
+      ],
+      [
+       "launch.py",
+       1,
+       1
+      ],
+      [
+       "threestudio/data/__init__.py",
+       1,
+       1
+      ],
+      [
+       "threestudio/models/geometry/__init__.py",
+       1,
+       1
+      ],
+      [
+       "threestudio/models/guidance/__init__.py",
+       1,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Look Gauss, No Pose: Novel View Synthesis using Gaussian Splatting without Accurate Pose Initialization",
+   "venue": "iros",
+   "year": "2024",
+   "repo": "Schmiddo/noposegs",
+   "field": "render",
+   "new_code_loc": 1107,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-07-04",
+     "modified": 19,
+     "added": 1712,
+     "deleted": 604,
+     "new_files_inside": 6,
+     "top": [
+      [
+       "scene/dataset_readers.py",
+       309,
+       135
+      ],
+      [
+       "utils/general_utils.py",
+       218,
+       11
+      ],
+      [
+       "scene/gaussian_model.py",
+       186,
+       37
+      ],
+      [
+       "train.py",
+       145,
+       74
+      ],
+      [
+       "gaussian_renderer/network_gui.py",
+       104,
+       59
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 11,
+     "added": 241,
+     "deleted": 98,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       102,
+       25
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       29,
+       17
+      ],
+      [
+       "diff_gaussian_rasterization/__init__.py",
+       23,
+       21
+      ],
+      [
+       "rasterize_points.cu",
+       30,
+       9
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       16,
+       13
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Dynamic Gaussian Splatting from Defocused and Motion-blurred Monocular Videos",
+   "venue": "nips",
+   "year": "2025",
+   "repo": "hhhddddddd/dydeblur",
+   "field": "render",
+   "new_code_loc": 8727,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-07-13",
+     "modified": 13,
+     "added": 2963,
+     "deleted": 118,
+     "new_files_inside": 16,
+     "top": [
+      [
+       "scene/dataset_readers.py",
+       976,
+       6
+      ],
+      [
+       "train.py",
+       524,
+       46
+      ],
+      [
+       "scene/gaussian_model.py",
+       410,
+       10
+      ],
+      [
+       "scene/__init__.py",
+       353,
+       11
+      ],
+      [
+       "gaussian_renderer/__init__.py",
+       209,
+       7
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-06-14",
+     "modified": 13,
+     "added": 1832,
+     "deleted": 348,
+     "new_files_inside": 2,
+     "top": [
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       515,
+       113
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       462,
+       47
+      ],
+      [
+       "rasterize_points.cu",
+       279,
+       25
+      ],
+      [
+       "cuda_rasterizer/backward.cu",
+       236,
+       61
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.h",
+       64,
+       80
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 7,
+     "added": 29,
+     "deleted": 12,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/forward.cu",
+       12,
+       3
+      ],
+      [
+       "diff_gaussian_rasterization/__init__.py",
+       4,
+       4
+      ],
+      [
+       "rasterize_points.cu",
+       4,
+       2
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       4,
+       1
+      ],
+      [
+       "cuda_rasterizer/forward.h",
+       3,
+       1
+      ]
+     ]
+    },
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-09-05",
+     "modified": 9,
+     "added": 552,
+     "deleted": 36,
+     "new_files_inside": 1,
+     "top": [
+      [
+       "scene/gaussian_model.py",
+       360,
+       18
+      ],
+      [
+       "gaussian_renderer/__init__.py",
+       130,
+       1
+      ],
+      [
+       "arguments/__init__.py",
+       24,
+       1
+      ],
+      [
+       "utils/loss_utils.py",
+       20,
+       2
+      ],
+      [
+       "scene/colmap_loader.py",
+       9,
+       6
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 1,
+     "added": 2,
+     "deleted": 0,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       2,
+       0
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-06-14",
+     "modified": 13,
+     "added": 1831,
+     "deleted": 348,
+     "new_files_inside": 2,
+     "top": [
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       515,
+       113
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       462,
+       47
+      ],
+      [
+       "rasterize_points.cu",
+       279,
+       25
+      ],
+      [
+       "cuda_rasterizer/backward.cu",
+       236,
+       61
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.h",
+       63,
+       80
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Gaussian Grouping: Segment and Edit Anything in 3D Scenes",
+   "venue": "eccv",
+   "year": "2024",
+   "repo": "lkeab/gaussian-grouping",
+   "field": "render",
+   "new_code_loc": 20495,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-09-05",
+     "modified": 10,
+     "added": 382,
+     "deleted": 56,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "scene/gaussian_model.py",
+       120,
+       8
+      ],
+      [
+       "train.py",
+       66,
+       33
+      ],
+      [
+       "render.py",
+       78,
+       5
+      ],
+      [
+       "scene/dataset_readers.py",
+       54,
+       5
+      ],
+      [
+       "utils/loss_utils.py",
+       36,
+       0
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 12,
+     "added": 125,
+     "deleted": 43,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       33,
+       5
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       25,
+       11
+      ],
+      [
+       "diff_gaussian_rasterization/__init__.py",
+       18,
+       16
+      ],
+      [
+       "rasterize_points.cu",
+       14,
+       4
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       14,
+       2
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Empowering Vector Graphics with Consistently Arbitrary Viewing and View-dependent Visibility",
+   "venue": "cvpr",
+   "year": "2025",
+   "repo": "chenxinl/Dream3DVG",
+   "field": "render",
+   "new_code_loc": 38639,
+   "changes": [
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-12",
+     "modified": 9,
+     "added": 61,
+     "deleted": 12,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       21,
+       0
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       13,
+       3
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       8,
+       1
+      ],
+      [
+       "diff_gaussian_rasterization/__init__.py",
+       4,
+       4
+      ],
+      [
+       "rasterize_points.cu",
+       6,
+       2
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "MVSDet: Multi-View Indoor 3D Object Detection via Efficient Plane Sweeps",
+   "venue": "nips",
+   "year": "2024",
+   "repo": "Pixie8888/MVSDet",
+   "field": "render",
+   "new_code_loc": 12346,
+   "changes": [
+    {
+     "base": "mmdetection3d",
+     "commit_date": "2024-01-17",
+     "modified": 15,
+     "added": 1143,
+     "deleted": 48,
+     "new_files_inside": 8,
+     "top": [
+      [
+       "projects/NeRF-Det/nerfdet/nerfdet_head.py",
+       395,
+       0
+      ],
+      [
+       "projects/NeRF-Det/nerfdet/multiview_pipeline.py",
+       374,
+       11
+      ],
+      [
+       "projects/NeRF-Det/nerfdet/nerf_utils/save_rendered_img.py",
+       244,
+       13
+      ],
+      [
+       "projects/NeRF-Det/nerfdet/scannet_multiview_dataset.py",
+       95,
+       1
+      ],
+      [
+       "tools/test.py",
+       9,
+       4
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Structure Consistent Gaussian Splatting with Matching Prior for Few-shot Novel View Synthesis",
+   "venue": "nips",
+   "year": "2024",
+   "repo": "prstrive/SCGaussian",
+   "field": "render",
+   "new_code_loc": 1217,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-09-05",
+     "modified": 13,
+     "added": 1316,
+     "deleted": 118,
+     "new_files_inside": 3,
+     "top": [
+      [
+       "scene/gaussian_model.py",
+       440,
+       58
+      ],
+      [
+       "scene/dataset_readers.py",
+       395,
+       12
+      ],
+      [
+       "utils/loss_utils.py",
+       134,
+       3
+      ],
+      [
+       "render.py",
+       87,
+       3
+      ],
+      [
+       "train.py",
+       72,
+       9
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "TalkingGaussian: Structure-Persistent 3D Talking Head Synthesis via Gaussian Splatting",
+   "venue": "eccv",
+   "year": "2024",
+   "repo": "Fictionarry/TalkingGaussian",
+   "field": "render",
+   "new_code_loc": 7821,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-09-05",
+     "modified": 10,
+     "added": 423,
+     "deleted": 213,
+     "new_files_inside": 2,
+     "top": [
+      [
+       "metrics.py",
+       148,
+       69
+      ],
+      [
+       "scene/dataset_readers.py",
+       113,
+       92
+      ],
+      [
+       "gaussian_renderer/__init__.py",
+       61,
+       2
+      ],
+      [
+       "utils/camera_utils.py",
+       31,
+       20
+      ],
+      [
+       "scene/gaussian_model.py",
+       36,
+       10
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 10,
+     "added": 137,
+     "deleted": 42,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       57,
+       14
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       18,
+       7
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       19,
+       6
+      ],
+      [
+       "rasterize_points.cu",
+       14,
+       2
+      ],
+      [
+       "diff_gaussian_rasterization/__init__.py",
+       7,
+       7
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "SurfaceSplat: Connecting Surface Reconstruction and Gaussian Splatting",
+   "venue": "iccv",
+   "year": "2025",
+   "repo": "aim-uofa/SurfaceSplat",
+   "field": "render",
+   "new_code_loc": 7115,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-07-31",
+     "modified": 12,
+     "added": 294,
+     "deleted": 253,
+     "new_files_inside": 1,
+     "top": [
+      [
+       "scene/dataset_readers.py",
+       57,
+       124
+      ],
+      [
+       "metrics.py",
+       34,
+       65
+      ],
+      [
+       "render.py",
+       40,
+       23
+      ],
+      [
+       "scene/cameras.py",
+       53,
+       5
+      ],
+      [
+       "utils/camera_utils.py",
+       45,
+       4
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 9,
+     "added": 85,
+     "deleted": 14,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       27,
+       1
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       18,
+       3
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       11,
+       1
+      ],
+      [
+       "rasterize_points.cu",
+       10,
+       2
+      ],
+      [
+       "diff_gaussian_rasterization/__init__.py",
+       5,
+       5
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "GS-IR: 3D Gaussian Splatting for Inverse Rendering",
+   "venue": "cvpr",
+   "year": "2024",
+   "repo": "lzhnb/GS-IR",
+   "field": "render",
+   "new_code_loc": 11223,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-07-04",
+     "modified": 17,
+     "added": 1039,
+     "deleted": 308,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "train.py",
+       269,
+       57
+      ],
+      [
+       "render.py",
+       192,
+       27
+      ],
+      [
+       "scene/gaussian_model.py",
+       134,
+       56
+      ],
+      [
+       "utils/camera_utils.py",
+       162,
+       7
+      ],
+      [
+       "scene/dataset_readers.py",
+       36,
+       40
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 11,
+     "added": 1141,
+     "deleted": 215,
+     "new_files_inside": 1,
+     "top": [
+      [
+       "cuda_rasterizer/forward.cu",
+       368,
+       50
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       237,
+       40
+      ],
+      [
+       "rasterize_points.cu",
+       190,
+       28
+      ],
+      [
+       "cuda_rasterizer/backward.cu",
+       101,
+       20
+      ],
+      [
+       "diff_gaussian_rasterization/__init__.py",
+       53,
+       44
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "FlexDrive: Toward Trajectory Flexibility in Driving Scene Gaussian Splatting Reconstruction and Rendering",
+   "venue": "cvpr",
+   "year": "2025",
+   "repo": "zhou745/FlexDrive",
+   "field": "render",
+   "new_code_loc": 1133,
+   "changes": [
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 3,
+     "added": 0,
+     "deleted": 539,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       0,
+       347
+      ],
+      [
+       "cuda_rasterizer/auxiliary.h",
+       0,
+       142
+      ],
+      [
+       "cuda_rasterizer/backward.h",
+       0,
+       50
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 1,
+     "added": 1,
+     "deleted": 1,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "setup.py",
+       1,
+       1
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 10,
+     "added": 175,
+     "deleted": 55,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/forward.cu",
+       55,
+       23
+      ],
+      [
+       "cuda_rasterizer/backward.cu",
+       37,
+       24
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       34,
+       6
+      ],
+      [
+       "rasterize_points.cu",
+       12,
+       0
+      ],
+      [
+       "cuda_rasterizer/auxiliary.h",
+       11,
+       0
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 10,
+     "added": 176,
+     "deleted": 31,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/forward.cu",
+       55,
+       12
+      ],
+      [
+       "cuda_rasterizer/backward.cu",
+       38,
+       11
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       34,
+       6
+      ],
+      [
+       "rasterize_points.cu",
+       12,
+       0
+      ],
+      [
+       "cuda_rasterizer/auxiliary.h",
+       11,
+       0
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 10,
+     "added": 181,
+     "deleted": 83,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "rasterize_points.cu",
+       57,
+       39
+      ],
+      [
+       "cuda_rasterizer/backward.cu",
+       39,
+       10
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       28,
+       13
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       25,
+       10
+      ],
+      [
+       "cuda_rasterizer/rasterizer.h",
+       10,
+       2
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Mesh2NeRF: Direct Mesh Supervision for Neural Radiance Field Representation and Generation",
+   "venue": "eccv",
+   "year": "2024",
+   "repo": "matthew-leng/ST-Occ",
+   "field": "render",
+   "new_code_loc": 15744,
+   "changes": [
+    {
+     "base": "BEVDet",
+     "commit_date": "2022-11-25",
+     "modified": 31,
+     "added": 1830,
+     "deleted": 84,
+     "new_files_inside": 14,
+     "top": [
+      [
+       "mmdet3d/datasets/pipelines/loading.py",
+       303,
+       28
+      ],
+      [
+       "mmdet3d/models/necks/view_transformer.py",
+       274,
+       5
+      ],
+      [
+       "mmdet3d/datasets/pipelines/transforms_3d.py",
+       225,
+       0
+      ],
+      [
+       "mmdet3d/datasets/nuscenes_dataset.py",
+       211,
+       7
+      ],
+      [
+       "mmdet3d/apis/test.py",
+       123,
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Animatable Gaussians: Learning Pose-dependent Gaussian Maps for High-fidelity Human Avatar Modeling",
+   "venue": "cvpr",
+   "year": "2024",
+   "repo": "lizhe00/AnimatableGaussians",
+   "field": "render",
+   "new_code_loc": 16964,
+   "changes": [
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 10,
+     "added": 130,
+     "deleted": 37,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       57,
+       14
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       18,
+       7
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       19,
+       6
+      ],
+      [
+       "rasterize_points.cu",
+       14,
+       2
+      ],
+      [
+       "cuda_rasterizer/backward.h",
+       7,
+       2
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "HeadStudio: Text to Animatable Head Avatars with 3D Gaussian Splatting",
+   "venue": "eccv",
+   "year": "2024",
+   "repo": "ZhenglinZhou/HeadStudio",
+   "field": "render",
+   "new_code_loc": 3900,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-07-31",
+     "modified": 10,
+     "added": 81,
+     "deleted": 53,
+     "new_files_inside": 1,
+     "top": [
+      [
+       "scene/cameras.py",
+       13,
+       19
+      ],
+      [
+       "scene/gaussian_model.py",
+       19,
+       10
+      ],
+      [
+       "utils/graphics_utils.py",
+       17,
+       0
+      ],
+      [
+       "arguments/__init__.py",
+       7,
+       6
+      ],
+      [
+       "gaussian_renderer/__init__.py",
+       5,
+       5
+      ]
+     ]
+    },
+    {
+     "base": "threestudio",
+     "commit_date": "2023-08-20",
+     "modified": 10,
+     "added": 94,
+     "deleted": 76,
+     "new_files_inside": 9,
+     "top": [
+      [
+       "threestudio/models/guidance/controlnet_guidance.py",
+       71,
+       56
+      ],
+      [
+       "threestudio/models/prompt_processors/base.py",
+       10,
+       10
+      ],
+      [
+       "threestudio/models/prompt_processors/stable_diffusion_prompt_processor.py",
+       6,
+       4
+      ],
+      [
+       "threestudio/utils/callbacks.py",
+       2,
+       1
+      ],
+      [
+       "threestudio/data/__init__.py",
+       1,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Compressing Volumetric Radiance Fields to 1 MB",
+   "venue": "cvpr",
+   "year": "2023",
+   "repo": "AlgoHunt/VQRF",
+   "field": "render",
+   "new_code_loc": 8133,
+   "changes": [
+    {
+     "base": "nerf-pytorch",
+     "commit_date": "2020-03-24",
+     "modified": 3,
+     "added": 220,
+     "deleted": 48,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "load_llff.py",
+       134,
+       40
+      ],
+      [
+       "load_blender.py",
+       85,
+       7
+      ],
+      [
+       "load_deepvoxels.py",
+       1,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "DNGaussian: Optimizing Sparse-View 3D Gaussian Radiance Fields with Global-Local Depth Normalization",
+   "venue": "cvpr",
+   "year": "2024",
+   "repo": "Fictionarry/DNGaussian",
+   "field": "render",
+   "new_code_loc": 4031,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-07-10",
+     "modified": 13,
+     "added": 815,
+     "deleted": 165,
+     "new_files_inside": 3,
+     "top": [
+      [
+       "scene/gaussian_model.py",
+       137,
+       54
+      ],
+      [
+       "scene/dataset_readers.py",
+       161,
+       22
+      ],
+      [
+       "gaussian_renderer/__init__.py",
+       150,
+       10
+      ],
+      [
+       "scene/__init__.py",
+       78,
+       36
+      ],
+      [
+       "render.py",
+       71,
+       5
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "View-Invariant Policy Learning via Zero-Shot Novel View Synthesis",
+   "venue": "corl",
+   "year": "2024",
+   "repo": "s-tian/VISTA",
+   "field": "render",
+   "new_code_loc": 3500,
+   "changes": [
+    {
+     "base": "robomimic",
+     "commit_date": "2023-10-20",
+     "modified": 8,
+     "added": 274,
+     "deleted": 14,
+     "new_files_inside": 6,
+     "top": [
+      [
+       "robomimic/models/base_nets.py",
+       97,
+       0
+      ],
+      [
+       "robomimic/envs/wrappers.py",
+       69,
+       0
+      ],
+      [
+       "robomimic/scripts/dataset_states_to_obs.py",
+       37,
+       8
+      ],
+      [
+       "robomimic/utils/log_utils.py",
+       36,
+       3
+      ],
+      [
+       "robomimic/scripts/train.py",
+       20,
+       2
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Radiative Gaussian Splatting for Efficient X-ray Novel View Synthesis",
+   "venue": "eccv",
+   "year": "2024",
+   "repo": "caiyuanhao1998/X-Gaussian",
+   "field": "render",
+   "new_code_loc": 71,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-07-09",
+     "modified": 16,
+     "added": 435,
+     "deleted": 233,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "scene/dataset_readers.py",
+       149,
+       11
+      ],
+      [
+       "train.py",
+       72,
+       74
+      ],
+      [
+       "scene/colmap_loader.py",
+       17,
+       46
+      ],
+      [
+       "utils/image_utils.py",
+       54,
+       0
+      ],
+      [
+       "scene/gaussian_model.py",
+       30,
+       15
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 2,
+     "added": 28,
+     "deleted": 78,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/backward.cu",
+       15,
+       57
+      ],
+      [
+       "cuda_rasterizer/forward.cu",
+       13,
+       21
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "BAD-NeRF: Bundle Adjusted Deblur Neural Radiance Fields",
+   "venue": "cvpr",
+   "year": "2023",
+   "repo": "WU-CVGL/BAD-NeRF",
+   "field": "render",
+   "new_code_loc": 1152,
+   "changes": [
+    {
+     "base": "nerf-pytorch",
+     "commit_date": "2020-03-19",
+     "modified": 3,
+     "added": 171,
+     "deleted": 503,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "run_nerf.py",
+       36,
+       393
+      ],
+      [
+       "run_nerf_helpers.py",
+       124,
+       92
+      ],
+      [
+       "load_llff.py",
+       11,
+       18
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Event-3DGS: Event-based 3D Reconstruction Using 3D Gaussian Splatting",
+   "venue": "nips",
+   "year": "2024",
+   "repo": "lanpokn/Event-3DGS",
+   "field": "render",
+   "new_code_loc": 10163,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-10-23",
+     "modified": 9,
+     "added": 743,
+     "deleted": 26,
+     "new_files_inside": 1,
+     "top": [
+      [
+       "render.py",
+       258,
+       2
+      ],
+      [
+       "utils/loss_utils.py",
+       205,
+       0
+      ],
+      [
+       "gaussian_renderer/__init__.py",
+       132,
+       2
+      ],
+      [
+       "train.py",
+       79,
+       10
+      ],
+      [
+       "scene/dataset_readers.py",
+       31,
+       10
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Fast Feedforward 3D Gaussian Splatting Compression",
+   "venue": "iclr",
+   "year": "2025",
+   "repo": "YihangChen-ee/FCGS",
+   "field": "render",
+   "new_code_loc": 2002,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2023-09-05",
+     "modified": 8,
+     "added": 69,
+     "deleted": 60,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "scene/__init__.py",
+       6,
+       36
+      ],
+      [
+       "scene/gaussian_model.py",
+       30,
+       10
+      ],
+      [
+       "scene/dataset_readers.py",
+       23,
+       11
+      ],
+      [
+       "scene/cameras.py",
+       2,
+       2
+      ],
+      [
+       "utils/camera_utils.py",
+       2,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Horseshoe Splatting: Handling Structural Sparsity for Uncertainty-Aware Gaussian-Splatting Radiance Field Rendering",
+   "venue": "iclr",
+   "year": "2026",
+   "repo": "HKU-MedAI/Horseshoe-Splatting",
+   "field": "render",
+   "new_code_loc": 49100,
+   "changes": [
+    {
+     "base": "gaussian-splatting",
+     "commit_date": "2024-09-02",
+     "modified": 11,
+     "added": 384,
+     "deleted": 210,
+     "new_files_inside": 2,
+     "top": [
+      [
+       "train.py",
+       94,
+       64
+      ],
+      [
+       "scene/dataset_readers.py",
+       92,
+       58
+      ],
+      [
+       "gaussian_renderer/__init__.py",
+       61,
+       8
+      ],
+      [
+       "scene/__init__.py",
+       29,
+       12
+      ],
+      [
+       "utils/image_utils.py",
+       40,
+       0
+      ]
+     ]
+    },
+    {
+     "base": "diff-gaussian-rasterization",
+     "commit_date": "2023-07-23",
+     "modified": 7,
+     "added": 29,
+     "deleted": 12,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "cuda_rasterizer/forward.cu",
+       12,
+       3
+      ],
+      [
+       "diff_gaussian_rasterization/__init__.py",
+       4,
+       4
+      ],
+      [
+       "rasterize_points.cu",
+       4,
+       2
+      ],
+      [
+       "cuda_rasterizer/rasterizer_impl.cu",
+       4,
+       1
+      ],
+      [
+       "cuda_rasterizer/forward.h",
+       3,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "GeoAuxNet: Towards Universal 3D Representation Learning for Multi-sensor Point Clouds",
+   "venue": "cvpr",
+   "year": "2024",
+   "repo": "zhangshengjun2019/GeoAuxNet",
+   "field": "lidar",
+   "new_code_loc": 82341,
+   "changes": [
+    {
+     "base": "Pointcept",
+     "commit_date": "2023-12-15",
+     "modified": 27,
+     "added": 333,
+     "deleted": 92,
+     "new_files_inside": 10,
+     "top": [
+      [
+       "pointcept/datasets/transform.py",
+       227,
+       2
+      ],
+      [
+       "pointcept/engines/test.py",
+       32,
+       31
+      ],
+      [
+       "pointcept/engines/hooks/misc.py",
+       3,
+       13
+      ],
+      [
+       "pointcept/datasets/preprocessing/nuscenes/preprocess_nuscenes_info.py",
+       1,
+       14
+      ],
+      [
+       "pointcept/models/default.py",
+       11,
+       4
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "VoxelKP: A Voxel-based Network Architecture for Human Keypoint Estimation in LiDAR Data",
+   "venue": "iccv",
+   "year": "2025",
+   "repo": "shijianjian/VoxelKP",
+   "field": "lidar",
+   "new_code_loc": 5052,
+   "changes": [
+    {
+     "base": "OpenPCDet",
+     "commit_date": "2023-06-28",
+     "modified": 30,
+     "added": 1415,
+     "deleted": 181,
+     "new_files_inside": 20,
+     "top": [
+      [
+       "pcdet/models/backbones_3d/spconv_backbone.py",
+       319,
+       2
+      ],
+      [
+       "pcdet/models/dense_heads/voxelnext_head.py",
+       240,
+       3
+      ],
+      [
+       "tools/visual_utils/open3d_vis_utils.py",
+       164,
+       21
+      ],
+      [
+       "pcdet/datasets/augmentor/database_sampler.py",
+       148,
+       15
+      ],
+      [
+       "tools/test.py",
+       3,
+       88
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "CR3DT: Camera-RADAR Fusion for 3D Detection and Tracking",
+   "venue": "iros",
+   "year": "2024",
+   "repo": "ETH-PBL/CR3DT",
+   "field": "lidar",
+   "new_code_loc": 2991,
+   "changes": [
+    {
+     "base": "BEVDet",
+     "commit_date": "2023-04-30",
+     "modified": 27,
+     "added": 718,
+     "deleted": 89,
+     "new_files_inside": 5,
+     "top": [
+      [
+       "tools/data_converter/nuscenes_converter.py",
+       236,
+       21
+      ],
+      [
+       "mmdet3d/datasets/pipelines/loading.py",
+       83,
+       7
+      ],
+      [
+       "mmdet3d/datasets/nuscenes_dataset.py",
+       70,
+       2
+      ],
+      [
+       "tools/create_data_bevdet.py",
+       49,
+       18
+      ],
+      [
+       "mmdet3d/models/voxel_encoders/pillar_encoder.py",
+       65,
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Find n' Propagate: Open-Vocabulary 3D Object Detection in Urban Environments",
+   "venue": "eccv",
+   "year": "2024",
+   "repo": "djamahl99/findnpropagate",
+   "field": "lidar",
+   "new_code_loc": 26032,
+   "changes": [
+    {
+     "base": "OpenPCDet",
+     "commit_date": "2023-05-13",
+     "modified": 31,
+     "added": 950,
+     "deleted": 75,
+     "new_files_inside": 55,
+     "top": [
+      [
+       "pcdet/models/dense_heads/transfusion_head.py",
+       133,
+       18
+      ],
+      [
+       "pcdet/utils/loss_utils.py",
+       138,
+       0
+      ],
+      [
+       "tools/train_utils/train_utils.py",
+       112,
+       0
+      ],
+      [
+       "pcdet/models/dense_heads/center_head.py",
+       81,
+       5
+      ],
+      [
+       "pcdet/utils/calibration_kitti.py",
+       69,
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Virtual Sparse Convolution for Multimodal 3D Object Detection",
+   "venue": "cvpr",
+   "year": "2023",
+   "repo": "hailanyi/VirConv",
+   "field": "lidar",
+   "new_code_loc": 13130,
+   "changes": [
+    {
+     "base": "OpenPCDet",
+     "commit_date": "2020-08-10",
+     "modified": 47,
+     "added": 3319,
+     "deleted": 316,
+     "new_files_inside": 30,
+     "top": [
+      [
+       "pcdet/datasets/augmentor/augmentor_utils.py",
+       479,
+       4
+      ],
+      [
+       "pcdet/models/backbones_3d/spconv_backbone.py",
+       388,
+       26
+      ],
+      [
+       "pcdet/models/roi_heads/target_assigner/proposal_target_layer.py",
+       320,
+       15
+      ],
+      [
+       "pcdet/datasets/augmentor/database_sampler.py",
+       288,
+       13
+      ],
+      [
+       "pcdet/ops/pointnet2/pointnet2_stack/pointnet2_modules.py",
+       221,
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Laplace Approximation Based Epistemic Uncertainty Estimation in 3D Object Detection",
+   "venue": "corl",
+   "year": "2022",
+   "repo": "pyun-ram/OpenPCUCT",
+   "field": "lidar",
+   "new_code_loc": 11871,
+   "changes": [
+    {
+     "base": "OpenPCDet",
+     "commit_date": "2022-02-21",
+     "modified": 9,
+     "added": 67,
+     "deleted": 10,
+     "new_files_inside": 8,
+     "top": [
+      [
+       "tools/test.py",
+       27,
+       2
+      ],
+      [
+       "pcdet/datasets/kitti/kitti_dataset.py",
+       22,
+       0
+      ],
+      [
+       "pcdet/datasets/kitti/kitti_object_eval_python/evaluate.py",
+       2,
+       7
+      ],
+      [
+       "pcdet/models/detectors/point_rcnn.py",
+       3,
+       0
+      ],
+      [
+       "pcdet/models/detectors/pointpillar.py",
+       3,
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Serialization based Point Cloud Oversegmentation",
+   "venue": "iccv",
+   "year": "2025",
+   "repo": "CHL-glitch/SPCNet",
+   "field": "lidar",
+   "new_code_loc": 15005,
+   "changes": [
+    {
+     "base": "Pointcept",
+     "commit_date": "2024-07-05",
+     "modified": 12,
+     "added": 966,
+     "deleted": 14,
+     "new_files_inside": 7,
+     "top": [
+      [
+       "pointcept/models/losses/misc.py",
+       779,
+       5
+      ],
+      [
+       "pointcept/engines/hooks/evaluator.py",
+       78,
+       2
+      ],
+      [
+       "pointcept/models/default.py",
+       47,
+       2
+      ],
+      [
+       "pointcept/models/utils/structure.py",
+       36,
+       0
+      ],
+      [
+       "pointcept/models/modules.py",
+       9,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "CAGroup3D: Class-Aware Grouping for 3D Object Detection on Point Clouds",
+   "venue": "nips",
+   "year": "2022",
+   "repo": "Haiyang-W/CAGroup3D",
+   "field": "lidar",
+   "new_code_loc": 6160,
+   "changes": [
+    {
+     "base": "OpenPCDet",
+     "commit_date": "2022-03-12",
+     "modified": 18,
+     "added": 749,
+     "deleted": 16,
+     "new_files_inside": 15,
+     "top": [
+      [
+       "pcdet/utils/loss_utils.py",
+       498,
+       0
+      ],
+      [
+       "pcdet/utils/box_coder_utils.py",
+       107,
+       0
+      ],
+      [
+       "pcdet/datasets/augmentor/augmentor_utils.py",
+       52,
+       0
+      ],
+      [
+       "pcdet/datasets/augmentor/data_augmentor.py",
+       43,
+       0
+      ],
+      [
+       "tools/train_utils/train_utils.py",
+       18,
+       3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "itKD: Interchange Transfer-Based Knowledge Distillation for 3D Object Detection",
+   "venue": "cvpr",
+   "year": "2023",
+   "repo": "hyeon-jo/interchange-transfer-KD",
+   "field": "lidar",
+   "new_code_loc": 3232,
+   "changes": [
+    {
+     "base": "CenterPoint",
+     "commit_date": "2021-04-03",
+     "modified": 26,
+     "added": 464,
+     "deleted": 94,
+     "new_files_inside": 9,
+     "top": [
+      [
+       "det3d/models/losses/centernet_loss.py",
+       212,
+       2
+      ],
+      [
+       "tools/dist_test.py",
+       55,
+       17
+      ],
+      [
+       "det3d/models/detectors/point_pillars.py",
+       30,
+       27
+      ],
+      [
+       "det3d/ops/dcn/src/deform_conv_cuda.cpp",
+       21,
+       21
+      ],
+      [
+       "det3d/datasets/waymo/waymo_common.py",
+       20,
+       3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Bi3D: Bi-Domain Active Learning for Cross-Domain 3D Object Detection",
+   "venue": "cvpr",
+   "year": "2023",
+   "repo": "PJLab-ADG/3DTrans",
+   "field": "lidar",
+   "new_code_loc": 28686,
+   "changes": [
+    {
+     "base": "OpenPCDet",
+     "commit_date": "2022-04-13",
+     "modified": 50,
+     "added": 4818,
+     "deleted": 68,
+     "new_files_inside": 71,
+     "top": [
+      [
+       "pcdet/utils/common_utils.py",
+       421,
+       1
+      ],
+      [
+       "pcdet/models/roi_heads/voxelrcnn_head.py",
+       380,
+       0
+      ],
+      [
+       "pcdet/models/detectors/pv_rcnn.py",
+       373,
+       0
+      ],
+      [
+       "pcdet/models/detectors/voxel_rcnn.py",
+       284,
+       0
+      ],
+      [
+       "pcdet/datasets/augmentor/augmentor_utils.py",
+       251,
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Query-based Temporal Fusion with Explicit Motion for 3D Object Detection",
+   "venue": "nips",
+   "year": "2023",
+   "repo": "AlmoonYsl/QTNet",
+   "field": "lidar",
+   "new_code_loc": 3323,
+   "changes": [
+    {
+     "base": "mmdetection3d",
+     "commit_date": "2021-03-31",
+     "modified": 14,
+     "added": 445,
+     "deleted": 29,
+     "new_files_inside": 8,
+     "top": [
+      [
+       "mmdet3d/datasets/pipelines/loading.py",
+       331,
+       3
+      ],
+      [
+       "mmdet3d/models/detectors/mvx_two_stage.py",
+       27,
+       13
+      ],
+      [
+       "tools/train.py",
+       37,
+       0
+      ],
+      [
+       "mmdet3d/datasets/waymo_dataset.py",
+       26,
+       2
+      ],
+      [
+       "mmdet3d/datasets/nuscenes_dataset.py",
+       6,
+       2
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Rethinking Data Augmentation for Robust LiDAR Semantic Segmentation in Adverse Weather",
+   "venue": "eccv",
+   "year": "2024",
+   "repo": "engineerJPark/LiDARWeather",
+   "field": "lidar",
+   "new_code_loc": 9291,
+   "changes": [
+    {
+     "base": "mmdetection3d",
+     "commit_date": "2023-09-13",
+     "modified": 35,
+     "added": 901,
+     "deleted": 180,
+     "new_files_inside": 28,
+     "top": [
+      [
+       "mmdet3d/datasets/transforms/transforms_3d.py",
+       314,
+       5
+      ],
+      [
+       "mmdet3d/models/decode_heads/minkunet_head.py",
+       77,
+       27
+      ],
+      [
+       "tools/dataset_converters/update_infos_to_v2.py",
+       97,
+       1
+      ],
+      [
+       "mmdet3d/models/data_preprocessors/data_preprocessor.py",
+       54,
+       28
+      ],
+      [
+       "mmdet3d/models/segmentors/minkunet.py",
+       45,
+       35
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Leveraging Enhanced Queries of Point Sets for Vectorized Map Construction",
+   "venue": "eccv",
+   "year": "2024",
+   "repo": "HXMap/MapQR",
+   "field": "lidar",
+   "new_code_loc": 23644,
+   "changes": [
+    {
+     "base": "mmdetection3d",
+     "commit_date": "2021-09-24",
+     "modified": 17,
+     "added": 50,
+     "deleted": 30,
+     "new_files_inside": 1,
+     "top": [
+      [
+       "mmdet3d/models/middle_encoders/sparse_encoder.py",
+       20,
+       16
+      ],
+      [
+       "mmdet3d/ops/spconv/functional.py",
+       10,
+       0
+      ],
+      [
+       "mmdet3d/ops/voxel/src/voxelization_cuda.cu",
+       2,
+       2
+      ],
+      [
+       "mmdet3d/datasets/nuscenes_dataset.py",
+       3,
+       0
+      ],
+      [
+       "mmdet3d/ops/__init__.py",
+       2,
+       1
+      ]
+     ]
+    },
+    {
+     "base": "BEVFormer",
+     "commit_date": "2022-06-27",
+     "modified": 14,
+     "added": 807,
+     "deleted": 11,
+     "new_files_inside": 13,
+     "top": [
+      [
+       "projects/mmdet3d_plugin/datasets/pipelines/loading.py",
+       301,
+       0
+      ],
+      [
+       "projects/mmdet3d_plugin/bevformer/modules/spatial_cross_attention.py",
+       139,
+       0
+      ],
+      [
+       "projects/mmdet3d_plugin/bevformer/modules/custom_base_transformer_layer.py",
+       138,
+       0
+      ],
+      [
+       "projects/mmdet3d_plugin/core/bbox/coders/nms_free_coder.py",
+       128,
+       0
+      ],
+      [
+       "projects/mmdet3d_plugin/datasets/pipelines/transform_3d.py",
+       71,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "VQ-Map: Bird's-Eye-View Map Layout Estimation in Tokenized Discrete Space via Vector Quantization",
+   "venue": "nips",
+   "year": "2024",
+   "repo": "Z1zyw/VQ-Map",
+   "field": "lidar",
+   "new_code_loc": 10680,
+   "changes": [
+    {
+     "base": "bevfusion-mit",
+     "commit_date": "2022-10-10",
+     "modified": 21,
+     "added": 230,
+     "deleted": 21,
+     "new_files_inside": 5,
+     "top": [
+      [
+       "mmdet3d/models/fusion_models/bevfusion.py",
+       122,
+       0
+      ],
+      [
+       "mmdet3d/datasets/nuscenes_dataset.py",
+       26,
+       2
+      ],
+      [
+       "mmdet3d/models/builder.py",
+       20,
+       0
+      ],
+      [
+       "tools/test.py",
+       8,
+       5
+      ],
+      [
+       "mmdet3d/core/utils/visualize.py",
+       9,
+       3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Rethinking Temporal Fusion with a Unified Gradient Descent View for 3D Semantic Occupancy Prediction",
+   "venue": "cvpr",
+   "year": "2025",
+   "repo": "cdb342/GDFusion",
+   "field": "lidar",
+   "new_code_loc": 46855,
+   "changes": [
+    {
+     "base": "mmdetection3d",
+     "commit_date": "2022-08-08",
+     "modified": 33,
+     "added": 2723,
+     "deleted": 124,
+     "new_files_inside": 56,
+     "top": [
+      [
+       "mmdet3d/datasets/pipelines/loading.py",
+       878,
+       10
+      ],
+      [
+       "mmdet3d/datasets/nuscenes_dataset.py",
+       610,
+       40
+      ],
+      [
+       "mmdet3d/datasets/pipelines/transforms_3d.py",
+       442,
+       1
+      ],
+      [
+       "mmdet3d/apis/test.py",
+       123,
+       0
+      ],
+      [
+       "mmdet3d/datasets/pipelines/test_time_aug.py",
+       118,
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "SAFDNet: A Simple and Effective Network for Fully Sparse 3D Object Detection",
+   "venue": "cvpr",
+   "year": "2024",
+   "repo": "zhanggang001/HEDNet",
+   "field": "lidar",
+   "new_code_loc": 2943,
+   "changes": [
+    {
+     "base": "OpenPCDet",
+     "commit_date": "2023-06-28",
+     "modified": 27,
+     "added": 953,
+     "deleted": 50,
+     "new_files_inside": 10,
+     "top": [
+      [
+       "pcdet/models/dense_heads/transfusion_head.py",
+       120,
+       8
+      ],
+      [
+       "pcdet/datasets/augmentor/database_sampler.py",
+       108,
+       15
+      ],
+      [
+       "tools/eval_utils/eval_utils.py",
+       107,
+       2
+      ],
+      [
+       "pcdet/datasets/nuscenes/nuscenes_dataset.py",
+       93,
+       3
+      ],
+      [
+       "pcdet/models/model_utils/centernet_utils.py",
+       95,
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "World4Drive: End-to-End Autonomous Driving via Intention-aware Physical Latent World Model",
+   "venue": "iccv",
+   "year": "2025",
+   "repo": "ucaszyp/World4Drive",
+   "field": "lidar",
+   "new_code_loc": 48473,
+   "changes": [
+    {
+     "base": "BEVFormer",
+     "commit_date": "2022-06-27",
+     "modified": 23,
+     "added": 829,
+     "deleted": 51,
+     "new_files_inside": 15,
+     "top": [
+      [
+       "projects/mmdet3d_plugin/datasets/pipelines/loading.py",
+       389,
+       0
+      ],
+      [
+       "projects/mmdet3d_plugin/datasets/pipelines/transform_3d.py",
+       218,
+       8
+      ],
+      [
+       "projects/mmdet3d_plugin/datasets/samplers/group_sampler.py",
+       83,
+       2
+      ],
+      [
+       "projects/mmdet3d_plugin/datasets/pipelines/formating.py",
+       35,
+       4
+      ],
+      [
+       "tools/test.py",
+       24,
+       8
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Is Ego Status All You Need for Open-Loop End-to-End Autonomous Driving?",
+   "venue": "cvpr",
+   "year": "2024",
+   "repo": "NVlabs/BEV-Planner",
+   "field": "lidar",
+   "new_code_loc": 33730,
+   "changes": [
+    {
+     "base": "BEVDet",
+     "commit_date": "2022-11-25",
+     "modified": 33,
+     "added": 3145,
+     "deleted": 150,
+     "new_files_inside": 24,
+     "top": [
+      [
+       "mmdet3d/datasets/nuscenes_dataset.py",
+       878,
+       47
+      ],
+      [
+       "mmdet3d/datasets/pipelines/loading.py",
+       585,
+       40
+      ],
+      [
+       "mmdet3d/datasets/pipelines/transforms_3d.py",
+       377,
+       0
+      ],
+      [
+       "tools/data_converter/nuscenes_converter.py",
+       322,
+       3
+      ],
+      [
+       "mmdet3d/models/necks/view_transformer.py",
+       280,
+       9
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "ManiWAV: Learning Robot Manipulation from In-the-Wild Audio-Visual Data",
+   "venue": "corl",
+   "year": "2024",
+   "repo": "real-stanford/maniwav",
+   "field": "robot",
+   "new_code_loc": 21128,
+   "changes": [
+    {
+     "base": "diffusion_policy",
+     "commit_date": "2023-06-01",
+     "modified": 17,
+     "added": 366,
+     "deleted": 184,
+     "new_files_inside": 23,
+     "top": [
+      [
+       "diffusion_policy/common/sampler.py",
+       135,
+       82
+      ],
+      [
+       "diffusion_policy/workspace/train_diffusion_unet_image_workspace.py",
+       62,
+       39
+      ],
+      [
+       "diffusion_policy/model/common/rotation_transformer.py",
+       28,
+       46
+      ],
+      [
+       "diffusion_policy/shared_memory/shared_memory_queue.py",
+       57,
+       0
+      ],
+      [
+       "diffusion_policy/dataset/base_dataset.py",
+       18,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Policy Contrastive Decoding for Robotic Foundation Models",
+   "venue": "iclr",
+   "year": "2026",
+   "repo": "pcd-robot/PCD",
+   "field": "robot",
+   "new_code_loc": 16907,
+   "changes": [
+    {
+     "base": "nerf-pytorch",
+     "commit_date": "2021-09-23",
+     "modified": 2,
+     "added": 22,
+     "deleted": 74,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "run_nerf.py",
+       16,
+       68
+      ],
+      [
+       "load_llff.py",
+       6,
+       6
+      ]
+     ]
+    },
+    {
+     "base": "octo",
+     "commit_date": "2024-01-23",
+     "modified": 3,
+     "added": 7,
+     "deleted": 1,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "octo/model/components/tokenizers.py",
+       3,
+       0
+      ],
+      [
+       "octo/model/octo_model.py",
+       2,
+       1
+      ],
+      [
+       "octo/data/utils/text_processing.py",
+       2,
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "On Robustness of Vision-Language-Action Model against Multi-Modal Perturbations",
+   "venue": "iclr",
+   "year": "2026",
+   "repo": "gakakulicc/RobustVLA",
+   "field": "robot",
+   "new_code_loc": 5662,
+   "changes": [
+    {
+     "base": "openpi",
+     "commit_date": "2025-05-28",
+     "modified": 9,
+     "added": 245,
+     "deleted": 50,
+     "new_files_inside": 3,
+     "top": [
+      [
+       "src/openpi/models/pi0.py",
+       115,
+       28
+      ],
+      [
+       "scripts/train.py",
+       63,
+       8
+      ],
+      [
+       "src/openpi/training/data_loader.py",
+       23,
+       3
+      ],
+      [
+       "examples/libero/convert_libero_data_to_lerobot.py",
+       8,
+       6
+      ],
+      [
+       "src/openpi/training/config.py",
+       12,
+       1
+      ]
+     ]
+    },
+    {
+     "base": "openvla",
+     "commit_date": "2024-10-08",
+     "modified": 3,
+     "added": 298,
+     "deleted": 26,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "vla-scripts/finetune.py",
+       293,
+       25
+      ],
+      [
+       "prismatic/extern/hf/configuration_prismatic.py",
+       2,
+       1
+      ],
+      [
+       "prismatic/training/strategies/base_strategy.py",
+       3,
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Open-TeleVision: Teleoperation with Immersive Active Visual Feedback",
+   "venue": "corl",
+   "year": "2024",
+   "repo": "OpenTeleVision/TeleVision",
+   "field": "robot",
+   "new_code_loc": 2256,
+   "changes": [
+    {
+     "base": "act",
+     "commit_date": "2023-09-04",
+     "modified": 6,
+     "added": 262,
+     "deleted": 240,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "imitate_episodes.py",
+       96,
+       180
+      ],
+      [
+       "utils.py",
+       113,
+       43
+      ],
+      [
+       "detr/models/detr_vae.py",
+       17,
+       12
+      ],
+      [
+       "detr/models/backbone.py",
+       16,
+       0
+      ],
+      [
+       "policy.py",
+       11,
+       3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Robot Parkour Learning",
+   "venue": "corl",
+   "year": "2023",
+   "repo": "ZiwenZhuang/parkour",
+   "field": "robot",
+   "new_code_loc": 12810,
+   "changes": [
+    {
+     "base": "legged_gym",
+     "commit_date": "2021-11-26",
+     "modified": 12,
+     "added": 1224,
+     "deleted": 189,
+     "new_files_inside": 17,
+     "top": [
+      [
+       "legged_gym/envs/base/legged_robot.py",
+       739,
+       136
+      ],
+      [
+       "legged_gym/scripts/play.py",
+       283,
+       20
+      ],
+      [
+       "legged_gym/utils/logger.py",
+       76,
+       10
+      ],
+      [
+       "legged_gym/utils/helpers.py",
+       28,
+       8
+      ],
+      [
+       "legged_gym/envs/a1/a1_config.py",
+       30,
+       2
+      ]
+     ]
+    },
+    {
+     "base": "rsl_rl",
+     "commit_date": "2021-10-29",
+     "modified": 10,
+     "added": 509,
+     "deleted": 142,
+     "new_files_inside": 19,
+     "top": [
+      [
+       "rsl_rl/storage/rollout_storage.py",
+       203,
+       54
+      ],
+      [
+       "rsl_rl/runners/on_policy_runner.py",
+       80,
+       44
+      ],
+      [
+       "rsl_rl/algorithms/ppo.py",
+       70,
+       31
+      ],
+      [
+       "rsl_rl/utils/utils.py",
+       94,
+       1
+      ],
+      [
+       "rsl_rl/modules/actor_critic_recurrent.py",
+       19,
+       10
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Waypoint-Based Imitation Learning for Robotic Manipulation",
+   "venue": "corl",
+   "year": "2023",
+   "repo": "lucys0/awe",
+   "field": "robot",
+   "new_code_loc": 2773,
+   "changes": [
+    {
+     "base": "diffusion_policy",
+     "commit_date": "2023-04-05",
+     "modified": 5,
+     "added": 91,
+     "deleted": 10,
+     "new_files_inside": 2,
+     "top": [
+      [
+       "diffusion_policy/dataset/robomimic_replay_image_dataset.py",
+       34,
+       4
+      ],
+      [
+       "diffusion_policy/dataset/kitchen_mjl_lowdim_dataset.py",
+       24,
+       2
+      ],
+      [
+       "diffusion_policy/dataset/robomimic_replay_lowdim_dataset.py",
+       23,
+       2
+      ],
+      [
+       "diffusion_policy/env_runner/robomimic_image_runner.py",
+       5,
+       1
+      ],
+      [
+       "diffusion_policy/env_runner/robomimic_lowdim_runner.py",
+       5,
+       1
+      ]
+     ]
+    },
+    {
+     "base": "robomimic",
+     "commit_date": "2022-07-08",
+     "modified": 11,
+     "added": 211,
+     "deleted": 35,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "robomimic/utils/dataset.py",
+       70,
+       2
+      ],
+      [
+       "robomimic/utils/log_utils.py",
+       55,
+       0
+      ],
+      [
+       "robomimic/scripts/train.py",
+       37,
+       6
+      ],
+      [
+       "robomimic/utils/train_utils.py",
+       19,
+       15
+      ],
+      [
+       "robomimic/algo/algo.py",
+       10,
+       2
+      ]
+     ]
+    },
+    {
+     "base": "act",
+     "commit_date": "2023-04-14",
+     "modified": 9,
+     "added": 60,
+     "deleted": 28,
+     "new_files_inside": 0,
+     "top": [
+      [
+       "imitate_episodes.py",
+       36,
+       13
+      ],
+      [
+       "sim_env.py",
+       11,
+       6
+      ],
+      [
+       "detr/models/detr_vae.py",
+       3,
+       3
+      ],
+      [
+       "constants.py",
+       2,
+       2
+      ],
+      [
+       "detr/main.py",
+       4,
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Align-Then-stEer: Adapting the Vision-Language Action Models through Unified Latent Guidance",
+   "venue": "iclr",
+   "year": "2026",
+   "repo": "TeleHuman/Align-Then-Steer",
+   "field": "robot",
+   "new_code_loc": 23291,
+   "changes": [
+    {
+     "base": "diffusion_policy",
+     "commit_date": "2023-04-05",
+     "modified": 7,
+     "added": 54,
+     "deleted": 10,
+     "new_files_inside": 3,
+     "top": [
+      [
+       "diffusion_policy/policy/diffusion_unet_image_policy.py",
+       31,
+       2
+      ],
+      [
+       "train.py",
+       19,
+       2
+      ],
+      [
+       "diffusion_policy/model/common/rotation_transformer.py",
+       2,
+       2
+      ],
+      [
+       "diffusion_policy/common/sampler.py",
+       1,
+       1
+      ],
+      [
+       "diffusion_policy/workspace/base_workspace.py",
+       1,
+       1
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

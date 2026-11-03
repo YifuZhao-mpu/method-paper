@@ -1,0 +1,1631 @@
+{
+ "source": "opsrun/all_matched.csv, accepted (tier poster/top), keyword rules on title+abstract",
+ "n": 6230,
+ "overall": {
+  "n": 6230,
+  "opp": {
+   "T1 条件崩溃与泛化": 0.501,
+   "T2 去掉特权输入或监督": 0.087,
+   "T3 效率": 0.422,
+   "T4 新能力或新设定": 0.081,
+   "T5 统一或简化": 0.169
+  },
+  "ops": {
+   "O1 换表示": 0.078,
+   "O2 去近似或精确化": 0.019,
+   "O3 先验或约束": 0.123,
+   "O4 新监督来源或蒸馏": 0.117,
+   "O5 联合求解或可微化": 0.077,
+   "O6 不确定性或可靠性": 0.065,
+   "O7 自适应分配": 0.097,
+   "O8 解耦或分解": 0.07,
+   "O9 借基础模型或相邻领域": 0.186,
+   "O10 时间或多视一致": 0.065,
+   "O11 多模态融合": 0.136,
+   "O12 分层或由粗到细": 0.071
+  },
+  "norms": {
+   "sota": 0.438,
+   "real_world": 0.103,
+   "benchmark_named": 0.264,
+   "plug_in": 0.032
+  },
+  "ops_ge2": 0.306
+ },
+ "by_field": {
+  "lidar": {
+   "n": 1414,
+   "opp": {
+    "T1 条件崩溃与泛化": 0.518,
+    "T2 去掉特权输入或监督": 0.143,
+    "T3 效率": 0.4,
+    "T4 新能力或新设定": 0.065,
+    "T5 统一或简化": 0.233
+   },
+   "ops": {
+    "O1 换表示": 0.053,
+    "O2 去近似或精确化": 0.009,
+    "O3 先验或约束": 0.093,
+    "O4 新监督来源或蒸馏": 0.194,
+    "O5 联合求解或可微化": 0.078,
+    "O6 不确定性或可靠性": 0.066,
+    "O7 自适应分配": 0.131,
+    "O8 解耦或分解": 0.051,
+    "O9 借基础模型或相邻领域": 0.12,
+    "O10 时间或多视一致": 0.117,
+    "O11 多模态融合": 0.266,
+    "O12 分层或由粗到细": 0.091
+   },
+   "norms": {
+    "sota": 0.624,
+    "real_world": 0.015,
+    "benchmark_named": 0.586,
+    "plug_in": 0.042
+   },
+   "ops_ge2": 0.366
+  },
+  "pano": {
+   "n": 237,
+   "opp": {
+    "T1 条件崩溃与泛化": 0.468,
+    "T2 去掉特权输入或监督": 0.076,
+    "T3 效率": 0.321,
+    "T4 新能力或新设定": 0.076,
+    "T5 统一或简化": 0.181
+   },
+   "ops": {
+    "O1 换表示": 0.084,
+    "O2 去近似或精确化": 0.072,
+    "O3 先验或约束": 0.152,
+    "O4 新监督来源或蒸馏": 0.097,
+    "O5 联合求解或可微化": 0.068,
+    "O6 不确定性或可靠性": 0.021,
+    "O7 自适应分配": 0.063,
+    "O8 解耦或分解": 0.068,
+    "O9 借基础模型或相邻领域": 0.169,
+    "O10 时间或多视一致": 0.114,
+    "O11 多模态融合": 0.127,
+    "O12 分层或由粗到细": 0.093
+   },
+   "norms": {
+    "sota": 0.578,
+    "real_world": 0.021,
+    "benchmark_named": 0.27,
+    "plug_in": 0.013
+   },
+   "ops_ge2": 0.312
+  },
+  "render": {
+   "n": 1300,
+   "opp": {
+    "T1 条件崩溃与泛化": 0.518,
+    "T2 去掉特权输入或监督": 0.092,
+    "T3 效率": 0.502,
+    "T4 新能力或新设定": 0.062,
+    "T5 统一或简化": 0.151
+   },
+   "ops": {
+    "O1 换表示": 0.231,
+    "O2 去近似或精确化": 0.033,
+    "O3 先验或约束": 0.271,
+    "O4 新监督来源或蒸馏": 0.123,
+    "O5 联合求解或可微化": 0.153,
+    "O6 不确定性或可靠性": 0.047,
+    "O7 自适应分配": 0.128,
+    "O8 解耦或分解": 0.138,
+    "O9 借基础模型或相邻领域": 0.145,
+    "O10 时间或多视一致": 0.108,
+    "O11 多模态融合": 0.083,
+    "O12 分层或由粗到细": 0.087
+   },
+   "norms": {
+    "sota": 0.552,
+    "real_world": 0.012,
+    "benchmark_named": 0.188,
+    "plug_in": 0.042
+   },
+   "ops_ge2": 0.463
+  },
+  "robot": {
+   "n": 3446,
+   "opp": {
+    "T1 条件崩溃与泛化": 0.491,
+    "T2 去掉特权输入或监督": 0.065,
+    "T3 效率": 0.411,
+    "T4 新能力或新设定": 0.096,
+    "T5 统一或简化": 0.149
+   },
+   "ops": {
+    "O1 换表示": 0.032,
+    "O2 去近似或精确化": 0.014,
+    "O3 先验或约束": 0.082,
+    "O4 新监督来源或蒸馏": 0.084,
+    "O5 联合求解或可微化": 0.05,
+    "O6 不确定性或可靠性": 0.074,
+    "O7 自适应分配": 0.069,
+    "O8 解耦或分解": 0.053,
+    "O9 借基础模型或相邻领域": 0.228,
+    "O10 时间或多视一致": 0.026,
+    "O11 多模态融合": 0.105,
+    "O12 分层或由粗到细": 0.056
+   },
+   "norms": {
+    "sota": 0.309,
+    "real_world": 0.177,
+    "benchmark_named": 0.16,
+    "plug_in": 0.025
+   },
+   "ops_ge2": 0.224
+  }
+ },
+ "by_field_venue": {
+  "lidar/机器人会议": {
+   "n": 341,
+   "opp": {
+    "T1 条件崩溃与泛化": 0.501,
+    "T2 去掉特权输入或监督": 0.147,
+    "T3 效率": 0.443,
+    "T4 新能力或新设定": 0.044,
+    "T5 统一或简化": 0.164
+   },
+   "ops": {
+    "O1 换表示": 0.023,
+    "O2 去近似或精确化": 0.006,
+    "O3 先验或约束": 0.065,
+    "O4 新监督来源或蒸馏": 0.111,
+    "O5 联合求解或可微化": 0.103,
+    "O6 不确定性或可靠性": 0.088,
+    "O7 自适应分配": 0.1,
+    "O8 解耦或分解": 0.026,
+    "O9 借基础模型或相邻领域": 0.085,
+    "O10 时间或多视一致": 0.082,
+    "O11 多模态融合": 0.311,
+    "O12 分层或由粗到细": 0.076
+   },
+   "norms": {
+    "sota": 0.534,
+    "real_world": 0.029,
+    "benchmark_named": 0.411,
+    "plug_in": 0.023
+   },
+   "ops_ge2": 0.302
+  },
+  "lidar/视觉会议": {
+   "n": 850,
+   "opp": {
+    "T1 条件崩溃与泛化": 0.515,
+    "T2 去掉特权输入或监督": 0.146,
+    "T3 效率": 0.372,
+    "T4 新能力或新设定": 0.068,
+    "T5 统一或简化": 0.24
+   },
+   "ops": {
+    "O1 换表示": 0.055,
+    "O2 去近似或精确化": 0.011,
+    "O3 先验或约束": 0.099,
+    "O4 新监督来源或蒸馏": 0.226,
+    "O5 联合求解或可微化": 0.068,
+    "O6 不确定性或可靠性": 0.06,
+    "O7 自适应分配": 0.133,
+    "O8 解耦或分解": 0.06,
+    "O9 借基础模型或相邻领域": 0.118,
+    "O10 时间或多视一致": 0.126,
+    "O11 多模态融合": 0.254,
+    "O12 分层或由粗到细": 0.102
+   },
+   "norms": {
+    "sota": 0.671,
+    "real_world": 0.007,
+    "benchmark_named": 0.64,
+    "plug_in": 0.046
+   },
+   "ops_ge2": 0.38
+  },
+  "lidar/学习会议": {
+   "n": 223,
+   "opp": {
+    "T1 条件崩溃与泛化": 0.556,
+    "T2 去掉特权输入或监督": 0.126,
+    "T3 效率": 0.444,
+    "T4 新能力或新设定": 0.085,
+    "T5 统一或简化": 0.314
+   },
+   "ops": {
+    "O1 换表示": 0.09,
+    "O2 去近似或精确化": 0.009,
+    "O3 先验或约束": 0.117,
+    "O4 新监督来源或蒸馏": 0.197,
+    "O5 联合求解或可微化": 0.076,
+    "O6 不确定性或可靠性": 0.054,
+    "O7 自适应分配": 0.17,
+    "O8 解耦或分解": 0.054,
+    "O9 借基础模型或相邻领域": 0.184,
+    "O10 时间或多视一致": 0.139,
+    "O11 多模态融合": 0.242,
+    "O12 分层或由粗到细": 0.067
+   },
+   "norms": {
+    "sota": 0.583,
+    "real_world": 0.022,
+    "benchmark_named": 0.646,
+    "plug_in": 0.058
+   },
+   "ops_ge2": 0.413
+  },
+  "pano/视觉会议": {
+   "n": 167,
+   "opp": {
+    "T1 条件崩溃与泛化": 0.449,
+    "T2 去掉特权输入或监督": 0.078,
+    "T3 效率": 0.299,
+    "T4 新能力或新设定": 0.084,
+    "T5 统一或简化": 0.18
+   },
+   "ops": {
+    "O1 换表示": 0.102,
+    "O2 去近似或精确化": 0.078,
+    "O3 先验或约束": 0.168,
+    "O4 新监督来源或蒸馏": 0.102,
+    "O5 联合求解或可微化": 0.054,
+    "O6 不确定性或可靠性": 0.024,
+    "O7 自适应分配": 0.078,
+    "O8 解耦或分解": 0.072,
+    "O9 借基础模型或相邻领域": 0.138,
+    "O10 时间或多视一致": 0.084,
+    "O11 多模态融合": 0.12,
+    "O12 分层或由粗到细": 0.108
+   },
+   "norms": {
+    "sota": 0.659,
+    "real_world": 0.006,
+    "benchmark_named": 0.275,
+    "plug_in": 0.012
+   },
+   "ops_ge2": 0.305
+  },
+  "render/机器人会议": {
+   "n": 72,
+   "opp": {
+    "T1 条件崩溃与泛化": 0.528,
+    "T2 去掉特权输入或监督": 0.069,
+    "T3 效率": 0.375,
+    "T4 新能力或新设定": 0.069,
+    "T5 统一或简化": 0.125
+   },
+   "ops": {
+    "O1 换表示": 0.208,
+    "O2 去近似或精确化": 0.028,
+    "O3 先验或约束": 0.208,
+    "O4 新监督来源或蒸馏": 0.111,
+    "O5 联合求解或可微化": 0.181,
+    "O6 不确定性或可靠性": 0.111,
+    "O7 自适应分配": 0.028,
+    "O8 解耦或分解": 0.014,
+    "O9 借基础模型或相邻领域": 0.083,
+    "O10 时间或多视一致": 0.042,
+    "O11 多模态融合": 0.125,
+    "O12 分层或由粗到细": 0.056
+   },
+   "norms": {
+    "sota": 0.417,
+    "real_world": 0.125,
+    "benchmark_named": 0.125,
+    "plug_in": 0.028
+   },
+   "ops_ge2": 0.347
+  },
+  "render/视觉会议": {
+   "n": 903,
+   "opp": {
+    "T1 条件崩溃与泛化": 0.508,
+    "T2 去掉特权输入或监督": 0.081,
+    "T3 效率": 0.481,
+    "T4 新能力或新设定": 0.056,
+    "T5 统一或简化": 0.142
+   },
+   "ops": {
+    "O1 换表示": 0.235,
+    "O2 去近似或精确化": 0.031,
+    "O3 先验或约束": 0.264,
+    "O4 新监督来源或蒸馏": 0.124,
+    "O5 联合求解或可微化": 0.157,
+    "O6 不确定性或可靠性": 0.044,
+    "O7 自适应分配": 0.114,
+    "O8 解耦或分解": 0.131,
+    "O9 借基础模型或相邻领域": 0.143,
+    "O10 时间或多视一致": 0.103,
+    "O11 多模态融合": 0.071,
+    "O12 分层或由粗到细": 0.087
+   },
+   "norms": {
+    "sota": 0.561,
+    "real_world": 0.002,
+    "benchmark_named": 0.194,
+    "plug_in": 0.039
+   },
+   "ops_ge2": 0.449
+  },
+  "render/学习会议": {
+   "n": 325,
+   "opp": {
+    "T1 条件崩溃与泛化": 0.542,
+    "T2 去掉特权输入或监督": 0.126,
+    "T3 效率": 0.588,
+    "T4 新能力或新设定": 0.077,
+    "T5 统一或简化": 0.182
+   },
+   "ops": {
+    "O1 换表示": 0.225,
+    "O2 去近似或精确化": 0.04,
+    "O3 先验或约束": 0.305,
+    "O4 新监督来源或蒸馏": 0.123,
+    "O5 联合求解或可微化": 0.135,
+    "O6 不确定性或可靠性": 0.04,
+    "O7 自适应分配": 0.191,
+    "O8 解耦或分解": 0.188,
+    "O9 借基础模型或相邻领域": 0.166,
+    "O10 时间或多视一致": 0.135,
+    "O11 多模态融合": 0.108,
+    "O12 分层或由粗到细": 0.092
+   },
+   "norms": {
+    "sota": 0.554,
+    "real_world": 0.015,
+    "benchmark_named": 0.188,
+    "plug_in": 0.055
+   },
+   "ops_ge2": 0.529
+  },
+  "robot/机器人会议": {
+   "n": 2484,
+   "opp": {
+    "T1 条件崩溃与泛化": 0.453,
+    "T2 去掉特权输入或监督": 0.058,
+    "T3 效率": 0.417,
+    "T4 新能力或新设定": 0.085,
+    "T5 统一或简化": 0.124
+   },
+   "ops": {
+    "O1 换表示": 0.027,
+    "O2 去近似或精确化": 0.014,
+    "O3 先验或约束": 0.072,
+    "O4 新监督来源或蒸馏": 0.072,
+    "O5 联合求解或可微化": 0.044,
+    "O6 不确定性或可靠性": 0.085,
+    "O7 自适应分配": 0.069,
+    "O8 解耦或分解": 0.042,
+    "O9 借基础模型或相邻领域": 0.15,
+    "O10 时间或多视一致": 0.015,
+    "O11 多模态融合": 0.084,
+    "O12 分层或由粗到细": 0.052
+   },
+   "norms": {
+    "sota": 0.249,
+    "real_world": 0.19,
+    "benchmark_named": 0.087,
+    "plug_in": 0.02
+   },
+   "ops_ge2": 0.167
+  },
+  "robot/视觉会议": {
+   "n": 333,
+   "opp": {
+    "T1 条件崩溃与泛化": 0.565,
+    "T2 去掉特权输入或监督": 0.093,
+    "T3 效率": 0.288,
+    "T4 新能力或新设定": 0.123,
+    "T5 统一或简化": 0.216
+   },
+   "ops": {
+    "O1 换表示": 0.066,
+    "O2 去近似或精确化": 0.012,
+    "O3 先验或约束": 0.126,
+    "O4 新监督来源或蒸馏": 0.141,
+    "O5 联合求解或可微化": 0.066,
+    "O6 不确定性或可靠性": 0.033,
+    "O7 自适应分配": 0.054,
+    "O8 解耦或分解": 0.081,
+    "O9 借基础模型或相邻领域": 0.384,
+    "O10 时间或多视一致": 0.06,
+    "O11 多模态融合": 0.168,
+    "O12 分层或由粗到细": 0.066
+   },
+   "norms": {
+    "sota": 0.489,
+    "real_world": 0.135,
+    "benchmark_named": 0.327,
+    "plug_in": 0.036
+   },
+   "ops_ge2": 0.369
+  },
+  "robot/学习会议": {
+   "n": 629,
+   "opp": {
+    "T1 条件崩溃与泛化": 0.603,
+    "T2 去掉特权输入或监督": 0.081,
+    "T3 效率": 0.456,
+    "T4 新能力或新设定": 0.122,
+    "T5 统一或简化": 0.213
+   },
+   "ops": {
+    "O1 换表示": 0.037,
+    "O2 去近似或精确化": 0.013,
+    "O3 先验或约束": 0.1,
+    "O4 新监督来源或蒸馏": 0.105,
+    "O5 联合求解或可微化": 0.067,
+    "O6 不确定性或可靠性": 0.052,
+    "O7 自适应分配": 0.078,
+    "O8 解耦或分解": 0.081,
+    "O9 借基础模型或相邻领域": 0.453,
+    "O10 时间或多视一致": 0.051,
+    "O11 多模态融合": 0.156,
+    "O12 分层或由粗到细": 0.067
+   },
+   "norms": {
+    "sota": 0.448,
+    "real_world": 0.148,
+    "benchmark_named": 0.359,
+    "plug_in": 0.038
+   },
+   "ops_ge2": 0.37
+  }
+ },
+ "examples": {
+  "lidar|O1 换表示": [
+   [
+    "VoxelNeXt: Fully Sparse VoxelNet for 3D Object Detection and Tracking",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "NEAT: Neural Attention Fields for End-to-End Autonomous Driving",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "HVPR: Hybrid Voxel-Point Representation for Single-Stage 3D Object Detection",
+    "CVPR",
+    "2021"
+   ]
+  ],
+  "lidar|O2 去近似或精确化": [
+   [
+    "GrooMeD-NMS: Grouped Mathematically Differentiable NMS for Monocular 3D Object Detection",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "PolarMix: A General Data Augmentation Technique for LiDAR Point Clouds",
+    "NIPS",
+    "2022"
+   ],
+   [
+    "Pseudo-Stereo for Monocular 3D Object Detection in Autonomous Driving",
+    "CVPR",
+    "2022"
+   ]
+  ],
+  "lidar|O3 先验或约束": [
+   [
+    "2DPASS: 2D Priors Assisted Semantic Segmentation on LiDAR Point Clouds",
+    "ECCV",
+    "2022"
+   ],
+   [
+    "Geometry Uncertainty Projection Network for Monocular 3D Object Detection",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "MonoDTR: Monocular 3D Object Detection With Depth-Aware Transformer",
+    "CVPR",
+    "2022"
+   ]
+  ],
+  "lidar|O4 新监督来源或蒸馏": [
+   [
+    "SE-SSD: Self-Ensembling Single-Stage Object Detector From Point Cloud",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "Is Pseudo-Lidar Needed for Monocular 3D Object Detection?",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "2DPASS: 2D Priors Assisted Semantic Segmentation on LiDAR Point Clouds",
+    "ECCV",
+    "2022"
+   ]
+  ],
+  "lidar|O5 联合求解或可微化": [
+   [
+    "Large Scale Interactive Motion Forecasting for Autonomous Driving: The Waymo Open Motion Dataset",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "Categorical Depth Distribution Network for Monocular 3D Object Detection",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "SE-SSD: Self-Ensembling Single-Stage Object Detector From Point Cloud",
+    "CVPR",
+    "2021"
+   ]
+  ],
+  "lidar|O6 不确定性或可靠性": [
+   [
+    "FIERY: Future Instance Prediction in Bird's-Eye View From Surround Monocular Cameras",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "Objects Are Different: Flexible Monocular 3D Object Detection",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "Geometry Uncertainty Projection Network for Monocular 3D Object Detection",
+    "ICCV",
+    "2021"
+   ]
+  ],
+  "lidar|O7 自适应分配": [
+   [
+    "TransFusion: Robust LiDAR-Camera Fusion for 3D Object Detection With Transformers",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "RPVNet: A Deep and Efficient Range-Point-Voxel Fusion Network for LiDAR Point Cloud Segmentation",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "VoxelNeXt: Fully Sparse VoxelNet for 3D Object Detection and Tracking",
+    "CVPR",
+    "2023"
+   ]
+  ],
+  "lidar|O8 解耦或分解": [
+   [
+    "Objects Are Different: Flexible Monocular 3D Object Detection",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "PillarNet: Real-Time and High-Performance Pillar-Based 3D Object Detection",
+    "ECCV",
+    "2022"
+   ],
+   [
+    "OccFormer: Dual-path Transformer for Vision-based 3D Semantic Occupancy Prediction",
+    "ICCV",
+    "2023"
+   ]
+  ],
+  "lidar|O9 借基础模型或相邻领域": [
+   [
+    "PointAugmenting: Cross-Modal Augmentation for 3D Object Detection",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "Driving with LLMs: Fusing Object-Level Vector Modality for Explainable Autonomous Driving",
+    "ICRA",
+    "2024"
+   ],
+   [
+    "DiLu: A Knowledge-Driven Approach to Autonomous Driving with Large Language Models",
+    "ICLR",
+    "2024"
+   ]
+  ],
+  "lidar|O10 时间或多视一致": [
+   [
+    "PETRv2: A Unified Framework for 3D Perception from Multi-Camera Images",
+    "ICCV",
+    "2023"
+   ],
+   [
+    "CoBEVT: Cooperative Bird’s Eye View Semantic Segmentation with Sparse Transformers",
+    "CORL",
+    "2022"
+   ],
+   [
+    "Spatio-Temporal Self-Supervised Representation Learning for 3D Point Clouds",
+    "ICCV",
+    "2021"
+   ]
+  ],
+  "lidar|O11 多模态融合": [
+   [
+    "TransFusion: Robust LiDAR-Camera Fusion for 3D Object Detection With Transformers",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "Multi-Modal Fusion Transformer for End-to-End Autonomous Driving",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "DeepFusion: Lidar-Camera Deep Fusion for Multi-Modal 3D Object Detection",
+    "CVPR",
+    "2022"
+   ]
+  ],
+  "lidar|O12 分层或由粗到细": [
+   [
+    "3D Object Detection With Pointformer",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "Not All Points Are Equal: Learning Highly Efficient Point-Based Detectors for 3D LiDAR Point Clouds",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "2DPASS: 2D Priors Assisted Semantic Segmentation on LiDAR Point Clouds",
+    "ECCV",
+    "2022"
+   ]
+  ],
+  "lidar|T1 条件崩溃与泛化": [
+   [
+    "TransFusion: Robust LiDAR-Camera Fusion for 3D Object Detection With Transformers",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "Cylindrical and Asymmetrical 3D Convolution Networks for LiDAR Segmentation",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "DeepFusion: Lidar-Camera Deep Fusion for Multi-Modal 3D Object Detection",
+    "CVPR",
+    "2022"
+   ]
+  ],
+  "lidar|T2 去掉特权输入或监督": [
+   [
+    "DETR3D: 3D Object Detection from Multi-view Images via 3D-to-2D Queries",
+    "CORL",
+    "2021"
+   ],
+   [
+    "Is Pseudo-Lidar Needed for Monocular 3D Object Detection?",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "VoxelNeXt: Fully Sparse VoxelNet for 3D Object Detection and Tracking",
+    "CVPR",
+    "2023"
+   ]
+  ],
+  "lidar|T3 效率": [
+   [
+    "Center-Based 3D Object Detection and Tracking",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "Categorical Depth Distribution Network for Monocular 3D Object Detection",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "Voxel Transformer for 3D Object Detection",
+    "ICCV",
+    "2021"
+   ]
+  ],
+  "lidar|T4 新能力或新设定": [
+   [
+    "BEVFusion: A Simple and Robust LiDAR-Camera Fusion Framework",
+    "NIPS",
+    "2022"
+   ],
+   [
+    "VoxelNeXt: Fully Sparse VoxelNet for 3D Object Detection and Tracking",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "Tri-Perspective View for Vision-Based 3D Semantic Occupancy Prediction",
+    "CVPR",
+    "2023"
+   ]
+  ],
+  "lidar|T5 统一或简化": [
+   [
+    "Center-Based 3D Object Detection and Tracking",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "Planning-Oriented Autonomous Driving",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "PETR: Position Embedding Transformation for Multi-View 3D Object Detection",
+    "ECCV",
+    "2022"
+   ]
+  ],
+  "pano|O1 换表示": [
+   [
+    "NeuralLift-360: Lifting an In-the-Wild 2D Photo to a 3D Object With 360deg Views",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "SliceNet: Deep Dense Depth Estimation From a Single Indoor Panorama Using a Slice-Based Representation",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "PanoHead: Geometry-Aware 3D Full-Head Synthesis in 360deg",
+    "CVPR",
+    "2023"
+   ]
+  ],
+  "pano|O2 去近似或精确化": [
+   [
+    "Bending Reality: Distortion-Aware Transformers for Adapting to Panoramic Semantic Segmentation",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "OSRT: Omnidirectional Image Super-Resolution With Distortion-Aware Transformer",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "Assessor360: Multi-sequence Network for Blind Omnidirectional Image Quality Assessment",
+    "NIPS",
+    "2023"
+   ]
+  ],
+  "pano|O3 先验或约束": [
+   [
+    "RealFusion: 360deg Reconstruction of Any Object From a Single Image",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "NeuralLift-360: Lifting an In-the-Wild 2D Photo to a 3D Object With 360deg Views",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "PanoHead: Geometry-Aware 3D Full-Head Synthesis in 360deg",
+    "CVPR",
+    "2023"
+   ]
+  ],
+  "pano|O4 新监督来源或蒸馏": [
+   [
+    "ZeroNVS: Zero-Shot 360-Degree View Synthesis from a Single Image",
+    "CVPR",
+    "2024"
+   ],
+   [
+    "Consistent4D: Consistent 360° Dynamic Object Generation from Monocular Video",
+    "ICLR",
+    "2024"
+   ],
+   [
+    "Progressively Complementary Network for Fisheye Image Rectification Using Appearance Flow",
+    "CVPR",
+    "2021"
+   ]
+  ],
+  "pano|O5 联合求解或可微化": [
+   [
+    "OmniQuant: Omnidirectionally Calibrated Quantization for Large Language Models",
+    "ICLR",
+    "2024"
+   ],
+   [
+    "LED2-Net: Monocular 360deg Layout Estimation via Differentiable Depth Rendering",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "DeepPanoContext: Panoramic 3D Scene Understanding With Holistic Scene Context Graph and Relation-Based Optimization",
+    "ICCV",
+    "2021"
+   ]
+  ],
+  "pano|O6 不确定性或可靠性": [
+   [
+    "Egocentric Whole-Body Motion Capture with FisheyeViT and Diffusion-Based Motion Refinement",
+    "CVPR",
+    "2024"
+   ],
+   [
+    "Innovating Real Fisheye Image Correction with Dual Diffusion Architecture",
+    "ICCV",
+    "2023"
+   ],
+   [
+    "Omni-Perception: Omnidirectional Collision Avoidance of Legged Robots in Dynamic Environments",
+    "CORL",
+    "2025"
+   ]
+  ],
+  "pano|O7 自适应分配": [
+   [
+    "PanoHead: Geometry-Aware 3D Full-Head Synthesis in 360deg",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "LAU-Net: Latitude Adaptive Upscaling Network for Omnidirectional Image Super-Resolution",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "OSRT: Omnidirectional Image Super-Resolution With Distortion-Aware Transformer",
+    "CVPR",
+    "2023"
+   ]
+  ],
+  "pano|O8 解耦或分解": [
+   [
+    "StyleLight: HDR Panorama Generation for Lighting Estimation and Editing",
+    "ECCV",
+    "2022"
+   ],
+   [
+    "ZeroRF: Fast Sparse View 360deg Reconstruction with Zero Pretraining",
+    "CVPR",
+    "2024"
+   ],
+   [
+    "Hierarchical Disentangled Representation Learning for Outdoor Illumination Estimation and Editing",
+    "ICCV",
+    "2021"
+   ]
+  ],
+  "pano|O9 借基础模型或相邻领域": [
+   [
+    "OmniQuant: Omnidirectionally Calibrated Quantization for Large Language Models",
+    "ICLR",
+    "2024"
+   ],
+   [
+    "NeuralLift-360: Lifting an In-the-Wild 2D Photo to a 3D Object With 360deg Views",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "ZeroNVS: Zero-Shot 360-Degree View Synthesis from a Single Image",
+    "CVPR",
+    "2024"
+   ]
+  ],
+  "pano|O10 时间或多视一致": [
+   [
+    "Estimating Egocentric 3D Human Pose in Global Space",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "Consistent4D: Consistent 360° Dynamic Object Generation from Monocular Video",
+    "ICLR",
+    "2024"
+   ],
+   [
+    "Panacea: Panoramic and Controllable Video Generation for Autonomous Driving",
+    "CVPR",
+    "2024"
+   ]
+  ],
+  "pano|O11 多模态融合": [
+   [
+    "RealFusion: 360deg Reconstruction of Any Object From a Single Image",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "History Aware Multimodal Transformer for Vision-and-Language Navigation",
+    "NIPS",
+    "2021"
+   ],
+   [
+    "Pano-AVQA: Grounded Audio-Visual Question Answering on 360deg Videos",
+    "ICCV",
+    "2021"
+   ]
+  ],
+  "pano|O12 分层或由粗到细": [
+   [
+    "History Aware Multimodal Transformer for Vision-and-Language Navigation",
+    "NIPS",
+    "2021"
+   ],
+   [
+    "Bending Reality: Distortion-Aware Transformers for Adapting to Panoramic Semantic Segmentation",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "360MonoDepth: High-Resolution 360deg Monocular Depth Estimation",
+    "CVPR",
+    "2022"
+   ]
+  ],
+  "pano|T1 条件崩溃与泛化": [
+   [
+    "Bending Reality: Distortion-Aware Transformers for Adapting to Panoramic Semantic Segmentation",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "PanoHead: Geometry-Aware 3D Full-Head Synthesis in 360deg",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "PanoFormer: Panorama Transformer for Indoor 360° Depth Estimation",
+    "ECCV",
+    "2022"
+   ]
+  ],
+  "pano|T2 去掉特权输入或监督": [
+   [
+    "Consistent4D: Consistent 360° Dynamic Object Generation from Monocular Video",
+    "ICLR",
+    "2024"
+   ],
+   [
+    "Panoramic Vision Transformer for Saliency Detection in 360° Videos",
+    "ECCV",
+    "2022"
+   ],
+   [
+    "Weakly-Supervised Stitching Network for Real-World Panoramic Image Generation",
+    "ECCV",
+    "2022"
+   ]
+  ],
+  "pano|T3 效率": [
+   [
+    "History Aware Multimodal Transformer for Vision-and-Language Navigation",
+    "NIPS",
+    "2021"
+   ],
+   [
+    "OmniQuant: Omnidirectionally Calibrated Quantization for Large Language Models",
+    "ICLR",
+    "2024"
+   ],
+   [
+    "HoHoNet: 360 Indoor Holistic Understanding With Latent Horizontal Features",
+    "CVPR",
+    "2021"
+   ]
+  ],
+  "pano|T4 新能力或新设定": [
+   [
+    "NeuralLift-360: Lifting an In-the-Wild 2D Photo to a 3D Object With 360deg Views",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "LAU-Net: Latitude Adaptive Upscaling Network for Omnidirectional Image Super-Resolution",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "Panoramic Human Activity Recognition",
+    "ECCV",
+    "2022"
+   ]
+  ],
+  "pano|T5 统一或简化": [
+   [
+    "History Aware Multimodal Transformer for Vision-and-Language Navigation",
+    "NIPS",
+    "2021"
+   ],
+   [
+    "StyleLight: HDR Panorama Generation for Lighting Estimation and Editing",
+    "ECCV",
+    "2022"
+   ],
+   [
+    "LED2-Net: Monocular 360deg Layout Estimation via Differentiable Depth Rendering",
+    "CVPR",
+    "2021"
+   ]
+  ],
+  "render|O1 换表示": [
+   [
+    "pixelNeRF: Neural Radiance Fields From One or Few Images",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "Magic3D: High-Resolution Text-to-3D Content Creation",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "PlenOctrees for Real-Time Rendering of Neural Radiance Fields",
+    "ICCV",
+    "2021"
+   ]
+  ],
+  "render|O2 去近似或精确化": [
+   [
+    "Mip-NeRF: A Multiscale Representation for Anti-Aliasing Neural Radiance Fields",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "Mip-NeRF 360: Unbounded Anti-Aliased Neural Radiance Fields",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "PlenOctrees for Real-Time Rendering of Neural Radiance Fields",
+    "ICCV",
+    "2021"
+   ]
+  ],
+  "render|O3 先验或约束": [
+   [
+    "Mip-NeRF 360: Unbounded Anti-Aliased Neural Radiance Fields",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "pixelNeRF: Neural Radiance Fields From One or Few Images",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "Plenoxels: Radiance Fields Without Neural Networks",
+    "CVPR",
+    "2022"
+   ]
+  ],
+  "render|O4 新监督来源或蒸馏": [
+   [
+    "Mip-NeRF 360: Unbounded Anti-Aliased Neural Radiance Fields",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "KiloNeRF: Speeding Up Neural Radiance Fields With Thousands of Tiny MLPs",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "DreamGaussian: Generative Gaussian Splatting for Efficient 3D Content Creation",
+    "ICLR",
+    "2024"
+   ]
+  ],
+  "render|O5 联合求解或可微化": [
+   [
+    "Magic3D: High-Resolution Text-to-3D Content Creation",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "SuGaR: Surface-Aligned Gaussian Splatting for Efficient 3D Mesh Reconstruction and High-Quality Mesh Rendering",
+    "CVPR",
+    "2024"
+   ],
+   [
+    "Deblur-NeRF: Neural Radiance Fields From Blurry Images",
+    "CVPR",
+    "2022"
+   ]
+  ],
+  "render|O6 不确定性或可靠性": [
+   [
+    "Depth-Supervised NeRF: Fewer Views and Faster Training for Free",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "Dense Depth Priors for Neural Radiance Fields From Sparse Input Views",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "NerfingMVS: Guided Optimization of Neural Radiance Fields for Indoor Multi-View Stereo",
+    "ICCV",
+    "2021"
+   ]
+  ],
+  "render|O7 自适应分配": [
+   [
+    "Point-NeRF: Point-Based Neural Radiance Fields",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "DreamGaussian: Generative Gaussian Splatting for Efficient 3D Content Creation",
+    "ICLR",
+    "2024"
+   ],
+   [
+    "Text-to-3D using Gaussian Splatting",
+    "CVPR",
+    "2024"
+   ]
+  ],
+  "render|O8 解耦或分解": [
+   [
+    "TensoRF: Tensorial Radiance Fields",
+    "ECCV",
+    "2022"
+   ],
+   [
+    "PlenOctrees for Real-Time Rendering of Neural Radiance Fields",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "Block-NeRF: Scalable Large Scene Neural View Synthesis",
+    "CVPR",
+    "2022"
+   ]
+  ],
+  "render|O9 借基础模型或相邻领域": [
+   [
+    "Magic3D: High-Resolution Text-to-3D Content Creation",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "Putting NeRF on a Diet: Semantically Consistent Few-Shot View Synthesis",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "Latent-NeRF for Shape-Guided Generation of 3D Shapes and Textures",
+    "CVPR",
+    "2023"
+   ]
+  ],
+  "render|O10 时间或多视一致": [
+   [
+    "NeRF in the Wild: Neural Radiance Fields for Unconstrained Photo Collections",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "Neural Body: Implicit Neural Representations With Structured Latent Codes for Novel View Synthesis of Dynamic Humans",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "Non-Rigid Neural Radiance Fields: Reconstruction and Novel View Synthesis of a Dynamic Scene From Monocular Video",
+    "ICCV",
+    "2021"
+   ]
+  ],
+  "render|O11 多模态融合": [
+   [
+    "In-Place Scene Labelling and Understanding With Implicit Scene Representation",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "CLIP-NeRF: Text-and-Image Driven Manipulation of Neural Radiance Fields",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "H-NeRF: Neural Radiance Fields for Rendering and Temporal Reconstruction of Humans in Motion",
+    "NIPS",
+    "2021"
+   ]
+  ],
+  "render|O12 分层或由粗到细": [
+   [
+    "Nerfies: Deformable Neural Radiance Fields",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "Magic3D: High-Resolution Text-to-3D Content Creation",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "BARF: Bundle-Adjusting Neural Radiance Fields",
+    "ICCV",
+    "2021"
+   ]
+  ],
+  "render|T1 条件崩溃与泛化": [
+   [
+    "Mip-NeRF 360: Unbounded Anti-Aliased Neural Radiance Fields",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "NeRF in the Wild: Neural Radiance Fields for Unconstrained Photo Collections",
+    "CVPR",
+    "2021"
+   ],
+   [
+    "Nerfies: Deformable Neural Radiance Fields",
+    "ICCV",
+    "2021"
+   ]
+  ],
+  "render|T2 去掉特权输入或监督": [
+   [
+    "Non-Rigid Neural Radiance Fields: Reconstruction and Novel View Synthesis of a Dynamic Scene From Monocular Video",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "In-Place Scene Labelling and Understanding With Implicit Scene Representation",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "Decomposing NeRF for Editing via Feature Field Distillation",
+    "NIPS",
+    "2022"
+   ]
+  ],
+  "render|T3 效率": [
+   [
+    "Mip-NeRF: A Multiscale Representation for Anti-Aliasing Neural Radiance Fields",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "TensoRF: Tensorial Radiance Fields",
+    "ECCV",
+    "2022"
+   ],
+   [
+    "Plenoxels: Radiance Fields Without Neural Networks",
+    "CVPR",
+    "2022"
+   ]
+  ],
+  "render|T4 新能力或新设定": [
+   [
+    "Nerfies: Deformable Neural Radiance Fields",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "Gaussian Splatting SLAM",
+    "CVPR",
+    "2024"
+   ],
+   [
+    "Deblur-NeRF: Neural Radiance Fields From Blurry Images",
+    "CVPR",
+    "2022"
+   ]
+  ],
+  "render|T5 统一或简化": [
+   [
+    "UNISURF: Unifying Neural Implicit Surfaces and Radiance Fields for Multi-View Reconstruction",
+    "ICCV",
+    "2021"
+   ],
+   [
+    "CLIP-NeRF: Text-and-Image Driven Manipulation of Neural Radiance Fields",
+    "CVPR",
+    "2022"
+   ],
+   [
+    "Gaussian Splatting SLAM",
+    "CVPR",
+    "2024"
+   ]
+  ],
+  "robot|O1 换表示": [
+   [
+    "CLIPort: What and Where Pathways for Robotic Manipulation",
+    "CORL",
+    "2021"
+   ],
+   [
+    "R3M: A Universal Visual Representation for Robot Manipulation",
+    "CORL",
+    "2022"
+   ],
+   [
+    "3D Neural Scene Representations for Visuomotor Control",
+    "CORL",
+    "2021"
+   ]
+  ],
+  "robot|O2 去近似或精确化": [
+   [
+    "Learning to Act from Actionless Videos through Dense Correspondences",
+    "ICLR",
+    "2024"
+   ],
+   [
+    "Efficient Tactile Simulation with Differentiability for Robotic Manipulation",
+    "CORL",
+    "2022"
+   ],
+   [
+    "An Unbiased Look at Datasets for Visuo-Motor Pre-Training",
+    "CORL",
+    "2023"
+   ]
+  ],
+  "robot|O3 先验或约束": [
+   [
+    "Perceiver-Actor: A Multi-Task Transformer for Robotic Manipulation",
+    "CORL",
+    "2022"
+   ],
+   [
+    "Diffusion-Based Generation, Optimization, and Planning in 3D Scenes",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "ARCTIC: A Dataset for Dexterous Bimanual Hand-Object Manipulation",
+    "CVPR",
+    "2023"
+   ]
+  ],
+  "robot|O4 新监督来源或蒸馏": [
+   [
+    "R3M: A Universal Visual Representation for Robot Manipulation",
+    "CORL",
+    "2022"
+   ],
+   [
+    "VIP: Towards Universal Visual Reward and Representation via Value-Implicit Pre-Training",
+    "ICLR",
+    "2023"
+   ],
+   [
+    "Real-World Robot Learning with Masked Visual Pre-training",
+    "CORL",
+    "2022"
+   ]
+  ],
+  "robot|O5 联合求解或可微化": [
+   [
+    "Diffusion-Based Generation, Optimization, and Planning in 3D Scenes",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "Model-Based Imitation Learning for Urban Driving",
+    "NIPS",
+    "2022"
+   ],
+   [
+    "ContactOpt: Optimizing Contact To Improve Grasps",
+    "CVPR",
+    "2021"
+   ]
+  ],
+  "robot|O6 不确定性或可靠性": [
+   [
+    "Bridging Offline Reinforcement Learning and Imitation Learning: A Tale of Pessimism",
+    "NIPS",
+    "2021"
+   ],
+   [
+    "Robots That Ask For Help: Uncertainty Alignment for Large Language Model Planners",
+    "CORL",
+    "2023"
+   ],
+   [
+    "Grounded Decoding: Guiding Text Generation with Grounded Models for Embodied Agents",
+    "NIPS",
+    "2023"
+   ]
+  ],
+  "robot|O7 自适应分配": [
+   [
+    "Bridging Offline Reinforcement Learning and Imitation Learning: A Tale of Pessimism",
+    "NIPS",
+    "2021"
+   ],
+   [
+    "In-Hand Object Rotation via Rapid Motor Adaptation",
+    "CORL",
+    "2022"
+   ],
+   [
+    "Watch and Match: Supercharging Imitation with Regularized Optimal Transport",
+    "CORL",
+    "2022"
+   ]
+  ],
+  "robot|O8 解耦或分解": [
+   [
+    "Legged Locomotion in Challenging Terrains using Egocentric Vision",
+    "CORL",
+    "2022"
+   ],
+   [
+    "Deep Whole-Body Control: Learning a Unified Policy for Manipulation and Locomotion",
+    "CORL",
+    "2022"
+   ],
+   [
+    "Masked World Models for Visual Control",
+    "CORL",
+    "2022"
+   ]
+  ],
+  "robot|O9 借基础模型或相邻领域": [
+   [
+    "Do As I Can, Not As I Say: Grounding Language in Robotic Affordances",
+    "CORL",
+    "2022"
+   ],
+   [
+    "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",
+    "CORL",
+    "2023"
+   ],
+   [
+    "Inner Monologue: Embodied Reasoning through Planning with Language Models",
+    "CORL",
+    "2022"
+   ]
+  ],
+  "robot|O10 时间或多视一致": [
+   [
+    "ARCTIC: A Dataset for Dexterous Bimanual Hand-Object Manipulation",
+    "CVPR",
+    "2023"
+   ],
+   [
+    "RVT: Robotic View Transformer for 3D Object Manipulation",
+    "CORL",
+    "2023"
+   ],
+   [
+    "MaskViT: Masked Visual Pre-Training for Video Prediction",
+    "ICLR",
+    "2023"
+   ]
+  ],
+  "robot|O11 多模态融合": [
+   [
+    "OpenVLA: An Open-Source Vision-Language-Action Model",
+    "CORL",
+    "2024"
+   ],
+   [
+    "EmbodiedGPT: Vision-Language Pre-Training via Embodied Chain of Thought",
+    "NIPS",
+    "2023"
+   ],
+   [
+    "Unified-IO 2: Scaling Autoregressive Multimodal Models with Vision Language Audio and Action",
+    "CVPR",
+    "2024"
+   ]
+  ],
+  "robot|O12 分层或由粗到细": [
+   [
+    "Habitat 2.0: Training Home Assistants to Rearrange their Habitat",
+    "NIPS",
+    "2021"
+   ],
+   [
+    "SayPlan: Grounding Large Language Models using 3D Scene Graphs for Scalable Robot Task Planning",
+    "CORL",
+    "2023"
+   ],
+   [
+    "MimicPlay: Long-Horizon Imitation Learning by Watching Human Play",
+    "CORL",
+    "2023"
+   ]
+  ],
+  "robot|T1 条件崩溃与泛化": [
+   [
+    "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",
+    "CORL",
+    "2023"
+   ],
+   [
+    "CLIPort: What and Where Pathways for Robotic Manipulation",
+    "CORL",
+    "2021"
+   ],
+   [
+    "BC-Z: Zero-Shot Task Generalization with Robotic Imitation Learning",
+    "CORL",
+    "2021"
+   ]
+  ],
+  "robot|T2 去掉特权输入或监督": [
+   [
+    "CLIPort: What and Where Pathways for Robotic Manipulation",
+    "CORL",
+    "2021"
+   ],
+   [
+    "Video PreTraining (VPT): Learning to Act by Watching Unlabeled Online Videos",
+    "NIPS",
+    "2022"
+   ],
+   [
+    "VIP: Towards Universal Visual Reward and Representation via Value-Implicit Pre-Training",
+    "ICLR",
+    "2023"
+   ]
+  ],
+  "robot|T3 效率": [
+   [
+    "CLIPort: What and Where Pathways for Robotic Manipulation",
+    "CORL",
+    "2021"
+   ],
+   [
+    "Learning to Walk in Minutes Using Massively Parallel Deep Reinforcement Learning",
+    "CORL",
+    "2021"
+   ],
+   [
+    "R3M: A Universal Visual Representation for Robot Manipulation",
+    "CORL",
+    "2022"
+   ]
+  ],
+  "robot|T4 新能力或新设定": [
+   [
+    "BC-Z: Zero-Shot Task Generalization with Robotic Imitation Learning",
+    "CORL",
+    "2021"
+   ],
+   [
+    "LLM-Planner: Few-Shot Grounded Planning for Embodied Agents with Large Language Models",
+    "ICCV",
+    "2023"
+   ],
+   [
+    "OpenVLA: An Open-Source Vision-Language-Action Model",
+    "CORL",
+    "2024"
+   ]
+  ],
+  "robot|T5 统一或简化": [
+   [
+    "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",
+    "CORL",
+    "2023"
+   ],
+   [
+    "CLIPort: What and Where Pathways for Robotic Manipulation",
+    "CORL",
+    "2021"
+   ],
+   [
+    "LLM-Planner: Few-Shot Grounded Planning for Embodied Agents with Large Language Models",
+    "ICCV",
+    "2023"
+   ]
+  ]
+ }
+}
