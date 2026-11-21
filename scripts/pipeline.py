@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Automated method-paper pipeline: Codex reasons and reviews, Claude Code executes.
+"""Automated method-paper pipeline: a reasoner (Codex, or a separate headless Claude process) reasons and reviews;
+Claude Code executes.
 
 Run from the paper repository root (the git repository holding CLAUDE.md, AGENTS.md and research/):
 
     python pipeline.py init [--autonomy checkpoints|auto] [--paper-dir paper] [--main-tex main.tex]
+                            [--reasoner codex|claude] [--claude-model MODEL] [--claude-effort xhigh]
                             [--codex-effort xhigh] [--codex-model MODEL]
                             [--start STAGE] [--gate2-passed REASON] [--force]
     python pipeline.py init --polish [--paper-dir paper] [--main-tex main.tex] [--start profile|figures|lint|polish]
@@ -13,14 +15,18 @@ Run from the paper repository root (the git repository holding CLAUDE.md, AGENTS
     python pipeline.py done [--skip] [--note TEXT] [--by subagent]
                                             validate this stage's outputs and advance
     python pipeline.py retry                re-run the current Codex stage with a fresh output file
+    python pipeline.py reason               with --reasoner claude: run the current reasoning stage with a separate
+                                            headless Claude process (what `next` gives as the command)
     python pipeline.py decide VALUE         answer a user checkpoint ("C2,C4", "2", "back 理由", "yes", "no", "stop")
     python pipeline.py fail [--note TEXT]   record that this stage failed (pauses after two failures)
     python pipeline.py goto STAGE [--reason TEXT] [--seed TEXT] [--anchor C12] [--gate2-passed REASON]
                                             jump to a stage (user decision); resets the round counters.
                                             --reason carries the author's conclusion (goto problems --reason drops
-                                            the anchor); --seed adds an opportunity to the next problems round;
+                                            the anchor; with a writing stage it is the author's instruction for the
+                                            outline, draft and revision); --seed adds an opportunity to the next round;
                                             --anchor (goto methods) continues on another anchor that passed gate one
-    python pipeline.py set [--codex-effort high] [--codex-model M] [--autonomy auto] [--codex-sandbox none]
+    python pipeline.py set [--reasoner claude] [--claude-model M] [--claude-effort max]
+                           [--codex-effort high] [--codex-model M] [--autonomy auto] [--codex-sandbox none]
                            [--screen-n 4] [--screen-per 2] [--screen-total 8] [--screen-setting TEXT]
                                             change settings in place (--codex-sandbox none: Codex without its own
                                             sandbox, for containers where bubblewrap cannot start)
@@ -38,8 +44,10 @@ import datetime as dt
 import hashlib
 import json
 import re
+import os
 import shlex
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -96,8 +104,13 @@ STAGES = [
               "否则写 card=keep。fail：核心 claim 不成立。")},
     {"id": "cp_final", "owner": "user", "title": "批准在测试集上跑最终报告"},
     {"id": "final_eval", "owner": "claude", "title": "最终报告评测", "runs": True},
-    {"id": "profile", "owner": "claude", "title": "生成目标会议的写作画像", "skippable": True},
-    {"id": "figures", "owner": "claude", "title": "数据图与框架图", "skippable": True},
+    {"id": "profile", "owner": "claude", "title": "写作画像、范文门槛和文献池", "skippable": True},
+    {"id": "outline", "owner": "codex", "title": "论文提纲：故事、引言分段、相关工作和主张—证据对应", "out": "outline.md",
+     "web": True, "pl": {"outline": (ENUM, {"ready", "weak"}), "reason": (FREE,)},
+     "formats": ["PIPELINE: outline=ready", "PIPELINE: outline=weak reason=一句话说明主结果为什么撑不起本文的主张"],
+     "note": ("ready：现有结果撑得起提纲里的主张。weak：主结果小于冻结的最小效果、落在种子波动之内，或者去掉继承的部件后本文"
+              "新增的部分几乎没有收益；流程会停下来请作者决定补实验、换主张还是照此写，提纲照常写完。")},
+    {"id": "figures", "owner": "claude", "title": "动机图、数据图、框架图和效果图", "skippable": True},
     {"id": "draft", "owner": "codex", "title": "写论文初稿", "out": "draft_notes.md", "write": True,
      "pl": {"draft": (ENUM, {"ready"})}, "formats": ["PIPELINE: draft=ready"]},
     {"id": "polish", "owner": "codex", "title": "收尾改稿（ARIS 稿件）", "out": "polish_notes.md", "write": True,
@@ -233,7 +246,7 @@ PROMPTS = {
         "任务：按 references/experiments.md，根据 research/method_card.md 写实验职责表：每个实验写明支撑的 claim、论证职责、"
         "数据集与协议、预期现象、状态（新行为“待做”）。必须包含主实验、逐模块消融、等容量对照、机制开关、按关口一失效条件分层、"
         "鲁棒性、效率；在测试集上的最终评测单独成行，状态写“最终报告（待批准）”。research/experiment_plan.md 已存在时在它的基础上"
-        "更新，已有行的“状态”列原样保留。{review_more}{probe_plan}",
+        "更新，已有行的“状态”列原样保留。{review_more}{probe_plan}{plan_note}",
         "完整的实验职责表（会保存为 research/experiment_plan.md）"),
     "review": (
         "任务：只依据 research/method_card.md、research/experiment_plan.md、research/runs.md、research/results/ 和 "
@@ -243,15 +256,58 @@ PROMPTS = {
         "自动生成的证据预检，标为缺失、作废或不可恢复的运行不能支持任何结论。结论为否定（fail 或 unmet）时，写一节“以后不要再试”："
         "被否定的做法和依据，供下一轮找方法时避开。{probe_review}",
         "完整的审查意见（会保存为 research/review.md），末尾写“交给：……；要做：……”"),
+    "outline": (
+        "任务：动笔之前先定下全文的组织，写成论文提纲（只写提纲，不写正文）。写法见 references/writing.md 第 4 节，篇幅和文献"
+        "数量的门槛见 research/writing_profile/venue_norms.json（没有就用 references/writing-patterns.md 第 13 节的默认值），范文的"
+        "结构见 research/writing_profile/exemplars.md（如果存在，只参考结构，不摘抄原文）。依据：research/method_card.md（方法）、"
+        "research/experiment_plan.md、research/runs.md 和 research/results/（已有的实验和数字）、research/gates.md（最接近的工作和"
+        "本质差异）、research/refs_pool.md（已核实的文献池；不存在时在“仍缺的材料”里写明，不凭记忆列文献）。{advisor}{writing_note}"
+        "\n提纲依次写九项：\n"
+        "1. 一句话故事和主结果：本文解决什么问题、凭什么想法、最强的一个数字（带运行编号和比较对象）。主结果小于方法卡冻结的"
+        "最小效果、落在种子波动之内，或只在个别设置成立时，如实写出，并在 PIPELINE 行写 outline=weak：结果撑不起主张时，组织"
+        "表达救不了。\n"
+        "2. 继承与贡献：哪些收益来自继承的已有部件（基线、已有的流程或编码器），哪些来自本文新增的部分；列出能把两者分开的"
+        "对照（哪张表哪一行、差值多少）。引言和实验都按这个划分写，本文只对新增部分提出主张。\n"
+        "3. 引言六段，每段写出要点和要引用的文献键：P1 研究背景，两三句内落到本文的具体问题；P2 现有研究的思路，按路线讲清"
+        "各自怎么做、解决了什么；P3 存在的普遍问题，指出技术上的缺口并解释它为什么出现；P4 本文的核心想法，独立成段，写关键"
+        "观察和它为什么能补上这个缺口；P5 方法与实验概述，每一步为什么需要，少写细节，给出主结果；P6 三条贡献，条目式，逐条"
+        "递进、互不重复，每条注明对应方法的哪一部分和哪一组实验。\n"
+        "4. 动机图：引言里的一张图，对比现有做法和本文的想法；写出每个面板画什么、读者一眼要看到的区别。\n"
+        "5. 相关工作：3–4 个小节，每条相邻的技术路线一节。每节列出要覆盖的文献键（从文献池取，按发展脉络排序，每篇一句话的"
+        "定位）、这条路线内部的递进关系，最后落到它留下的、本文要解决的问题。目标期刊近两年的相关论文要用上。池里缺的重要"
+        "文献列在“需补入文献池”（题目加 DOI 或 arXiv 编号，检索核实过再列，核实不了的注明“未核实”），实验方下一阶段补入。\n"
+        "6. 主张—证据对应表：| 主张 | 对应贡献 | 回答的研究问题 | 实验（表、图、运行编号） | 结论一句话 |，C1 起编号。实验一节"
+        "按主张分小节；不支撑任何主张的实验（实现细节、编码细节、负面对照）写明移到附录还是补充材料。\n"
+        "7. 方法一节的小节划分：每小节对应引言里的哪个问题，以及为什么这样设计（一两句）。\n"
+        "8. 篇幅和文献目标：引言、相关工作的词数和段数，参考文献总数、近两年条数、目标期刊条数；逐小节列出计划引用的条数，"
+        "合计达到目标。\n"
+        "9. 讨论与局限：有实质内容（适用条件、失败情形的分析）才单独成节，否则写明并入实验分析还是结论。",
+        "完整的提纲（会保存为 research/outline.md），末尾列“仍缺的材料”和“需作者决策”"),
     "draft": (
-        "任务：按 references/writing.md 和 references/writing-patterns.md（以及 research/writing_profile/ 下的目标会议画像，"
-        "如果存在），在论文目录 {paper_abs} 中撰写或更新初稿（主文件 {tex}）：摘要、引言、相关工作、方法、实验、结论。"
+        "任务：{outline_ref}，以及 references/writing.md 和 references/writing-patterns.md（research/writing_profile/ "
+        "下有目标期刊或会议的画像和门槛时按它校准），在论文目录 {paper_abs} 中撰写或更新初稿（主文件 {tex}）：摘要、引言、相关"
+        "工作、方法、实验、结论。{advisor}{writing_note}\n"
+        "引言按提纲的六段写：背景、现有研究的思路、存在的普遍问题、本文的核心想法（独立成段）、方法与实验概述、三条贡献；贡献"
+        "点写成条目式的三条，每条对应方法的一部分和一组实验；引言引用动机图。相关工作按提纲的小节写，每条路线讲清代表工作各自"
+        "做了什么、彼此怎样递进，每小节最后落到它留下的问题；不把多篇文献压成一句带过。方法每个小节先用一两句说明它解决引言里"
+        "的哪个问题、为什么这样设计，再给定义和公式。实验按提纲的主张分小节，每小节依次写：这个实验回答什么问题、设置、结果、"
+        "这个结果说明什么；继承的部件带来的收益和本文新增部分的收益分开报告；提纲标为附录或补充材料的实验不进正文。不设只有"
+        "几句话的讨论一节。\n"
+        "引用只用已核实的条目：从 research/refs_pool.bib 把要引的条目复制进论文目录的 .bib（引用键不变，已有同键条目时不重复），"
+        "或用论文目录 .bib 里已有的条目；文献池里没有的文献不凭记忆写，列进“仍缺的材料”。引用一篇文献前读过它在 "
+        "research/refs_pool.md 里的摘要或题目，确认它确实属于所在的那条路线。篇幅和参考文献数达到提纲第 8 项的目标。\n"
         "方法以 research/method_card.md 为准；数字只能来自 research/runs.md 和 research/results/，图使用论文目录 figs/ 中已生成的图；"
         "遵守发布会原则和诚信边界，正文不出现文件名。",
-        "修改摘要、仍缺的材料和需作者决策的问题"),
+        "修改摘要、各节词数和参考文献数、仍缺的材料和需作者决策的问题"),
     "revise": (
         "任务：读 research/lint_report.md（文稿与图表检查结果），按 references/writing.md 的改稿流程修改论文目录 {paper_abs} 中的"
-        "稿件：逐处处理，最小改动，不改数据和事实；删除结果、新增事实一律列入“需作者决策”。",
+        "稿件：逐处处理，最小改动，不改数据和事实；删除结果、新增事实一律列入“需作者决策”。{advisor}{writing_note}\n"
+        "报告里“结构与篇幅”一类的问题不适用最小改动，按 research/outline.md（如果存在）和 references/writing.md 第 4 节补写：引言补齐"
+        "六段、贡献点改成条目式的三条；相关工作按路线补全代表工作和近两年的工作，写出递进关系和每条路线留下的问题；参考"
+        "文献从 research/refs_pool.bib 补到门槛以上（条目复制进论文目录的 .bib，引用键不变），只引读过摘要、确实相关的条目，"
+        "文献池不够时把缺的路线列进“需作者决策”，不凭记忆补文献，也不为凑数引用不相关的论文；过短的讨论并入实验分析或结论。"
+        "报告里“参考文献核对”一节：不一致的条目（DOI 或 arXiv 编号对应的是另一篇论文）对着 research/refs_pool.bib 改正，池里"
+        "没有的列进“需作者决策”；年份不同和查不到的条目不擅自删改，列进“需作者决策”请作者对着原文核对。",
         "问题表（编号、位置、原文、类型、改法、理由）和“需作者决策”清单"),
     "polish": (
         "任务：论文目录 {paper_abs} 里是 ARIS 写好并经过它的改进循环的稿件（主文件 {tex}，各节通常在 sections/ 下）。按发布会"
@@ -259,7 +315,8 @@ PROMPTS = {
         "重写，没问题的地方不动。重点看：叙事是否围绕本文最强的优势，按“问题为何重要 → 现有方法为何不够 → 本文提供什么 → 证据"
         "如何支持”展开；正文里的自我削弱表达、疑问句和文件名；正文的条目式列表改成整段叙述（引言里的贡献点可以保留）；每个实验"
         "段落是否承担明确的论证职责；术语和符号前后一致。research/lint_report.md（检查脚本的结果）如果存在，其中每一处都要处理"
-        "或写明不改的理由。research/writing_profile/ 下有目标会议的写作画像时按它校准，没有就用 references/writing-patterns.md。",
+        "或写明不改的理由；其中“结构与篇幅”一类的问题，不新增引用、不改 claim 就能解决的（引言分段、贡献点改成条目式的三条、"
+        "过短的讨论并入其他节）直接改，需要新增文献或补写大段内容的列入“需作者决策”，交回 ARIS 处理。research/writing_profile/ 下有目标会议的写作画像时按它校准，没有就用 references/writing-patterns.md。",
         "问题表（编号、位置、原文、类型、改法、理由）、改动过的文件清单和“需作者决策”清单"),
 }
 
@@ -291,25 +348,60 @@ CLAUDE_TASKS = {
             "偏离方法卡或职责表的改动先记进 research/deviations.md。上一轮审查意见见 research/review.md（如有）。"),
     "final_eval": ("用已定好的配置在测试集上跑职责表中标为“最终报告”的实验，只跑一次；在 research/runs.md 新增的这些行的状态里写"
                    "“最终报告”，并把职责表中对应行的状态改为“已完成”。"),
-    "profile": ("为目标会议和本文子领域生成写作画像：\n  python {skill}/scripts/corpus/build_corpus.py --out research/writing_profile "
+    "profile": ("为写作做三项准备（目标期刊或会议、子领域见 CLAUDE.md 的项目信息；细节见 {skill}/references/writing.md 第 4.1 节）。\n"
+                "一、文献池（全部取自 Crossref 和 arXiv 的元数据，写进 research/refs_pool.md 和 refs_pool.bib）：\n"
+                "  python {skill}/scripts/lit_pool.py find \"<目标期刊全名>\"        # 查 ISSN；目标是会议时跳过这一条和 venue\n"
+                "  python {skill}/scripts/lit_pool.py venue --issn <ISSN> --query \"<主题词>\" --from <去年> --must \"<主题正则>\" --tag \"<期刊简称>\"\n"
+                "  python {skill}/scripts/lit_pool.py topic --query \"<一条技术路线的关键词>\" --tag \"<路线名>\"   # 每条相邻路线各跑一次\n"
+                "  python {skill}/scripts/lit_pool.py arxiv --query \"<主题词>\"\n"
+                "  python {skill}/scripts/lit_pool.py doi <基线、数据集、指标和最接近工作的 DOI>\n"
+                "技术路线取自 research/gates.md 列出的最接近工作和 research/method_card.md；论文目录已有 .bib 时先 "
+                "`lit_pool.py import <.bib>` 再 `lit_pool.py check <.bib> --add`。每条路线不少于 8 条，合计不少于参考文献门槛的 1.5 倍"
+                "（期刊约 60 条）；读一遍 refs_pool.md，明显不相关的用 `lit_pool.py drop <键>` 去掉。\n"
+                "二、范文和门槛：从文献池“目标期刊”一组挑 2–3 篇同主题的近两年论文，PDF 放 research/writing_profile/exemplars/（正式版"
+                "下载不到时用它的 arXiv 版本；都拿不到就不做范文，norms 不带 --exemplars），逐篇转成文本（pdftotext 不加 -layout，或用 "
+                "PyMuPDF）再量：\n"
+                "  pdftotext <pdf> <txt> && python {skill}/scripts/paper_lint.py <txt> --stats > research/writing_profile/exemplars/<名字>.json\n"
+                "  python {skill}/scripts/lit_pool.py norms --issn <ISSN> --query \"<主题词>\" --must \"<主题正则>\" --venue \"<简称>\" "
+                "--venue-type journal|conference --target-regex \"<期刊名的正则，同时覆盖全名和缩写>\" --exemplars research/writing_profile/exemplars/*.json\n"
+                "（正则例：Circuits and Systems for Video Technology|Circuits Syst\\.? Video Technol|TCSVT）\n"
+                "再把每篇范文的引言每段讲什么、相关工作分哪几个小节、各节词数和参考文献数记进 research/writing_profile/exemplars.md，"
+                "只记结构和数字，不摘抄原文。目标是会议时 norms 不带 --issn。\n"
+                "三、写作画像（目标是会议时做；期刊可省）：\n  python {skill}/scripts/corpus/build_corpus.py --out research/writing_profile "
                 "--fields \"<子领域名>=<正则>\" --venues <目标会议及相近会议> --target 600\n  python {skill}/scripts/corpus/extract.py "
                 "--dir research/writing_profile\n  python {skill}/scripts/corpus/stats.py --dir research/writing_profile\n"
-                "正则按 CLAUDE.md 的项目信息写；网络不通或样本太少时用 `done --skip`，写作时改用 references/writing-patterns.md。"),
-    "figures": ("用 {skill}/scripts/paper_plot.py 从 research/results/ 的原始数据画论文数据图（按目标会议版心宽度），用 "
-                "{skill}/scripts/framework_figure.py 按 research/method_card.md 画算法框架图（色块分区、底部机理说明、不放结果），"
-                "图存到 {paper}/figs/；每张图看 PNG 预览，修到遮挡检查通过。"),
-    "lint": ("运行下面两条命令，把输出合并写进 research/lint_report.md（覆盖旧报告）：\n  python {skill}/scripts/paper_lint.py "
-             "{paper}/{tex}\n  python {skill}/scripts/figure_table_check.py {paper}/{tex} --venue <目标会议，如 cvpr、ieee、neurips>"),
+                "完成的标志是 research/refs_pool.md，加上 venue_norms.json 或 stats.json 之一。Crossref 和 arXiv 都连不上时用 "
+                "`done --skip --note <原因>`，写作时只能引用论文目录已有的文献，门槛用 references/writing-patterns.md 第 13 节的默认值。"),
+    "figures": ("按 research/outline.md 准备全文的图，存到 {paper}/figs/：\n"
+                "动机图：按提纲第 4 项，对比现有做法和本文的想法，放在引言；用 {skill}/scripts/framework_figure.py 画（色块分区，"
+                "不放结果数字），或用提纲指定的真实样例拼图。\n"
+                "数据图：用 {skill}/scripts/paper_plot.py 从 research/results/ 的原始数据画，按目标期刊或会议的版心宽度，只画提纲"
+                "主张—证据对应表里进正文的实验。\n"
+                "算法框架图：用 {skill}/scripts/framework_figure.py 按 research/method_card.md 画（色块分区、底部机理说明、不放结果）。\n"
+                "效果图：任务有可视化输出时按 {skill}/references/figures.md 第 7 节出一张，帧或样例按事先写明的规则选；3D 检测用 "
+                "{skill}/scripts/qualfig.py。\n"
+                "每张图看 PNG 预览，修到遮挡检查通过。另外，提纲“需补入文献池”一节列出的文献，用 `python {skill}/scripts/lit_pool.py "
+                "doi <DOI>` 或 `arxiv --query <题目>` 加进文献池，查不到的记进 research/deviations.md。"),
+    "lint": ("运行下面的命令，把输出合并写进 research/lint_report.md（覆盖旧报告）：\n  python {skill}/scripts/paper_lint.py "
+             "{paper}/{tex}\n  python {skill}/scripts/figure_table_check.py {paper}/{tex} --venue <目标会议或期刊，如 cvpr、ieee、neurips>\n"
+             "  python {skill}/scripts/lit_pool.py check {paper}/<稿件的 .bib> --out research/refs_check.md    # 连不上 Crossref 时写明没有核对\n"
+             "paper_lint 按文档类判断期刊稿还是会议稿，research/writing_profile/venue_norms.json 存在时用其中的门槛和目标期刊；"
+             "两者都没有时加 `--venue-type journal|conference` 和 `--target-venue \"<期刊全名的正则>\"`；RA-L、SPL 这类限 8 页以内的"
+             "快报用 IEEEtran 的期刊模板，但篇幅按会议稿，加 `--venue-type conference`。refs_check.md 的“参考文献核对”一节原样"
+             "并入报告（不改级别）。"),
     "handback": ("收尾改动会让 ARIS 的审计记录过期（它按文件哈希核对稿件）。在本项目里依次运行 ARIS 的 paper-claim-audit 和 "
                  "citation-audit 技能，参数都是 \"{paper}/\"（装的是 method-paper 插件时命令是 /method-paper:paper-claim-audit，官方 aris "
                  "插件是 /aris:paper-claim-audit，用脚本安装的是 /paper-claim-audit，其余技能同理）；论文有定理，或者标题和摘要里有普适性"
                  "的说法时，再跑 kill-argument；最后跑 paper-compile。审计要求改数字或替换引用时按 ARIS 的流程处理（替换和删除引用要用户"
                  "确认），改完把改动告诉用户。准备投稿时还要按 ARIS paper-writing 第 5.9 和 6.0 节跑 integrity-forensics 和 "
-                 "verify_paper_audits.sh。没有装 ARIS，或者 ARIS 的审查通道（codex MCP，插件里用 /method-paper:setup 配置）没配好时，"
+                 "verify_paper_audits.sh。没有装 ARIS，或者 ARIS 的审稿通道（默认是 codex MCP，插件里用 /method-paper:setup 配置；也可以换成 claude-review，见 references/aris.md 第 7 节）没配好时，"
                  "用 `done --skip --note <原因>`。"),
 }
 # polish mode: the facts live in ARIS's files, not in research/
 CLAUDE_TASKS_POLISH = {
+    "lint": ("运行下面两条命令，把输出合并写进 research/lint_report.md（覆盖旧报告）：\n  python {skill}/scripts/paper_lint.py "
+             "{paper}/{tex} --structure-severity 中\n  python {skill}/scripts/figure_table_check.py {paper}/{tex} --venue "
+             "<目标会议或期刊，如 cvpr、ieee、neurips>\n引用由 ARIS 的 citation-audit 核对，这里不重复。"),
     "profile": ("为目标会议和本文子领域生成写作画像（子领域和目标会议看 PAPER_PLAN.md 或 NARRATIVE_REPORT.md）：\n  python {skill}/scripts/"
                 "corpus/build_corpus.py --out research/writing_profile --fields \"<子领域名>=<正则>\" --venues <目标会议及相近会议> "
                 "--target 600\n  python {skill}/scripts/corpus/extract.py --dir research/writing_profile\n  python {skill}/scripts/corpus/"
@@ -692,7 +784,15 @@ def fmt(text, st):
                           "替换还是插入，以及怎样做成可以插进多个基线的模块。" if has_cs(st) else ""),
         code_survey_gate2=(f"本质差异要在代码层面也成立：对照 {CS}，如果本方法的代码修改位置和改动类型与某个最接近工作基本相同，"
                            "要求方法卡写明机制上的差异（修订）；写不出差异才判换方法。" if has_cs(st) else ""),
-        todo="状态不是“已完成”和“最终报告”的行")
+        todo="状态不是“已完成”和“最终报告”的行",
+        advisor=("research/advisor_notes.md 是导师、合作者或审稿人的意见，逐条落实，并在输出末尾列“意见处理表”（意见、处理方式、"
+                 "位置）。" if (R / "advisor_notes.md").exists() else ""),
+        writing_note=(f"作者的要求：{d['writing_note']}。" if d.get("writing_note") else ""),
+        outline_ref=("按 research/outline.md 的提纲" if (R / "outline.md").exists() else
+                     "research/outline.md 还没有（提纲阶段没有跑过）：先按 references/writing.md 第 4.1 节在输出的开头列出九项提纲，"
+                     "再按它写稿；写稿依据这份提纲"),
+        plan_note=((f"作者要求补实验：{d['plan_note']}。" + ("research/outline.md 第 1、2、6 项写了现有结果撑不起哪些主张，" if (R / "outline.md").exists() else "")
+                    + "把要补的实验写成新行（状态“待做”），已完成的行不动。") if d.get("plan_note") else ""))
 
 
 def probe_reviews(st):
@@ -784,6 +884,16 @@ def unsandboxed(st):
     return st.get("codex_sandbox") == "none"
 
 
+def reasoner(st):
+    """Who does the reasoning and review stages: codex (codex exec) or claude (a separate headless Claude process)."""
+    return st.get("reasoner", "codex")
+
+
+def guarded(st):
+    """Stages whose reasoner is not kept from writing by an OS sandbox are checked afterwards for changes."""
+    return unsandboxed(st) or reasoner(st) == "claude"
+
+
 def guard_scan(st, stage):
     roots = [R]
     paper = Path(st["paper_dir"])
@@ -807,7 +917,7 @@ def guard_scan(st, stage):
 
 def guard_start(st):
     stage = STAGES[IDX[st["stage"]]]
-    if unsandboxed(st) and stage["owner"] == "codex":
+    if guarded(st) and stage["owner"] == "codex":
         GUARD.write_text(json.dumps({"stage": stage["id"], "files": guard_scan(st, stage)}), encoding="utf-8")
 
 
@@ -822,15 +932,52 @@ def guard_changes(st, stage):
                   + [f"新增 {k}" for k in new.keys() - old.keys()] + [f"删除 {k}" for k in old.keys() - new.keys()])
 
 
-def codex_command(stage, st):
-    sid = stage["id"]
-    if sid == "review":
+CLAUDE_ROLE = ("你是 method-paper 流程单独调起的推理与审查进程，也就是 AGENTS.md 里称为 Codex 的推理与审查方，不是执行方。"
+               "仓库 CLAUDE.md 里写给执行方 Claude Code 的分工、自动推进循环和流程命令都不适用于你；SKILL.md 和参考文档里“交给 "
+               "Codex”的事指的就是你，直接自己完成。不运行 pipeline.py，不跑实验，不改实验结果和记录。按用户消息里的任务工作，"
+               "最终回复的最后一行必须是任务要求的 PIPELINE 行。")
+CLAUDE_ROLE_WRITE = "这一阶段你可以修改当前目录（论文目录）里的稿件，不改别处的文件。"
+
+
+def claude_argv(stage, st):
+    """A reasoning stage run by a fresh headless Claude process with only the tools the stage needs: read-only stages
+    get Read/Grep/Glob (plus web search where the stage searches literature); writing stages run inside the paper
+    folder in acceptEdits mode, which keeps edits to that folder (no blanket Edit/Write allow rule)."""
+    argv = ["claude", "-p", "--output-format", "text", "--no-session-persistence", "--strict-mcp-config"]
+    if st.get("claude_model"):
+        argv += ["--model", st["claude_model"]]
+    if st.get("claude_effort", "xhigh") != "default":
+        argv += ["--effort", st.get("claude_effort", "xhigh")]
+    role = CLAUDE_ROLE
+    if stage.get("write"):
+        argv += ["--permission-mode", "acceptEdits", "--tools", "Read,Grep,Glob,Edit,Write", "--allowedTools", "Read Grep Glob",
+                 "--disallowedTools", "Bash NotebookEdit WebSearch WebFetch"]
+        role += CLAUDE_ROLE_WRITE
+        cwd = paper_abs(st)
+    else:
+        tools = ["Read", "Grep", "Glob"] + (["WebSearch", "WebFetch"] if stage.get("web") else [])
+        argv += ["--tools", ",".join(tools), "--allowedTools", " ".join(tools), "--disallowedTools", "Bash Edit Write NotebookEdit"]
+        cwd = root()
+    return argv + ["--append-system-prompt", role], cwd
+
+
+def write_prompt(stage, st):
+    if stage["id"] == "review":
         evidence_precheck()
-    pfile = R / "prompts" / f"{sid}.md"
+    pfile = R / "prompts" / f"{stage['id']}.md"
     pfile.parent.mkdir(parents=True, exist_ok=True)
     pfile.write_text(prompt_text(stage, st), encoding="utf-8")
+    return pfile
+
+
+def codex_command(stage, st):
+    """The command the executor runs for a reasoning stage (codex exec, or this script's `reason` for Claude)."""
+    sid = stage["id"]
+    pfile = write_prompt(stage, st)
     out = run_file(st, sid)
     out.parent.mkdir(parents=True, exist_ok=True)
+    if reasoner(st) == "claude":
+        return f"{self_cmd()} reason"
     q = shlex.quote
     opts = ""
     if st.get("codex_model"):
@@ -868,7 +1015,16 @@ def action(st):
         a["saved_as"] = str(R / stage["out"]) + ("（追加）" if stage.get("append") else "")
         a["message"] = ("在仓库根目录后台运行上面的命令，等命令结束（输出文件出现）后执行 `pipeline.py done`。"
                         "不要改提示，不要把你自己对结果的解读加进去。命令失败或输出不合格时用 `pipeline.py retry` 重跑。")
-        if unsandboxed(st):
+        if reasoner(st) == "claude":
+            argv, cwd = claude_argv(stage, st)
+            a["reasoner"] = "claude"
+            a["runs"] = f"cd {shlex.quote(str(cwd))} && {shlex.join(argv)} < {R / 'prompts' / (sid + '.md')}"
+            a["message"] = ("在仓库根目录后台运行上面的命令：它单独调起一个 Claude 进程做这一阶段的推理与审查（runs 一行是实际的 "
+                            "claude 命令，只给它这一阶段要用的工具"
+                            + ("，只能改论文目录里的稿件" if stage.get("write") else "，只读") + "），进程结束后输出文件才出现，"
+                            "再执行 `pipeline.py done`。不要改提示，不要把你自己对结果的解读加进去；输出不合格时用 `pipeline.py retry` "
+                            "重跑。运行期间你不要改 research/" + ("" if stage.get("write") else " 和论文目录") + "，done 时会核对。")
+        elif unsandboxed(st):
             a["message"] += ("（无沙箱模式：Codex 没有写保护，运行期间你不要改 research/ 和论文目录；done 时会核对这些文件，"
                              "被改动就不通过。）")
     elif stage["owner"] == "claude":
@@ -1007,12 +1163,13 @@ def validate(st, stage):
             legacy = "max_option" not in st["decisions"]  # state from a version that numbered every round 1, 2, 3
             if old and not legacy:
                 raise Invalid(f"候选编号 {old} 和前几轮重复；本轮应从 {low} 开始编号")
-        if unsandboxed(st):
+        if guarded(st):
             ch = guard_changes(st, stage)
             if ch:
-                raise Invalid("无沙箱模式下，Codex 运行期间这些文件有变化：" + "；".join(ch[:8])
-                              + (f" 等 {len(ch)} 处" if len(ch) > 8 else "") + "。Codex 只应写出它的回复文件"
-                              + ("和论文目录里的稿件" if stage.get("write") else "") + "：用 git diff 核对，是 Codex 改的就用 "
+                who = "Claude 推理进程" if reasoner(st) == "claude" else "Codex"
+                raise Invalid(f"{'无沙箱模式下，' if reasoner(st) != 'claude' else ''}{who}运行期间这些文件有变化："
+                              + "；".join(ch[:8]) + (f" 等 {len(ch)} 处" if len(ch) > 8 else "") + f"。{who}只应写出它的回复文件"
+                              + ("和论文目录里的稿件" if stage.get("write") else "") + f"：用 git diff 核对，是{who}改的就用 "
                               "git checkout 恢复（恢复后内容一致即可通过），再 done 或 retry")
         return res
     if stage.get("runs"):
@@ -1084,9 +1241,19 @@ def validate(st, stage):
             raise Invalid("本阶段没有生成 research/code_survey/lineage.md")
         return {}
     if sid == "profile":
-        p = R / "writing_profile" / "stats.json"
-        if not p.exists() or p.stat().st_mtime < started:
-            raise Invalid("本阶段没有生成 research/writing_profile/stats.json")
+        if polish_mode(st):
+            p = R / "writing_profile" / "stats.json"
+            if not p.exists() or p.stat().st_mtime < started:
+                raise Invalid("本阶段没有生成 research/writing_profile/stats.json")
+            return {}
+        pool = R / "refs_pool.md"
+        prof = [p for p in (R / "writing_profile" / "venue_norms.json", R / "writing_profile" / "stats.json") if p.exists()]
+        if not pool.exists():
+            raise Invalid("没有文献池 research/refs_pool.md：用 lit_pool.py 建；Crossref 和 arXiv 都连不上时用 done --skip --note <原因>")
+        if not prof:
+            raise Invalid("research/writing_profile/ 下没有 venue_norms.json（lit_pool.py norms）或 stats.json（写作画像），至少要有一个")
+        if all(p.stat().st_mtime < started for p in [pool] + prof):
+            raise Invalid("文献池和写作画像都不是本阶段更新的；确实不需要更新时用 done --skip --note <原因>")
         return {}
     if sid == "figures":
         paper = Path(st["paper_dir"])
@@ -1311,6 +1478,7 @@ def route_after(st, sid, pl):
             return None, msg
         return "methods", "关口二判为换方法，带着原因重新找方法"
     if sid == "plan":
+        d.pop("plan_note", None)
         d.pop("review_more", None)
         return "run", ""
     if sid == "review":
@@ -1355,6 +1523,13 @@ def route_after(st, sid, pl):
             return "plan", "按审查意见把补充实验写进职责表"
         record_finding(st, "review", "核心 claim 不成立", pl.get("reason") or "见 review.md")
         return None, f"结果审查认为核心 claim 不成立：{pl.get('reason') or '见 review.md'}"
+    if sid == "profile" and polish_mode(st):
+        return "figures", ""
+    if sid == "outline" and pl.get("outline") == "weak":
+        why = pl.get("reason") or "见 research/outline.md 第 1、2 项"
+        return None, (f"提纲认为现有结果撑不起本文的主张：{why}。组织表达解决不了这个问题，下一步由作者决定：补实验用 "
+                      "`goto plan --reason <要补什么>`；换主张或换主结果用 `goto outline --reason <新的主张>`；确认照此写用 "
+                      "`goto figures`")
     if sid == "figures" and polish_mode(st):
         return "lint", "先跑检查脚本，收尾改稿时一并处理"
     if sid in ("draft", "polish"):
@@ -1451,6 +1626,7 @@ def cmd_init(a):
     st = {"version": 2, "mode": "polish" if a.polish else "research", "autonomy": a.autonomy,
           "paper_dir": a.paper_dir, "main_tex": a.main_tex,
           "codex_effort": a.codex_effort, "codex_model": a.codex_model, "codex_sandbox": a.codex_sandbox,
+          "reasoner": a.reasoner, "claude_model": a.claude_model, "claude_effort": a.claude_effort,
           "screen": {"n": a.screen_n, "per": a.screen_per, "total": a.screen_total},
           "limits": {"problem_rounds": 3, "method_rounds": 3, "gate2_revise_rounds": 3, "review_rounds": 3,
                      "revise_rounds": 2, "attempts": 2, "refine_rounds": 2, "reposition_rounds": 2},
@@ -1463,7 +1639,9 @@ def cmd_init(a):
     start_stage(st, start, "init" + ("（收尾模式：研究和初稿由 ARIS 完成）" if a.polish else ""))
     save(st)
     if not (Path(".git").exists() or any((p / ".git").exists() for p in Path.cwd().resolve().parents)):
-        print("提示：这里不是 git 仓库。codex exec 默认要求在 git 仓库里运行，先 git init。")
+        print("提示：这里不是 git 仓库。流程靠 git 回看每个阶段的改动，codex exec 也默认要求在 git 仓库里运行，先 git init。")
+    if a.reasoner == "claude" and not shutil.which("claude"):
+        print("提示：推理方设为 claude，但找不到 claude 命令；装好 Claude Code 再继续。")
     if a.polish:
         if not (paper / "PAPER_IMPROVEMENT_LOG.md").exists():
             print("提示：论文目录里没有 PAPER_IMPROVEMENT_LOG.md，ARIS 的改进循环（paper-writing 第 5 阶段）可能还没跑。先跑完它再收尾，"
@@ -1486,7 +1664,7 @@ def cmd_next(a):
         print(f"阶段：{act['stage']}（{act['title']}）  负责：{act['owner']}  "
               f"未通过轮次：关口一 {r['problem']}、方法周期 {r['method']}、方法卡修订 {r.get('gate2_revise', 0)}、"
               f"补强 {r.get('reposition', 0)}、补实验 {r['review']}、改稿 {r['revise']}")
-    for k in ("question", "options", "recommended", "screen", "details", "task", "command", "output", "saved_as"):
+    for k in ("question", "options", "recommended", "screen", "details", "task", "command", "runs", "output", "saved_as"):
         if act.get(k):
             print(f"{k}: {act[k]}")
     print(act.get("message", ""))
@@ -1550,6 +1728,36 @@ def cmd_done(a):
         advance(st, nxt, why)
     save(st)
     cmd_next(argparse.Namespace(json=a.json))
+
+
+def cmd_reason(a):
+    """reasoner=claude: run the current reasoning stage with a separate headless Claude process."""
+    st = load()
+    sid = st["stage"]
+    stage = STAGES[IDX[sid]]
+    if st.get("stopped"):
+        sys.exit(f"流程已暂停：{st['stopped']}")
+    if stage["owner"] != "codex":
+        sys.exit(f"当前阶段 {sid} 不是推理与审查阶段，用 next 看该做什么")
+    if reasoner(st) != "claude":
+        sys.exit("推理方是 Codex：运行 next 给出的 codex exec 命令；要改用 Claude，先 set --reasoner claude")
+    if not shutil.which("claude"):
+        sys.exit("找不到 claude 命令：确认 Claude Code 已安装、在 PATH 上")
+    pfile = write_prompt(stage, st)
+    out = run_file(st, sid)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    part, logf = out.with_name(out.name + ".part"), out.with_suffix(".log")
+    argv, cwd = claude_argv(stage, st)
+    with open(pfile, "rb") as fin, open(part, "wb") as fout, open(logf, "w", encoding="utf-8") as ferr:
+        ferr.write(f"# cwd: {cwd}\n# {shlex.join(argv)}\n")
+        ferr.flush()
+        rc = subprocess.run(argv, cwd=cwd, stdin=fin, stdout=fout, stderr=ferr).returncode
+    part.replace(out)  # the output file appears only once the run has finished
+    if rc != 0 and "unknown option" in logf.read_text(encoding="utf-8", errors="replace"):
+        print(f"提示：这个 Claude Code 版本不认识某个参数（见 {logf}），先运行 claude update 再 retry")
+    print(f"Claude 推理进程已结束（返回码 {rc}），输出在 {out}；接着运行 done")
+    if rc != 0:
+        sys.exit(rc)
 
 
 def cmd_retry(a):
@@ -1635,7 +1843,18 @@ def cmd_goto(a):
         elif a.stage == "methods" and not d.get("passed_candidate") and d.get("anchors"):
             switch_anchor(st, d["anchors"][-1]["id"])  # the current anchor was dropped; carry on with the latest remaining one
             switched = True
-    if a.reason and not polish_mode(st):  # carry the user's conclusion into the next Codex stage and the ledger
+    writing = not polish_mode(st) and IDX[a.stage] >= IDX["profile"]
+    if writing:   # a reason given with a writing stage is the author's instruction for the outline, the draft and the revision
+        if a.reason:
+            d["writing_note"] = a.reason
+    else:
+        d.pop("writing_note", None)
+    if not polish_mode(st):
+        if a.stage == "plan" and a.reason:   # e.g. after an outline judged weak: which experiments to add
+            d["plan_note"] = a.reason
+        else:
+            d.pop("plan_note", None)
+    if a.reason and not polish_mode(st) and not writing:  # carry the user's conclusion into the next Codex stage and the ledger
         if a.stage in ("problems", "cp_candidates"):  # the author drops the anchor
             cand = d.pop("passed_candidate", None)
             if cand and cand not in d.setdefault("tried_candidates", []):
@@ -1648,7 +1867,8 @@ def cmd_goto(a):
         elif a.stage in ("methods", "cp_method") and not switched:  # a reason given with a new anchor is about the old one
             d["gate2_reason"] = a.reason
             d["method_failures"] = d.get("method_failures", 0) + 1
-        record_finding(st, st["stage"], f"用户决定跳到 {a.stage}", a.reason, src="research/review.md")
+        if not (a.stage == "plan" and IDX[st["stage"]] >= IDX["profile"]):  # experiments asked for while writing are not a negative result
+            record_finding(st, st["stage"], f"用户决定跳到 {a.stage}", a.reason, src="research/review.md")
     st["stopped"] = None
     st["rounds"] = {k: 0 for k in st["rounds"]}  # a user decision starts the failure counts afresh
     advance(st, a.stage, "用户指定" + (f"：{a.reason}" if a.reason else ""))
@@ -1659,13 +1879,13 @@ def cmd_goto(a):
 def cmd_set(a):
     st = load()
     changed = []
-    for k in ("codex_effort", "codex_model", "autonomy", "codex_sandbox"):
+    for k in ("codex_effort", "codex_model", "autonomy", "codex_sandbox", "reasoner", "claude_model", "claude_effort"):
         v = getattr(a, k)
         if v is not None:
             st[k] = None if v == "" else v
             changed.append(f"{k}={v}")
-    if a.codex_sandbox == "none":
-        guard_start(st)  # the current Codex stage, if any, is checked from now on
+    if a.codex_sandbox == "none" or a.reasoner == "claude":
+        guard_start(st)  # the current reasoning stage, if any, is checked from now on
     for k in ("n", "per", "total", "setting"):
         v = getattr(a, f"screen_{k}")
         if v is not None:
@@ -1674,8 +1894,8 @@ def cmd_set(a):
     if a.screen_setting is not None:
         st["decisions"].pop("control_failures", None)  # a new screening setting gets a fresh chance to reproduce the deficiency
     if not changed:
-        sys.exit("没有要改的设置（--codex-effort / --codex-model / --autonomy / --codex-sandbox / --screen-n / --screen-per / "
-                 "--screen-total / --screen-setting）")
+        sys.exit("没有要改的设置（--reasoner / --claude-model / --claude-effort / --codex-effort / --codex-model / --autonomy / "
+                 "--codex-sandbox / --screen-n / --screen-per / --screen-total / --screen-setting）")
     log(st, st["stage"], "set", " ".join(changed))
     save(st)
     print("已更新：" + "，".join(changed))
@@ -1687,6 +1907,11 @@ def cmd_status(a):
         print(f"当前阶段：{st['stage']}  收尾模式（研究和初稿由 ARIS 完成）  改稿轮次：{st['rounds']['revise']}")
     else:
         print(f"当前阶段：{st['stage']}  自主程度：{st['autonomy']}  未通过轮次：{st['rounds']}")
+    if reasoner(st) == "claude":
+        print(f"推理与审查：单独调起的 Claude 进程（模型 {st.get('claude_model') or 'Claude Code 的默认设置'}，"
+              f"强度 {st.get('claude_effort', 'xhigh')}）")
+    else:
+        print(f"推理与审查：Codex（模型 {st.get('codex_model') or 'Codex 的默认设置'}，强度 {st.get('codex_effort', 'xhigh')}）")
     if st.get("stopped"):
         print(f"已暂停：{st['stopped']}")
     print(f"决定：{json.dumps(st['decisions'], ensure_ascii=False)}")
@@ -1708,6 +1933,12 @@ def main(argv=None):
     p.add_argument("--codex-sandbox", choices=["default", "none"], default="default",
                    help="none: run Codex with --dangerously-bypass-approvals-and-sandbox (containers where its sandbox "
                         "cannot start); each Codex stage then checks that research/ was not changed")
+    p.add_argument("--reasoner", choices=["codex", "claude"], default=None,
+                   help="who does the reasoning and review stages (default codex, or $METHOD_PAPER_REASONER): codex exec, "
+                        "or a separate headless Claude process (claude -p) started by `pipeline.py reason`")
+    p.add_argument("--claude-model", help="model for the Claude reasoner, e.g. opus or a full model name (default: Claude Code's)")
+    p.add_argument("--claude-effort", default="xhigh", choices=["low", "medium", "high", "xhigh", "max", "default"],
+                   help="effort for the Claude reasoner (default xhigh; 'default' leaves Claude Code's own setting)")
     p.add_argument("--screen-n", type=int, default=4, help="candidates screened in parallel after each methods round")
     p.add_argument("--screen-per", type=float, default=2, help="GPU hours per screened candidate")
     p.add_argument("--screen-total", type=float, default=8, help="GPU hours for one screening round")
@@ -1726,10 +1957,16 @@ def main(argv=None):
     p = sub.add_parser("decide"); p.add_argument("value")
     p = sub.add_parser("fail"); p.add_argument("--note")
     p = sub.add_parser("goto"); p.add_argument("stage"); p.add_argument("--gate2-passed")
-    p.add_argument("--reason", help="why (e.g. the probe's verdict); passed to the next Codex stage and logged in findings.md")
+    p.add_argument("--reason", help="why (e.g. the probe's verdict); passed to the next Codex stage and logged in findings.md. "
+                                    "With a writing stage (profile and later) it is the author's instruction for the outline, "
+                                    "the draft and the revision")
     p.add_argument("--seed", help="with goto problems: an opportunity the author wants written up and evaluated in the next round")
     p.add_argument("--anchor", help="with goto methods: continue on another anchor (an opportunity that passed gate one), e.g. C12")
+    sub.add_parser("reason", help="reasoner=claude: run the current reasoning stage with a separate headless Claude process")
     p = sub.add_parser("set", help="change settings without restarting the pipeline")
+    p.add_argument("--reasoner", choices=["codex", "claude"])
+    p.add_argument("--claude-model", help="'' to go back to Claude Code's default model")
+    p.add_argument("--claude-effort", choices=["low", "medium", "high", "xhigh", "max", "default"])
     p.add_argument("--codex-effort", choices=["low", "medium", "high", "xhigh", "default"])
     p.add_argument("--codex-model", help="'' to go back to Codex's configured model")
     p.add_argument("--codex-sandbox", choices=["default", "none"])
@@ -1739,7 +1976,11 @@ def main(argv=None):
     p.add_argument("--screen-setting", help="where every screen runs (a subset or condition that shows the deficiency); '' clears it")
     sub.add_parser("status")
     a = ap.parse_args(argv)
-    {"init": cmd_init, "next": cmd_next, "done": cmd_done, "retry": cmd_retry, "decide": cmd_decide,
+    if a.cmd == "init" and a.reasoner is None:
+        a.reasoner = os.environ.get("METHOD_PAPER_REASONER", "codex")
+        if a.reasoner not in ("codex", "claude"):
+            sys.exit(f"METHOD_PAPER_REASONER={a.reasoner} 不对，只能是 codex 或 claude")
+    {"init": cmd_init, "next": cmd_next, "done": cmd_done, "retry": cmd_retry, "decide": cmd_decide, "reason": cmd_reason,
      "fail": cmd_fail, "goto": cmd_goto, "set": cmd_set, "status": cmd_status}[a.cmd](a)
 
 

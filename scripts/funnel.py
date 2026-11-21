@@ -21,7 +21,7 @@ import pipeline as P  # noqa: E402  (parse_pipeline, last_line)
 
 R = Path("research")
 KEYS = {"problems": "candidates", "gate1": "gate1", "methods": "options", "method_card": "method_card", "gate2": "gate2",
-        "plan": "plan", "review": "review", "draft": "draft", "revise": "revise", "polish": "polish"}
+        "plan": "plan", "review": "review", "outline": "outline", "draft": "draft", "revise": "revise", "polish": "polish"}
 
 
 def accepted_runs(hist):

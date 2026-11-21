@@ -1,6 +1,6 @@
 ---
 name: method-paper
-description: 方法创新型论文（机器学习、计算机视觉、三维重建、LiDAR/毫米波雷达、机器人学习）从选题到成稿的自动化流程与写作改稿助手。核心是三道关口（研究问题是否成立、是否有真正的新方法、实验能否验证新机制）、"发布会原则"写作和基于近五年（2021–2026）顶会语料的写作规律；分工固定为 Codex 负责方法推理与审查，Claude 负责完成任务（实现、实验、出图）并按流程自动推进。用户在找研究问题或创新点、查新、判断 idea 能不能做、设计或补全方法、设计对比与消融实验、跑实验、让流程自动往下走、写或改论文（摘要、引言、方法、实验、结论）、回复审稿意见、检查防御性写作、全文通体检查、检查图表字体、重画数据图、画算法框架图、想了解顶会论文的写作规律、用 ARIS 做完研究和初稿后要收尾润色时都要使用，即使用户没有提到这个 skill 的名字。和 ARIS 装在一起时（例如 method-paper 插件内置的 ARIS），用户点名 ARIS 才用 ARIS，上面这些请求默认由本 skill 处理。Also use for English requests about method papers - finding unexplored problems, novelty gating, method specs, ablations, running experiments, automated research pipelines, drafting or revising CVPR, ICRA, RA-L or NeurIPS style papers, polishing a draft written by ARIS, writing patterns of top-venue papers, defensive-writing audits, figure and table checks, framework diagrams.
+description: 方法创新型论文（机器学习、计算机视觉、三维重建、LiDAR/毫米波雷达、机器人学习）从选题到成稿的自动化流程与写作改稿助手。核心是三道关口（研究问题是否成立、是否有真正的新方法、实验能否验证新机制）、"发布会原则"写作和基于近五年（2021–2026）顶会语料的写作规律；分工固定为推理方（Codex，或流程单独调起的 Claude 进程）负责方法推理与审查，Claude Code 负责完成任务（实现、实验、出图）并按流程自动推进。用户在找研究问题或创新点、查新、判断 idea 能不能做、设计或补全方法、设计对比与消融实验、跑实验、让流程自动往下走、写或改论文（摘要、引言、方法、实验、结论）、按期刊要求扩写引言和相关工作、补全并核对参考文献、落实导师批注、回复审稿意见、检查防御性写作、全文通体检查、检查图表字体、重画数据图、画算法框架图、想了解顶会论文的写作规律、用 ARIS 做完研究和初稿后要收尾润色时都要使用，即使用户没有提到这个 skill 的名字。和 ARIS 装在一起时（例如 method-paper 插件内置的 ARIS），用户点名 ARIS 才用 ARIS，上面这些请求默认由本 skill 处理。Also use for English requests about method papers - finding unexplored problems, novelty gating, method specs, ablations, running experiments, automated research pipelines, drafting or revising CVPR, ICRA, RA-L, NeurIPS or IEEE Transactions papers, building a verified reference list, polishing a draft written by ARIS, writing patterns of top-venue papers, defensive-writing audits, figure and table checks, framework diagrams.
 ---
 
 # 方法论文
@@ -13,17 +13,19 @@ description: 方法创新型论文（机器学习、计算机视觉、三维重�
 
 分工是固定的，和用户在哪个工具里提出请求无关：
 
-- **Codex：方法推理与审查。** 找问题和查新（A）、关口审查（B）、方法卡（C，代码修改位置除外）、实验设计（D）、结果审查、写作（E）、改稿与回应信（F）。Codex 不跑实验，不改实现代码，不改 `research/results/` 和 `research/runs.md`。
+- **推理方（默认 Codex）：方法推理与审查。** 找问题和查新（A）、关口审查（B）、方法卡（C，代码修改位置除外）、实验设计（D）、结果审查、写作（E）、改稿与回应信（F）。推理方不跑实验，不改实现代码，不改 `research/results/` 和 `research/runs.md`。流程设为 `--reasoner claude` 时，推理方是流程单独调起的 Claude 进程（见下文“只用 Claude 模型”），下文说的 Codex 都指推理方。
 - **Claude（Claude Code）：完成任务。** 拉取最接近工作的开源代码并生成代码构成报告（只陈述代码事实，由 Codex 解读）、读代码并填写方法卡里的代码修改位置、实现方法、跑实验（包括关口一的诊断实验）、记录每次运行、出数据图和框架图（G、H）、跑图表检查脚本。
-- **Claude 收到推理或审查类请求时，不自己做，用 `codex exec` 交给 Codex。** 在论文仓库根目录以只读方式运行，提示用单引号包起来并写上"使用 $method-paper"，用 `-o` 把 Codex 的回复写进 `research/` 下对应的交接文件；只给 Codex 文件路径和任务，不附上自己的解读。命令模板见 [references/collaboration.md](references/collaboration.md) 第 6 节。拿到结果后，Claude 用几句话转告用户，不改写 Codex 的结论；不同意时把分歧报告给用户，由用户决定是否重跑（自动流程里是 `pipeline.py retry` 或 `goto`）。
-- **`codex` 不可用时**（没安装或没登录），Claude 告诉用户，征得同意后才把推理与审查交给一个独立子代理：只给它本 skill、文件路径和任务，不给自己的结论；自动流程里用 `pipeline.py done --by subagent` 记下执行方。用户不同意就暂停，等 Codex 可用。
+- **执行方 Claude Code 收到推理或审查类请求时，不自己做，交给推理方。** 推理方是 Claude 时运行 `pipeline.py reason`。推理方是 Codex 时用 `codex exec`：在论文仓库根目录以只读方式运行，提示用单引号包起来并写上"使用 $method-paper"，用 `-o` 把 Codex 的回复写进 `research/` 下对应的交接文件；只给 Codex 文件路径和任务，不附上自己的解读。命令模板见 [references/collaboration.md](references/collaboration.md) 第 6 节。拿到结果后，Claude 用几句话转告用户，不改写 Codex 的结论；不同意时把分歧报告给用户，由用户决定是否重跑（自动流程里是 `pipeline.py retry` 或 `goto`）。
+- **`codex` 不可用时**（没安装或没登录），Claude 告诉用户，征得同意后才把推理与审查交给一个独立子代理：只给它本 skill、文件路径和任务，不给自己的结论；自动流程里用 `pipeline.py done --by subagent` 记下执行方。用户不同意就暂停，等 Codex 可用；也可以改用 Claude 推理方（`pipeline.py set --reasoner claude`）。被流程调起来做推理与审查的那个进程本身就是推理方，直接按任务完成，不再往外交。
 - **事实和判断分开。** 能机械核对的事实（文件在不在、运行是否结束、数值是多少）由脚本和 Claude 核对；"有效""机制成立""claim 被支持"这类判断只由 Codex 下。工程问题（审计脚本、测试、归档）交给 Claude 修，只降低证据可信度，不让科学结论停在待定。
 - **两边都用最高一档的常规思考强度 xhigh。** Codex：pipeline.py 在每条命令里带 `-c 'model_reasoning_effort="xhigh"'`，手写命令时也加上；当前模型不支持时用 `pipeline.py set --codex-effort high`。Claude Code：论文仓库的 `.claude/settings.json` 写 `"effortLevel": "xhigh"`（模板 assets/claude-settings.json，项目设置里这个键对所有模型生效）；环境变量 `CLAUDE_CODE_EFFORT_LEVEL`、启动参数 `--effort` 和会话里的 `/effort` 优先于它。
 - 交接文件、各方能改哪些内容、一轮完整流程，见 collaboration.md。
 
+**只用 Claude 模型。** `pipeline.py init --reasoner claude`（已有项目用 `set --reasoner claude`；环境变量 `METHOD_PAPER_REASONER=claude` 让新项目默认如此）之后，不再需要 Codex：每个推理与审查阶段由 `pipeline.py reason` 调起一个新的 `claude -p` 进程，全新上下文，只拿到提示和文件路径，只给这一阶段要用的工具（只读阶段是读文件和检索，写稿阶段只能改论文目录），系统提示写明它是推理方、CLAUDE.md 里写给执行方的规则不适用于它；`done` 时核对 `research/` 没有被改动。模型和强度用 `--claude-model`、`--claude-effort`（默认 xhigh）指定。推理方和执行方同属 Claude，交叉检查不如换一家模型，审查最好用比执行方更强的模型、开最高强度，并且始终保留不依赖审查判断的对照（阳性对照、同步训练的基线）。细节见 collaboration.md 第 8 节；ARIS 的审稿也换成 Claude 见 aris.md 第 7 节。
+
 ## 自动流程
 
-用户说"开始""继续""自动推进"，或者希望流程自己往下走时，Claude Code 用 `scripts/pipeline.py` 推进：在论文仓库根目录运行 `pipeline.py next`，按它给出的负责方执行（Codex 阶段运行它给出的 `codex exec` 命令，Claude 阶段完成它给出的任务，用户检查点停下来问用户），完成后运行 `pipeline.py done`，循环到下一个检查点或完成。阶段依次是：列机会候选 → 用户选候选 → 量证据和提升空间 → 关口一（通过的成为锚点） → 拉取最接近工作的代码并分析构成 → 出一组候选方法 → 候选并行初筛（接近的细化一轮） → 用户选方法 → 方法卡 → 代码修改位置 → 关口二 → 实验职责表 → 实现与实验 → 结果审查 → 用户批准最终评测 → 最终报告 → 写作画像 → 出图 → 写稿 → 检查 → 改稿。关口不通过时自动退回相应阶段；Codex 建议放弃锚点、复核没确认锚点的提升空间、补强的候选都没达标、一个锚点用完三个周期时停下来问作者；审查要求补实验时先由 Codex 更新职责表（需要时修订方法卡并重过关口二），再由 Claude 补跑；连续多轮不通过就暂停等用户。每类循环都有轮数上限，到上限的那一轮必须下结论；否定结果记进 `research/findings.md`，之后的候选必须避开。每次 Codex 运行的回复单独存一个文件，流程只读这个文件的最后一行来决定下一步。第一次用 `pipeline.py init`；阶段表、自主程度和停止条件见 collaboration.md 第 4 节，Claude Code 的循环写在 assets/CLAUDE.md。
+用户说"开始""继续""自动推进"，或者希望流程自己往下走时，Claude Code 用 `scripts/pipeline.py` 推进：在论文仓库根目录运行 `pipeline.py next`，按它给出的负责方执行（Codex 阶段运行它给出的 `codex exec` 命令，Claude 阶段完成它给出的任务，用户检查点停下来问用户），完成后运行 `pipeline.py done`，循环到下一个检查点或完成。阶段依次是：列机会候选 → 用户选候选 → 量证据和提升空间 → 关口一（通过的成为锚点） → 拉取最接近工作的代码并分析构成 → 出一组候选方法 → 候选并行初筛（接近的细化一轮） → 用户选方法 → 方法卡 → 代码修改位置 → 关口二 → 实验职责表 → 实现与实验 → 结果审查 → 用户批准最终评测 → 最终报告 → 写作画像、范文门槛和文献池 → 论文提纲 → 出图 → 写稿 → 检查 → 改稿。关口不通过时自动退回相应阶段；Codex 建议放弃锚点、复核没确认锚点的提升空间、补强的候选都没达标、一个锚点用完三个周期、提纲认为结果撑不起主张时停下来问作者；审查要求补实验时先由 Codex 更新职责表（需要时修订方法卡并重过关口二），再由 Claude 补跑；连续多轮不通过就暂停等用户。每类循环都有轮数上限，到上限的那一轮必须下结论；否定结果记进 `research/findings.md`，之后的候选必须避开。每次 Codex 运行的回复单独存一个文件，流程只读这个文件的最后一行来决定下一步。第一次用 `pipeline.py init`；阶段表、自主程度和停止条件见 collaboration.md 第 4 节，Claude Code 的循环写在 assets/CLAUDE.md。
 
 ## 红线（所有模式都生效）
 
@@ -59,6 +61,7 @@ description: 方法创新型论文（机器学习、计算机视觉、三维重�
 | 写论文、写摘要引言 | E 写作 | Codex | references/writing.md、writing-patterns.md |
 | 改稿、查防御性写作、全文通体检查 | F 改稿 | Codex | references/writing.md、writing-patterns.md |
 | 问顶会论文的写作规律、为自己的方向重算写作画像 | 写作规律 | Claude 跑脚本，Codex 写作时参考 | references/writing-patterns.md |
+| 导师说引言或相关工作太短、参考文献太少、没组织好；投期刊要补文献 | E、F（先备料和提纲） | Claude 建文献池、量范文；Codex 写提纲并改稿 | writing.md 第 4 节、writing-patterns.md 第 13 节 |
 | 看相关论文的开源代码是怎么拼、怎么改的 | 代码构成 | Claude 跑 code_lineage.py，Codex 解读 | references/code-patterns.md |
 | 让流程自动往下走 | 自动流程 | Claude 推进 | references/collaboration.md |
 | 研究和初稿由 ARIS 完成，要按发布会原则收尾 | ARIS 收尾 | Codex 改稿；Claude 跑检查、出图、交回 ARIS 复审 | references/aris.md |
@@ -91,18 +94,21 @@ description: 方法创新型论文（机器学习、计算机视觉、三维重�
 ### 结果审查（Codex）
 只依据方法卡、职责表、`runs.md`、`results/` 和 `deviations.md` 审查：每条 claim 是否被结果支撑，协议是否一致，测试集纪律，多种子统计；写进 `research/review.md`，末尾写明下一步交给谁、做什么。写进论文的每个数字都要能追溯到 `runs.md` 的某一行。
 
-### E 写作（Codex）
-- 叙事只有一条主线：问题为什么重要 → 现有方法为什么不够（失效机制、依赖拿不到的输入或代价太高）→ 本文提供了什么（机制）→ 证据如何支持。
+### E 写作（Codex 写，Claude 备料）
+- 先备料再动笔（writing.md 第 4.1 节）：Claude 用 `scripts/lit_pool.py` 建文献池（目标期刊近两年的同主题论文、每条相邻技术路线、基线和数据集，全部取自 Crossref 和 arXiv 的元数据），量 2–3 篇目标期刊范文的篇幅，写出门槛；Codex 写提纲 `research/outline.md`（故事和主结果、继承与贡献、引言六段、动机图、相关工作各小节和它留下的问题、主张—证据对应表、篇幅与文献目标），初稿按提纲写。主结果小于冻结的最小效果或种子波动时提纲判 `outline=weak`，流程停下来由作者决定，不靠措辞撑。
+- 叙事只有一条主线：问题为什么重要 → 现有方法为什么不够（失效机制、依赖拿不到的输入或代价太高）→ 本文提供了什么（机制）→ 证据如何支持。引言按六段写：背景、现有研究的思路、存在的普遍问题、核心想法（独立成段）、方法与实验概述、三条贡献（条目式，每条对应一组实验），并配一张动机图。
+- 相关工作按技术路线分小节，讲清代表工作各自做了什么、怎样递进，每小节落到它留下的问题；不把多篇文献压成一句。参考文献只用文献池和已核实的条目，不凭记忆写；期刊稿不少于 40 条，并引用目标期刊近两年的相关论文（门槛见 writing-patterns.md 第 13 节）。
+- 实验按主张组织：每个小节写明回答什么问题、设置、结果、说明什么；继承的部件带来的收益和本文新增的部分分开报告；不支撑主张的实验放附录。只有几句话的讨论不单独成节。
 - 方法节是全文最清楚、篇幅最大的部分：开头用一句话讲机制并配框架图，再逐模块写"消除哪个失效 → 定义 → 连接方式 → 直观解释"。读者读完方法节应能复现。
 - 数据只为证明：每张表、每张图只回答一个问题；不承担论证职责的结果不进正文。
 - 摘要和全文都要说清三件事：提出了什么方法、解决了什么问题、得到了什么结果。
-- 全程遵守 writing.md 里的发布会原则和文风规则；用 writing-patterns.md 的语料规律校准篇幅和结构（摘要约 8 句、先缺口后方法、结果给数字；题目"方法名: 机制或条件"；引言约 5 段；贡献点约 3 条）。缺口句写出失效原因是关口一的要求，不是语料统计出的规律（语料里约三分之一的缺口句这样写）。有 `research/writing_profile/` 时以目标会议的画像为准。
+- 全程遵守 writing.md 里的发布会原则和文风规则；用 writing-patterns.md 的语料规律校准篇幅和结构（摘要约 8 句、先缺口后方法、结果给数字；题目"方法名: 机制或条件"；会议稿引言约 5 段，期刊稿更长，见第 13 节；贡献点 3 条）。缺口句写出失效原因是关口一的要求，不是语料统计出的规律（语料里约三分之一的缺口句这样写）。有 `research/writing_profile/` 时以目标期刊或会议的画像和门槛为准。导师或审稿人的意见贴进 `research/advisor_notes.md`，提纲、初稿和改稿会逐条落实。
 
 ### F 改稿（Codex；防御性写作检查、全文通体检查）
 1. 先看初筛结果：自动流程里是 Claude 跑出的 `research/lint_report.md`（paper_lint 和 figure_table_check）；单独改稿时运行 `python scripts/paper_lint.py <稿件>`（支持 .tex、.md、.txt、.docx）。脚本只负责找疑点，最终判断靠逐句语义审查。
 2. 逐段审查：发布会原则 9 条、文风规则、摘要三件事、方法七要素在正文是否可见、每个实验的论证职责、图表规范。
 3. 输出问题表：编号 | 位置 | 原文 | 类型/规则 | 改法（改后的完整句子） | 理由。
-4. 改动最小化：保持作者的用词习惯和段落结构，只替换、删除或补一句，不整段重写；没有问题的句子一字不动；不改数据和事实；遵守 writing.md 第 2 节的诚信边界。需要重组实验或叙事的问题、以及任何涉及删除结果的问题，单列"需作者决策"，按 删除 → 缩小主张 → 换评价维度 → 解释为权衡 → 重组实验 → 重新定义故事 的优先级给建议。
+4. 改动最小化：保持作者的用词习惯和段落结构，只替换、删除或补一句，不整段重写；没有问题的句子一字不动；不改数据和事实；遵守 writing.md 第 2 节的诚信边界。检查报告里"结构与篇幅"一类的问题（引言或相关工作偏短、参考文献不够、讨论过短）是例外：按提纲和 writing.md 第 4 节补写，文献从文献池补，不凭记忆、不凑数。需要重组实验或叙事的问题、以及任何涉及删除结果的问题，单列"需作者决策"，按 删除 → 缩小主张 → 换评价维度 → 解释为权衡 → 重组实验 → 重新定义故事 的优先级给建议。
 5. LaTeX 稿件原地修改并列出改动（由 Claude 调用时，Codex 在论文目录里以可写方式运行）；Word 稿件优先用修订模式交付。
 
 ### G 图表（Claude）
@@ -121,10 +127,12 @@ ARIS 可以分开装（官方 aris 插件，命令 `/aris:<技能>`，可以只�
 
 | 命令 | 作用 |
 |---|---|
-| `python scripts/paper_lint.py FILE [--json]` | 疑问句、自我削弱与过度对冲、过程叙述、改动前后混写、文件名与代码标识符、正文列表、引用顺序、摘要三件事；英文摘要再和语料画像比较 |
+| `python scripts/paper_lint.py FILE [--json]` | 疑问句、自我削弱与过度对冲、过程叙述、改动前后混写、文件名与代码标识符、正文列表、引用顺序、摘要三件事；结构与篇幅（引言、相关工作、参考文献总数、近两年和目标期刊的条数、过短的讨论，按期刊稿或会议稿的门槛）；英文摘要再和语料画像比较。`--stats` 输出各节词数和文献数，也能量 pdftotext 转出的范文 |
+| `python scripts/lit_pool.py find / venue / topic / arxiv / doi / import / check / norms / drop / status` | 文献池：从 Crossref 和 arXiv 取已核实的条目，生成 `research/refs_pool.md` 和 `refs_pool.bib`；`check` 逐条核对稿件的 .bib；`norms` 统计目标期刊同主题论文的参考文献数，写出 `venue_norms.json`（writing.md 第 4.1 节） |
 | `python scripts/figure_table_check.py main.tex --venue cvpr` | 每张图插入后的实际字号与缩放、Type 3 字体、位图分辨率；表格字号是否统一、是否整表缩放；也支持 .docx |
 | `import paper_plot`（见 figures.md） | 版心尺寸、字体与正文一致、图例避让、遮挡检查、PDF 与 PNG 输出 |
 | `python scripts/framework_figure.py spec.json -o OUT` | 色块分区框架图：数据集样例图、张量、点云、热力图、算子、损失、底部机理说明 |
+| `python scripts/qualfig.py spec.json --out OUT` | 3D 检测效果图：相机画面上的投影框、鸟瞰图上的点云和框，标签不遮挡内容（figures.md 第 7 节） |
 | `python scripts/pipeline.py init / next / done / retry / decide / goto / fail / set / status` | 自动流程：当前阶段由谁做、Codex 命令、校验产出、按关口和审查结论路由、用户检查点；`retry` 重跑当前 Codex 阶段，`goto` 跳到指定阶段，`set` 中途改 Codex 思考强度或模型；`init --polish` 只跑 ARIS 稿件的收尾阶段；`set --codex-sandbox none` 在 Codex 沙箱起不来的容器里不用它的沙箱（collaboration.md 第 7 节）；以插件安装时可以直接用 `method-paper-pipeline <命令>` |
 | `scripts/codex_nosandbox.sh` | 给 ARIS 的 codex MCP 桥用的包装：把每次调用的沙箱设置改成 danger-full-access（aris.md 第 7 节） |
 | `python scripts/code_lineage.py --repos owner/repo ... --out DIR` | 拉取开源代码（只取代码文件），识别所基于的代码库（拷入修改、作为依赖、README 声明），对照原代码库最接近的历史版本统计改了哪些文件、改了多少、新写了多少；`--from-md` 从关口记录里收集仓库地址 |

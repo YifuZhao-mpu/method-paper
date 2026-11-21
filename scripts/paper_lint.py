@@ -2,6 +2,8 @@
 """First-pass linter for method papers, Chinese and English.
 
     python paper_lint.py paper.tex | paper.md | paper.txt | paper.docx  [--json] [--max 300]
+                         [--venue-type journal|conference] [--target-venue REGEX] [--norms venue_norms.json]
+                         [--structure-severity 高|中|低] [--stats] [--year 2026]
 
 It only finds suspects; every finding must be confirmed sentence by sentence
 before anything is changed, and it never edits the file.
@@ -17,10 +19,17 @@ Rules (codes match references/writing.md):
   J2  bullet or numbered lists in the body (one contributions list in the introduction is allowed)
   J3  citation order: numbers first appear in ascending order; ascending inside one bracket
   K   abstract states the method, the problem and the result
+  S   structure and size: introduction, related work, references (count, recent, target venue), discussion
+
+Structure checks follow the venue type (journal or conference), read from the document class unless
+--venue-type is given; --norms points at research/writing_profile/venue_norms.json (written by lit_pool.py) to
+replace the defaults; --target-venue is a regex for the journal the paper is going to; --stats prints the
+measured structure as JSON (also works on text extracted from a published PDF with pdftotext, to measure exemplars).
 """
 from __future__ import annotations
 
 import argparse
+import datetime
 import os
 import json
 import re
@@ -40,6 +49,8 @@ class Unit:
     section: str = ""
     kind: str = "prose"      # prose, list, table, caption, abstract, heading, refs
     line_starts: list = field(default_factory=list)  # [(offset, loc)] for multi-line paragraphs
+    level: int = 0           # headings: 1 = top-level section, 2 = subsection, ...
+    top: str = ""            # title of the top-level section the unit belongs to
 
     def loc_at(self, off):
         loc = self.loc
@@ -67,6 +78,7 @@ SKIP_ENVS = {"equation", "equation*", "align", "align*", "gather", "gather*", "m
              "verbatim", "lstlisting", "minted", "algorithmic", "algorithm2e", "tikzpicture", "comment"}
 TABLE_ENVS = {"tabular", "tabular*", "tabularx", "longtable", "array", "tabulary"}
 LIST_ENVS = {"itemize", "enumerate", "description"}
+TEX_LEVEL = {"chapter": 0, "section": 1, "subsection": 2, "subsubsection": 3, "paragraph": 4}
 SECTION_RE = re.compile(r"\\(chapter|section|subsection|subsubsection|paragraph)\*?\s*(?:\[[^\]]*\])?\s*\{([^{}]*)\}")
 INPUT_RE = re.compile(r"\\(input|include|subfile)\{([^{}]+)\}")
 
@@ -140,6 +152,8 @@ def read_tex(path):
     buf, starts = [], []
     preamble = []
     cites = []  # (keys list, loc)
+    cite_secs = []  # (keys list, heading the citation sits under)
+    fig_ref_secs = set()  # headings under which a figure is referenced
     pending = {"kind": None}
 
     def flush():
@@ -174,7 +188,14 @@ def read_tex(path):
             continue
         for m in re.finditer(r"\\cite[a-zA-Z]*\*?(?:\[[^\]]*\])*\{([^{}]+)\}", line):
             if not any(e in SKIP_ENVS for e in env_stack):
-                cites.append(([k.strip() for k in m.group(1).split(",") if k.strip()], loc))
+                ks = [k.strip() for k in m.group(1).split(",") if k.strip()]
+                before = SECTION_RE.search(line)
+                sec_here = before.group(2).strip() if before and before.start() < m.start() else section
+                cites.append((ks, loc))
+                cite_secs.append((ks, sec_here))
+        for m in re.finditer(r"\\(?:ref|cref|Cref|autoref|subref)\*?\{\s*(fig[^{}]*)\}", line, re.I):
+            before = SECTION_RE.search(line)
+            fig_ref_secs.add(before.group(2).strip() if before and before.start() < m.start() else section)
         tokens = re.split(r"(\\begin\{[^{}]+\}|\\end\{[^{}]+\}|\\item\b|\\caption\{)", line)
         for tok in tokens:
             if not tok:
@@ -206,7 +227,7 @@ def read_tex(path):
             if ms:
                 flush()
                 section = ms.group(2).strip()
-                units.append(Unit(section, loc, section, "heading"))
+                units.append(Unit(section, loc, section, "heading", level=TEX_LEVEL[ms.group(1)]))
                 tok = tok[ms.end():]
             if "\\end{document}" in tok:
                 break
@@ -220,7 +241,8 @@ def read_tex(path):
         if not line.strip():
             flush()
     flush()
-    meta = {"preamble": "\n".join(preamble), "cites": cites, "main": Path(path), "missing_inputs": missing}
+    meta = {"preamble": "\n".join(preamble), "cites": cites, "cite_secs": cite_secs, "main": Path(path),
+            "missing_inputs": missing, "fig_ref_secs": fig_ref_secs}
     # list detection: report each list environment once
     meta["list_envs"] = []
     sec, stack = "", []
@@ -235,7 +257,60 @@ def read_tex(path):
 
 HEADING_TXT = re.compile(r"^(#{1,6}\s+.+|(\d+(\.\d+)*|[一二三四五六七八九十]+[、.．])\s*\S.{0,40}|第[一二三四五六七八九十\d]+章.*|"
                          r"摘\s*要|Abstract|ABSTRACT|参考文献|References|REFERENCES|致\s*谢|Acknowledg(e)?ments?)$")
-MD_LIST = re.compile(r"^\s*([-*+•]|\d+[.)、]|[（(]\d+[)）]|[①②③④⑤⑥⑦⑧⑨⑩])\s*")
+MD_LIST = re.compile(r"^\s*([-*+•](?=\s)|\d+[.)](?=\s)|\d+、|[（(]\d+[)）]|[①②③④⑤⑥⑦⑧⑨⑩])\s*")
+
+
+ROMAN_HEAD = re.compile(r"^[IVX]{1,5}\.\s+[A-Z][A-Za-z &:,'\-]{2,60}$")
+LETTER_HEAD = re.compile(r"^[A-Z]\.\s+[A-Z][A-Za-z0-9 &:,'\-/()]{3,70}$")
+BACK_HEAD = re.compile(r"^(Appendix(\s+[A-Z])?\.?(\s+\S.*)?|APPENDIX(\s+[A-Z])?(\s+\S.*)?|Supplementary [Mm]aterials?|"
+                       r"CRediT authorship contribution statement|Declaration of [Cc]ompeting [Ii]nterests?|"
+                       r"Data [Aa]vailability( [Ss]tatement)?|Funding|Conflicts? of [Ii]nterest)$")
+ROMAN_VAL = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6, "VII": 7, "VIII": 8, "IX": 9, "X": 10, "XI": 11, "XII": 12}
+
+
+def squeeze_smallcaps(s):
+    """pdftotext writes small-caps headings as 'R ELATED W ORK'; join the initials back."""
+    return re.sub(r"\b([A-Z]) (?=[A-Z]{2,}\b)", r"\1", s)
+
+
+NUM_HEAD = re.compile(r"^(\d{1,2}(?:\.\d{1,2}){0,3})\.?\s+([A-Z\u4e00-\u9fff][^=<>|{}]{1,68})$")
+
+
+def txt_heading(s, in_refs, ieee, last_top):
+    """(level, top-level number) of a plain-text heading line; level 0 when the line is not a heading.
+
+    Numbered headings must continue the numbering (the next top-level number, or a sub-number of the current
+    one), which keeps algorithm lines, table cells and equation fragments of a PDF text dump out."""
+    if len(s) > 72 or re.search(r"[。．.!?！？;；,，:：]$", s):
+        return 0, None
+    q = squeeze_smallcaps(s)
+    if ROMAN_HEAD.match(q):
+        v = ROMAN_VAL.get(q.split(".")[0])
+        if v and ((not ieee and v == 1) or (ieee and last_top is not None and v in (last_top + 1, last_top + 2))):
+            return 1, v
+        if not (ieee and LETTER_HEAD.match(s)):
+            return 0, None
+    if BACK_HEAD.match(q):
+        return 1, None
+    m = NUM_HEAD.match(q)
+    if m:
+        if ieee or in_refs:
+            return 0, None
+        nums = [int(x) for x in m.group(1).split(".")]
+        if len(nums) == 1:
+            ok = nums[0] in ((0, 1) if last_top is None else (last_top + 1, last_top + 2))
+        else:
+            ok = last_top is not None and nums[0] == last_top
+        return (len(nums), nums[0]) if ok else (0, None)
+    if re.match(r"^\d", q):
+        return 0, None
+    if HEADING_TXT.match(q):
+        return 1, None
+    if ieee and not in_refs and LETTER_HEAD.match(s):
+        words = [w for w in s.split()[1:] if len(w) > 3]
+        if len(s.split()) >= 3 and words and sum(w[0].isupper() for w in words) >= 0.6 * len(words):
+            return 2, None
+    return 0, None
 
 
 def classify_heading(s):
@@ -254,6 +329,10 @@ def read_md_or_txt(path):
     blank_paras = sum(1 for l in raw_lines if not l.strip()) > 0
     units, section, kind = [], "", "prose"
     in_code = False
+    ieee, last_top = False, None
+    # review copies carry a line number in front of every line; drop it
+    nonblank = [l for l in raw_lines if l.strip()]
+    numbered = not is_md and sum(1 for l in nonblank if re.match(r"^\s*\d{1,4}(\s{2,}\S|\s*$)", l)) >= 0.3 * max(1, len(nonblank))
     buf, starts = [], []
 
     def flush(k=None):
@@ -275,16 +354,25 @@ def read_md_or_txt(path):
             continue
         if in_code:
             continue
+        if numbered:
+            if re.match(r"^\s*\d{1,4}\s*$", line):
+                continue
+            line = re.sub(r"^\s*\d{1,4}\s{2,}(?=\S)", "", line)
         s = line.strip()
         if not s:
             flush()
             continue
-        if (is_md and s.startswith("#")) or (not is_md and len(s) <= 40 and HEADING_TXT.match(s)
-                                              and not re.search(r"[。．.!?！？;；]$", s)):
+        if is_md:
+            lvl, top = (len(s) - len(s.lstrip("#"))) if s.startswith("#") else 0, None
+        else:
+            lvl, top = txt_heading(s, kind == "refs", ieee, last_top)
+        if lvl:
             flush()
-            section = s.lstrip("#").strip()
-            kind = classify_heading(s) or "prose"
-            units.append(Unit(section, loc, section, "heading"))
+            section = squeeze_smallcaps(s.lstrip("#").strip())
+            ieee = ieee or (lvl == 1 and top is not None and bool(ROMAN_HEAD.match(section)))
+            last_top = top if (top is not None and lvl == 1) else last_top
+            kind = classify_heading(re.sub(r"^[IVX\d.]+\s+", "", section)) or classify_heading(section) or "prose"
+            units.append(Unit(section, loc, section, "heading", level=lvl))
             continue
         if not is_md and re.match(r"^(摘\s*要|Abstract)\s*[:：—-]", s):
             flush()
@@ -306,7 +394,7 @@ def read_md_or_txt(path):
         if not blank_paras:
             flush()
     flush()
-    return units, {}
+    return units, {"paragraphs_reliable": is_md}
 
 
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
@@ -325,6 +413,18 @@ def _docx_styles(z):
         ol = st.find(f"{W}pPr/{W}outlineLvl")
         styles[sid] = {"name": (name or "").lower(), "outline": ol is not None}
     return styles
+
+
+def _docx_level(el, style_name, text):
+    """Heading level from the style name (heading 2, 标题 2), the outline level, or the numbering in the text."""
+    m = re.search(r"(\d)", style_name) if (style_name.startswith("heading") or style_name.startswith("标题")) else None
+    if m:
+        return int(m.group(1))
+    ol = el.find(f"{W}pPr/{W}outlineLvl")
+    if ol is not None and (ol.get(W + "val") or "").isdigit():
+        return int(ol.get(W + "val")) + 1
+    m = re.match(r"^(\d+(?:\.\d+)*)", text)
+    return m.group(1).count(".") + 1 if m else 1
 
 
 def read_docx(path):
@@ -371,14 +471,14 @@ def read_docx(path):
         if is_heading:
             section = t
             kind = classify_heading(t) or "prose"
-            units.append(Unit(t, loc, section, "heading"))
+            units.append(Unit(t, loc, section, "heading", level=_docx_level(el, st["name"], t)))
             continue
         if re.match(r"^(摘\s*要|Abstract)\s*[:：—-]", t):
             section, kind = "摘要", "abstract"
             t = re.sub(r"^(摘\s*要|Abstract)\s*[:：—-]\s*", "", t)
         elif re.fullmatch(r"(摘\s*要|abstract|参考文献|references)", t.strip().lower()):
             section, kind = t, classify_heading(t) or "prose"
-            units.append(Unit(t, loc, section, "heading"))
+            units.append(Unit(t, loc, section, "heading", level=1))
             continue
         is_list = el.find(f"{W}pPr/{W}numPr") is not None or "list" in st["name"] or "列表" in st["name"]
         is_caption = "caption" in st["name"] or "题注" in st["name"]
@@ -487,7 +587,7 @@ def is_limit_section(section):
     return bool(re.search(r"limitation|局限|不足", section or "", re.I))
 
 
-def lint_units(units, meta, path):
+def lint_units(units, meta, path, cfg=None):
     F = []
     for loc, name in meta.get("missing_inputs", []):
         F.append(Finding("J1", "提示", loc, "", name, "找不到被 \\input/\\include 的文件，这部分没有检查"))
@@ -541,6 +641,7 @@ def lint_units(units, meta, path):
     F += check_lists(units, meta)
     F += check_citations(units, meta, path)
     F += check_abstract(units)
+    F += check_structure(units, meta, path, cfg)
     return F
 
 
@@ -758,9 +859,283 @@ def abstract_profile(text, loc):
     return F
 
 
+# --------------------------------------------------------------------------- structure
+RELATED_RE = re.compile(r"related\s+works?|prior\s+work|previous\s+work|literature|相关工作|相关研究|研究现状|文献综述|国内外", re.I)
+DISCUSS_RE = re.compile(r"^\s*(?:[IVX\d.]+\s+)?(discussions?|讨论)\s*$", re.I)
+CJK_RE = re.compile(r"[\u4e00-\u9fff]")
+# Defaults per venue type. Journal numbers follow IEEE Transactions practice (references/writing-patterns.md,
+# section 13); a venue_norms.json from lit_pool.py or the exemplars replaces them.
+NORMS = {
+    "journal": {"intro_words": 700, "intro_paragraphs": 5, "related_words": 650, "related_subsections": 3,
+                "related_cites": 25, "refs": 40, "recent_refs": 10, "venue_refs": 4, "venue_recent_refs": 2,
+                "discussion_words": 150, "sev": "高"},
+    "conference": {"intro_words": 450, "intro_paragraphs": 4, "related_words": 300, "related_subsections": 2,
+                   "related_cites": 15, "refs": 30, "recent_refs": 8, "venue_refs": 0, "venue_recent_refs": 0,
+                   "discussion_words": 120, "sev": "中"},
+}
+
+
+def size_words(text):
+    """English words plus Chinese characters converted at 1.6 characters per word."""
+    cjk = len(CJK_RE.findall(text))
+    return len(re.findall(r"[A-Za-z0-9][A-Za-z0-9'\-]*", CJK_RE.sub(" ", text))) + round(cjk / 1.6)
+
+
+def assign_tops(units):
+    """Mark every unit with its top-level section. The level of the introduction's heading is taken as the section
+    level, so a document title above it (# Title, then ## Introduction) does not swallow the whole paper."""
+    heads = [u for u in units if u.kind == "heading"]
+    intro = next((u for u in heads if is_intro(u.text)), None)
+    base = intro.level if intro else (min(u.level for u in heads) if heads else 0)
+    cur = ""
+    for u in units:
+        if u.kind == "heading" and u.level <= base:
+            cur = u.text
+        u.top = cur
+    return base
+
+
+def detect_venue_type(meta):
+    pre = meta.get("preamble", "")
+    m = re.search(r"\\documentclass(?:\[([^\]]*)\])?\{([^{}]+)\}", pre)
+    if not m:
+        return None
+    opts, cls = (m.group(1) or "").lower(), m.group(2).lower()
+    if cls in ("elsarticle", "svjour3", "sn-jnl", "iopart", "mdpi", "frontiersin") or "journal" in opts:
+        return "journal"
+    if cls == "ieeetran":
+        return "conference" if "conference" in opts else "journal"
+    if cls in ("llncs", "acmart") or re.search(r"\\usepackage(?:\[[^\]]*\])?\{(cvpr|iccv|eccv|wacv|neurips[_\d]*|icml\d*|"
+                                                  r"iclr\d*_conference|corl[_\d]*|aaai\d*|ieeeconf|bmvc\w*)\}", pre, re.I):
+        return "conference"
+    return None
+
+
+def bib_entries(main):
+    """key -> (year, venue text) from the .bib files the document names (or the .bbl next to it)."""
+    main = Path(main)
+    src = "\n".join(l for _, _, l in expand_tex(main))
+    names = []
+    for m in re.finditer(r"\\(?:bibliography|addbibresource)\{([^{}]+)\}", src):
+        names += [n.strip() for n in m.group(1).split(",") if n.strip()]
+    out = {}
+    for n in names:
+        f = main.parent / (n if n.endswith(".bib") else n + ".bib")
+        if not f.exists():
+            continue
+        txt = f.read_text(encoding="utf-8", errors="ignore")
+        for m in re.finditer(r"@(\w+)\s*\{\s*([^,\s]+)\s*,(.*?)(?=\n@|\Z)", txt, re.S):
+            body = m.group(3)
+            y = re.search(r"\byear\s*=\s*[{\"]?\s*(\d{4})", body, re.I)
+            v = None
+            for fld in ("journal", "journaltitle", "booktitle", "howpublished", "publisher"):   # the venue, in this order
+                v = re.search(rf"\b{fld}\s*=\s*[{{\"](.+?)[}}\"]\s*,?\s*(?:\n|$)", body, re.I | re.S)
+                if v:
+                    break
+            arx = "arXiv" if re.search(r"arxiv", body, re.I) else ""
+            out[m.group(2)] = (int(y.group(1)) if y else None, re.sub(r"\s+", " ", v.group(1)) if v else arx)
+    if not out:
+        bbl = main.with_suffix(".bbl")
+        if bbl.exists():
+            txt = bbl.read_text(encoding="utf-8", errors="ignore")
+            for m in re.finditer(r"\\bibitem(?:\[[^\]]*\])?\{([^{}]+)\}(.*?)(?=\\bibitem|\\end\{thebibliography\})", txt, re.S):
+                ys = re.findall(r"\b(19\d\d|20\d\d)\b", m.group(2))
+                out[m.group(1).strip()] = (int(ys[-1]) if ys else None, re.sub(r"\s+", " ", m.group(2)))
+    return out
+
+
+def structure_stats(units, meta, path, year=None, target_venue=None):
+    """Measured structure of the manuscript: section sizes, the introduction, related work and the references."""
+    year = year or datetime.date.today().year
+    base = assign_tops(units)
+    tv = re.compile(target_venue, re.I) if target_venue else None
+    tops, order = {}, []
+    for u in units:
+        if u.kind == "heading":
+            if u.level <= base and u.text not in tops:
+                tops[u.text] = {"name": u.text, "words": 0, "paragraphs": 0, "subsections": 0, "list_items": 0,
+                                "figure": False, "text": []}
+                order.append(u.text)
+            elif u.top in tops and u.level == base + 1:
+                tops[u.top]["subsections"] += 1
+            continue
+        s = tops.get(u.top)
+        if s is None or u.kind in ("refs", "table"):
+            continue
+        if u.kind == "caption":
+            s["figure"] = True
+            continue
+        s["words"] += size_words(u.text)
+        s["text"].append(u.text)
+        if u.kind == "prose":
+            s["paragraphs"] += 1
+        elif u.kind == "list":
+            s["list_items"] += 1
+        if re.search(r"\bFig(?:ure|\.)|图\s*\d", u.text):
+            s["figure"] = True
+
+    def pick(pred):
+        return next((tops[n] for n in order if pred(n)), None)
+    intro, related = pick(is_intro), pick(lambda n: bool(RELATED_RE.search(n)))
+    discussion = pick(lambda n: bool(DISCUSS_RE.match(n)))
+    st = {"sections": [{k: tops[n][k] for k in ("name", "words", "paragraphs", "subsections")} for n in order],
+          "paragraphs_reliable": meta.get("paragraphs_reliable", True), "year": year}
+    if intro:
+        txt = " ".join(intro["text"])
+        enum = len(set(re.findall(r"(?:^|[\s(（])(?:\(?([1-4])[)）]|(First|Second|Third|Fourth)\b,?)", txt)))
+        st["intro"] = {"words": intro["words"], "paragraphs": intro["paragraphs"], "figure": intro["figure"],
+                       "contribution_items": intro["list_items"] or (enum if enum >= 2 else 0),
+                       "contribution_list": intro["list_items"] >= 2,
+                       "contribution_stated": bool(intro["list_items"] >= 2 or enum >= 2
+                                                   or re.search(r"\bcontributions?\b|贡献", txt, re.I))}
+    if related:
+        st["related"] = {"words": related["words"], "subsections": related["subsections"]}
+    if discussion:
+        st["discussion"] = {"name": discussion["name"], "words": discussion["words"]}
+    # references
+    refs = {}
+    if meta.get("cites") is not None:  # LaTeX: what is cited, looked up in the .bib or .bbl
+        bib = bib_entries(meta["main"])
+        cited = []
+        for ks, _ in meta["cites"]:
+            cited += [k for k in ks if k not in cited]
+        info = [bib.get(k, (None, "")) for k in cited]
+        refs = {"count": len(cited), "years_known": sum(1 for y, _ in info if y)}
+        sec_top = {}
+        for u in units:
+            if u.kind == "heading":
+                sec_top[u.text] = u.top
+        if related:
+            rel = set()
+            for ks, sec in meta.get("cite_secs", []):
+                if sec_top.get(sec, sec) == related["name"]:
+                    rel.update(ks)
+            st["related"]["cites"] = len(rel)
+        if intro and any(sec_top.get(s, s) == intro["name"] for s in meta.get("fig_ref_secs", ())):
+            st["intro"]["figure"] = True
+    else:  # plain text or Word: the numbered reference list
+        entries, cur = [], None
+        ref_units = [u for u in units if u.kind == "refs"]
+        bracket = any(re.match(r"^\s*\[\d+\]", u.text) for u in ref_units)
+        for u in ref_units:
+            m = re.match(r"^\s*\[(\d+)\]\s*\S", u.text) if bracket else re.match(r"^\s*(\d+)[.、]\s+\S", u.text)
+            if m and int(m.group(1)) == len(entries) + 1:
+                cur = [u.text]
+                entries.append(cur)
+            elif cur is not None:
+                cur.append(u.text)
+        info = []
+        for e in entries:
+            txt = " ".join(e)
+            ys = re.findall(r"\b(19\d\d|20\d\d)\b", txt)
+            ys = [int(y) for y in ys if int(y) <= year + 1]
+            info.append((max(ys) if ys else None, txt))
+        refs = {"count": len(entries), "years_known": sum(1 for y, _ in info if y)}
+        if related:
+            nums = set()
+            for txt in related["text"]:
+                for m in CITE_BRACKET.finditer(txt):
+                    nums.update(_expand(m.group(1)))
+            st["related"]["cites"] = len(nums)
+    refs["recent"] = sum(1 for y, _ in info if y and y >= year - 1)
+    if tv:
+        refs["venue"] = sum(1 for _, v in info if v and tv.search(squeeze_ws(v)))
+        refs["venue_recent"] = sum(1 for y, v in info if v and tv.search(squeeze_ws(v)) and y and y >= year - 1)
+    st["refs"] = refs
+    return st
+
+
+def squeeze_ws(s):
+    return re.sub(r"\s+", " ", s)
+
+
+def load_norms(venue_type, norms_file):
+    n = dict(NORMS.get(venue_type or "", {}))
+    if norms_file and Path(norms_file).exists():
+        try:
+            data = json.loads(Path(norms_file).read_text(encoding="utf-8"))
+        except ValueError:
+            data = {}
+        n.update({k: v for k, v in data.get("targets", {}).items() if isinstance(v, (int, float))})
+        n["_source"] = str(norms_file)
+        n["_target_venue"] = data.get("target_venue_regex")
+        n["_venue_type"] = data.get("venue_type")
+        n["_median_refs"] = data.get("measured", {}).get("median_refs")
+        n["_venue"] = data.get("venue")
+    return n
+
+
+def check_structure(units, meta, path, cfg):
+    cfg = cfg or {}
+    vt = cfg.get("venue_type") or None
+    norms_probe = load_norms(None, cfg.get("norms"))
+    vt = vt or norms_probe.get("_venue_type") or detect_venue_type(meta)
+    n = load_norms(vt, cfg.get("norms"))
+    target = cfg.get("target_venue") or n.get("_target_venue")
+    st = structure_stats(units, meta, path, cfg.get("year"), target)
+    meta["structure"] = st
+    y0 = st["year"] - 1
+    F = []
+    parts = []
+    if "intro" in st:
+        parts.append(f"引言 {st['intro']['words']} 词" + (f"、{st['intro']['paragraphs']} 段" if st["paragraphs_reliable"] else ""))
+    if "related" in st:
+        parts.append(f"相关工作 {st['related']['words']} 词、{st['related']['subsections']} 小节、引用 {st['related'].get('cites', 0)} 篇")
+    r = st["refs"]
+    parts.append(f"参考文献 {r['count']} 条（{y0} 年以来 {r['recent']} 条" + (f"，目标期刊 {r['venue']} 条、其中近两年 {r['venue_recent']} 条" if target else "") + "）")
+    kind = {"journal": "期刊稿", "conference": "会议稿"}.get(vt, "未识别稿件类型，只报告数字；用 --venue-type 指定后才按门槛检查")
+    F.append(Finding("S", "提示", "全文", "", "；".join(parts), f"结构与篇幅（{kind}"
+                     + (f"，门槛来自 {n['_source']}" if n.get("_source") else "")
+                     + (f"；{n.get('_venue') or '目标期刊'}同主题论文的参考文献数中位数是 {n['_median_refs']}" if n.get("_median_refs") else "") + "）"))
+    if not vt:
+        return F
+    sev = cfg.get("severity") or n["sev"]
+
+    def low(name, have, need, how):
+        if need and have < need:
+            F.append(Finding("S", sev, "全文", name, f"{have}（门槛 {need}）", how))
+    if "intro" in st:
+        i = st["intro"]
+        low("引言", i["words"], n["intro_words"], "引言偏短：按“背景 → 现有思路 → 普遍问题 → 本文的核心想法 → 方法与实验概述 → "
+            "三点贡献”补齐（writing.md 第 4 节）")
+        if st["paragraphs_reliable"]:
+            low("引言", i["paragraphs"], n["intro_paragraphs"], "引言段数偏少：现有研究的思路、存在的问题、本文的核心想法各自成段")
+        if not i["contribution_stated"]:
+            F.append(Finding("S", sev, "全文", "引言", "没有贡献点", "引言末尾列出三条贡献，条目式，每条对应方法的一个部分和一组实验"))
+        elif not i["contribution_list"]:
+            F.append(Finding("S", "中", "全文", "引言", "贡献点写在段落里", "贡献点改成条目式的三条，互不重复、逐条递进，每条对应方法的一个部分和一组实验"))
+        elif i["contribution_items"] not in (3, 4):
+            F.append(Finding("S", "中", "全文", "引言", f"贡献点 {i['contribution_items']} 条", "贡献点收成三条，互不重复、逐条递进"))
+        if not i["figure"]:
+            F.append(Finding("S", "中", "全文", "引言", "没有引用图", "引言配一张动机图：把现有做法和本文的想法画出来，突出区别"))
+    else:
+        F.append(Finding("S", "提示", "全文", "", "", "没有识别到引言"))
+    if "related" in st:
+        rl = st["related"]
+        low("相关工作", rl["words"], n["related_words"], "相关工作偏短：按技术路线分小节，把每条路线的代表工作讲全、讲出递进关系，"
+            "每小节最后落到它留下的问题")
+        low("相关工作", rl["subsections"], n["related_subsections"], "相关工作小节偏少：每条相邻的技术路线一个小节")
+        low("相关工作", rl.get("cites", 0), n["related_cites"], "相关工作引用偏少：从文献池补全每条路线的代表工作和近两年的工作")
+    else:
+        F.append(Finding("S", sev, "全文", "", "没有相关工作一节", "单独写相关工作一节"))
+    low("参考文献", r["count"], n["refs"], "参考文献偏少：用 lit_pool.py 建文献池，补到门槛以上；每条都要是核实过的条目")
+    if r["years_known"] >= 0.6 * max(1, r["count"]):
+        low("参考文献", r["recent"], n["recent_refs"], f"{y0} 年以来的文献偏少：补近两年的相关工作")
+    if target:
+        low("参考文献", r["venue"], n["venue_refs"], "目标期刊的文献偏少：补引目标期刊上的相关论文")
+        low("参考文献", r["venue_recent"], n["venue_recent_refs"], f"目标期刊 {y0} 年以来的论文引得偏少：用 lit_pool.py venue 查近两年的相关论文")
+    elif vt == "journal":
+        F.append(Finding("S", "提示", "全文", "参考文献", "", "没有指定目标期刊（--target-venue 或 venue_norms.json），未检查目标期刊近两年论文的引用数"))
+    if "discussion" in st and st["discussion"]["words"] < n["discussion_words"]:
+        F.append(Finding("S", sev, "全文", st["discussion"]["name"], f"{st['discussion']['words']} 词",
+                         "讨论一节太短：并入实验分析或结论，或者删掉；要保留就写成有实质内容的分析"))
+    return F
+
+
 # --------------------------------------------------------------------------- report
 NAMES = {"Q": "疑问句", "A": "自我削弱", "B": "过度对冲", "C": "替审稿人总结弱点", "E": "过程叙述",
-         "I": "改动前后混写", "J1": "文件名/路径/代码标识符", "J2": "条目式分段", "J3": "引用顺序", "K": "摘要三件事"}
+         "I": "改动前后混写", "J1": "文件名/路径/代码标识符", "J2": "条目式分段", "J3": "引用顺序", "K": "摘要三件事",
+         "S": "结构与篇幅"}
 
 
 def report(path, findings, maxn):
@@ -772,7 +1147,7 @@ def report(path, findings, maxn):
     by_code = {}
     for f in findings:
         by_code.setdefault(f.code, []).append(f)
-    for code in ["Q", "A", "B", "C", "E", "I", "J1", "J2", "J3", "K"]:
+    for code in ["S", "Q", "A", "B", "C", "E", "I", "J1", "J2", "J3", "K"]:
         fs = by_code.get(code)
         if not fs:
             continue
@@ -796,6 +1171,15 @@ def main(argv=None):
     ap.add_argument("file")
     ap.add_argument("--json", action="store_true", help="machine-readable output")
     ap.add_argument("--max", type=int, default=300, help="max rows per rule in the report")
+    ap.add_argument("--venue-type", choices=["journal", "conference"], help="default: read from the document class")
+    ap.add_argument("--target-venue", help="regex for the target journal in the reference list, "
+                                           "e.g. 'Circuits and Systems for Video Technology'")
+    ap.add_argument("--norms", help="venue_norms.json with thresholds (default: research/writing_profile/venue_norms.json "
+                                    "when it exists)")
+    ap.add_argument("--structure-severity", choices=["高", "中", "低"],
+                    help="severity of the structure findings (default: 高 for journals, 中 for conferences)")
+    ap.add_argument("--stats", action="store_true", help="print the measured structure as JSON and exit")
+    ap.add_argument("--year", type=int, help="current year for the 'recent references' count (default: today)")
     a = ap.parse_args(argv)
     p = Path(a.file)
     ext = p.suffix.lower()
@@ -807,7 +1191,18 @@ def main(argv=None):
         units, meta = read_md_or_txt(p)
     else:
         sys.exit("支持 .tex、.md、.txt、.docx")
-    findings = lint_units(units, meta, p)
+    norms = a.norms or ("research/writing_profile/venue_norms.json"
+                        if Path("research/writing_profile/venue_norms.json").exists() else None)
+    cfg = {"venue_type": a.venue_type, "target_venue": a.target_venue, "norms": norms, "year": a.year,
+           "severity": a.structure_severity}
+    if a.stats:
+        if not meta:
+            meta = {}
+        n = load_norms(None, norms)
+        st = structure_stats(units, meta, p, a.year, a.target_venue or n.get("_target_venue"))
+        print(json.dumps(st, ensure_ascii=False, indent=1))
+        return 0
+    findings = lint_units(units, meta, p, cfg)
     if a.json:
         print(json.dumps([f.__dict__ for f in findings], ensure_ascii=False, indent=1))
     else:

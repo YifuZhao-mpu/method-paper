@@ -103,7 +103,7 @@ ARIS 的写作原则里也有一条"发布会"式的原则（Launch Mindset：�
 ## 7. 调用方式和 MCP
 
 - ARIS 在 Claude Code 里的审查和审计调用全部走 MCP。codex-cli 0.154 去掉了 `codex mcp-server`，ARIS 改用自带的 codex-exec 桥，它是本地进程，底层仍是 `codex exec`。分开装运行一次 `/aris:setup`，合并装运行一次 `/method-paper:setup`，就会注册它；用 ARIS 安装脚本装的手动注册：`claude mcp add codex -s user -- python3 "<ARIS 克隆目录>/mcp-servers/codex-exec/server.py"`。之后重启 Claude Code。没注册时 ARIS 的审查会判 REVIEW_UNAVAILABLE。从 GitHub 装的插件每个版本放在不同的目录，旧目录 14 天后清理，所以更新 ARIS 之后先删掉 `~/.aris/repo`，再跑一次 setup：setup 会把 codex 服务改指到新目录，但 `~/.aris/repo` 只在缺失或指向的目录不存在时才重写。
-- method-paper 的流程和收尾都直接调用 `codex exec`，不需要 MCP；思考强度默认 xhigh，用 `pipeline.py set --codex-effort` 修改。
+- method-paper 的流程和收尾都直接调用 `codex exec`（推理方设为 claude 时是 `claude -p`），不需要 MCP；思考强度默认 xhigh，用 `pipeline.py set --codex-effort` 或 `--claude-effort` 修改。
 - 容器里 Codex 的沙箱起不来（报 `bwrap: No permissions to create a new namespace`）时，ARIS 的审查也读不到文件。根治是在宿主机或容器启动参数上放开权限；用户同意让容器充当唯一的沙箱时，把 ARIS 的桥接指向 method-paper 的包装脚本，它把每次调用的沙箱设置改成 `danger-full-access`（`codex exec` 不弹审批，效果等同于 `--dangerously-bypass-approvals-and-sandbox`；续接对话的 `exec resume` 不收 `--sandbox`，所以改的是 `-c sandbox_mode=`）：
   ```bash
   claude mcp remove codex -s user
@@ -111,6 +111,11 @@ ARIS 的写作原则里也有一条"发布会"式的原则（Launch Mindset：�
   ```
   重启 Claude Code 生效。method-paper 自己的流程用 `pipeline.py set --codex-sandbox none`（collaboration.md 第 7 节）。权限放开以后，按同样的方式重新注册、去掉 `-e CODEX_BIN=...`，恢复 Codex 自己的沙箱。
 - ARIS 的默认审查模型是 gpt-6-astra，审计类调用用 xhigh 或 ultra。两边的 Codex 调用互不影响。
+- **ARIS 的审稿也换成 Claude。** ARIS 支持 `claude-code` 审稿后端，走它自带的 claude-review 桥（底层是本机的 `claude -p`）。先注册一次，`CLAUDE_REVIEW_MODEL` 可以省略：
+  ```bash
+  claude mcp add claude-review -s user -e CLAUDE_REVIEW_MODEL=<模型> -- python3 "<ARIS 目录>/mcp-servers/claude-review/server.py"
+  ```
+  再在项目里写 `.aris/reviewer.json`：`{"backend": "claude-code"}`，或者单次调用时加 `— reviewer: claude-code`。ARIS 按模型家族记录审查的独立性：执行方和审稿方都是 Claude 时记为 same-family，结论只算 provisional（暂定），claims、citations、proof、attack 这四类语义审计只有跨家族的审查才能记为 accepted。最终报告照样生成，总体保证级别显示 provisional。method-paper 自己的流程只用 Claude 时见 collaboration.md 第 8 节。
 
 ## 8. 把进行中的 method-paper 项目交给 ARIS
 

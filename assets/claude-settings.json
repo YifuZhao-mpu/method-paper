@@ -5,8 +5,12 @@
       "Bash(codex exec *)",
       "Bash(method-paper-pipeline *)",
       "Bash(method-paper-lineage *)",
+      "Bash(python */method-paper/scripts/pipeline.py *)",
       "Bash(python ~/.claude/skills/method-paper/scripts/pipeline.py *)",
-      "Bash(python ~/.claude/skills/method-paper/scripts/code_lineage.py *)"
+      "Bash(python ~/.claude/skills/method-paper/scripts/code_lineage.py *)",
+      "Bash(method-paper-litpool *)",
+      "Bash(python */method-paper/scripts/lit_pool.py *)",
+      "Bash(python ~/.claude/skills/method-paper/scripts/lit_pool.py *)"
     ]
   }
 }

@@ -1,8 +1,8 @@
-# 分工与自动流程：Codex 负责方法推理与审查，Claude 负责完成任务
+# 分工与自动流程：推理方负责方法推理与审查，Claude Code 负责完成任务
 
-推理和执行分开做：Codex 找问题、设计方法、设计实验、审查结果、写稿；Claude Code 改代码、跑实验、记录结果、出图，并推进整个流程。审查结果的一方没有亲手做实验，审查才是独立的。
+推理和执行分开做：推理方（默认 Codex，也可以是流程单独调起的 Claude 进程，见第 8 节；下文的 Codex 都指推理方）找问题、设计方法、设计实验、审查结果、写稿；Claude Code 改代码、跑实验、记录结果、出图，并推进整个流程。审查结果的一方没有亲手做实验，审查才是独立的。
 
-用户只和 Claude Code 对话。流程由 `scripts/pipeline.py` 管理：它记住当前阶段，告诉 Claude Code 这一步由谁做、具体做什么；遇到推理或审查类阶段，Claude Code 用 `codex exec`（Codex 的非交互模式，不经过 MCP）交给 Codex。两个工具不共享对话，所有交接都通过论文仓库 `research/` 下的文件完成。
+用户只和 Claude Code 对话。流程由 `scripts/pipeline.py` 管理：它记住当前阶段，告诉 Claude Code 这一步由谁做、具体做什么；遇到推理或审查类阶段，Claude Code 用 `codex exec`（Codex 的非交互模式，不经过 MCP）交给 Codex，推理方是 Claude 时用 `pipeline.py reason` 交给一个单独的 Claude 进程。两个工具不共享对话，所有交接都通过论文仓库 `research/` 下的文件完成。
 
 ## 1. 分工
 
@@ -15,7 +15,7 @@
 | 实验设计（D） | 写实验职责表 | 按表实现和运行；要加表外实验，先记进偏差记录 |
 | 实验执行 | — | 负责：改代码、跑实验、记录每次运行、出图（G、H） |
 | 结果审查 | 负责：核对结果是否支撑对应 claim，检查协议一致、测试集纪律、多种子统计 | 提供原始结果文件和复现命令 |
-| 写作（E）、改稿（F）、回应信 | 负责 | 生成写作画像、出图、跑文稿和图表检查脚本 |
+| 写作（E）、改稿（F）、回应信 | 负责：先写提纲，再写稿、改稿 | 建文献池、量范文和门槛、生成写作画像、出图、跑文稿和图表检查脚本、核对参考文献 |
 | 推进流程 | — | 负责：运行 pipeline.py，执行每一步，在检查点停下问用户 |
 
 ## 2. 交接文件
@@ -38,8 +38,12 @@
 | `deviations.md` | Claude Code | 实现与方法卡或实验表不一致的地方、原因、对结论的影响；由 Codex 决定改方法卡还是改实现 |
 | `review.md` | Codex | 结果审查：哪些 claim 成立、哪些证据不足、下一轮要做什么 |
 | `code_survey/` | Claude Code | 最接近工作的代码构成报告（lineage.md、lineage.json）：基于哪些代码库、改了哪些文件、改了多少、新写了多少 |
-| `writing_profile/` | Claude Code | 目标会议和子领域的写作画像（writing-patterns.md 第 12 节） |
-| `lint_report.md` | Claude Code | paper_lint 和 figure_table_check 的输出 |
+| `writing_profile/` | Claude Code | 目标会议和子领域的写作画像（writing-patterns.md 第 12 节）；`venue_norms.json` 是目标期刊的篇幅和文献门槛，`exemplars/`、`exemplars.md` 是范文的篇幅和结构（第 13 节） |
+| `refs_pool.json`、`refs_pool.md`、`refs_pool.bib` | Claude Code（lit_pool.py 生成） | 文献池：取自 Crossref 和 arXiv 的已核实条目，按目标期刊、技术路线分组；写稿只从这里和论文目录已核实的 .bib 引用 |
+| `outline.md` | Codex | 论文提纲：故事和主结果、继承与贡献、引言六段、动机图、相关工作各小节、主张—证据对应表、篇幅与文献目标（writing.md 第 4.1 节） |
+| `advisor_notes.md` | 作者 | 导师、合作者或审稿人的意见（可选）；提纲、初稿和改稿逐条落实，并列出每条的处理 |
+| `refs_check.md` | Claude Code（lit_pool.py check） | 稿件 .bib 逐条核对的结果：不一致、查不到的条目 |
+| `lint_report.md` | Claude Code | paper_lint（含结构与篇幅）、figure_table_check 和参考文献核对的输出 |
 | `evidence_precheck.md` | pipeline.py | 每次结果审查前自动生成：每条运行的结果文件在不在、是否作废或证据不可恢复 |
 | `findings.md` | pipeline.py 汇总 | 否定记录（只追加）：关口未通过、换方法、机制预测落空、用户跳转时的原因和出处；之后所有 Codex 阶段先读它，新方案不落回这些做法 |
 | `draft_notes.md`、`revision_notes.md`、`polish_notes.md` | Codex | 写稿、改稿和收尾（ARIS 稿件）的修改摘要、需作者决策的问题 |
@@ -79,15 +83,16 @@ Codex 每次运行的回复写进 `codex/<阶段>-<次数>.md`，最后一行是
 | review 结果审查 | Codex | review.md | 机制探针轮：met → 写完整职责表；pending → 再补一轮探针（最多两轮，之后必须在 met 和 unmet 之间下结论）；unmet → back=methods 换方法，back=problems（阳性对照或上限也不成立）→ 暂停请作者决定是否放弃锚点。正常轮：补满 3 轮后的那一轮只能判 pass 或 fail（不支持的 claim 删掉或缩小后判 pass）；通过 → 请用户批准最终评测；要补且方法卡不变（`more card=keep`）→ plan → run；要补且方法卡要改（`more card=revise`）→ method_card 修订 → code_location → gate2 → plan → run；最多补 3 轮；核心 claim 不成立 → 暂停 |
 | cp_final | 用户 | 批准 | 这一项总是要问 |
 | final_eval 最终报告 | Claude | runs.md | — |
-| profile 写作画像 | Claude | writing_profile/ | 网络不通可跳过 |
-| figures 数据图与框架图 | Claude | 论文目录 figs/ | 可跳过 |
-| draft 写初稿 | Codex（论文目录可写） | 稿件、draft_notes.md | — |
+| profile 写作画像、范文门槛和文献池 | Claude | refs_pool.md、refs_pool.bib、writing_profile/ | 要有文献池，加上 venue_norms.json 或 stats.json 之一；Crossref 和 arXiv 都连不上时 `done --skip --note` |
+| outline 论文提纲 | Codex（只读，可检索） | outline.md | ready → 出图；weak（现有结果撑不起主张）→ 暂停，由作者决定 `goto plan --reason <要补的实验>`、`goto outline --reason <新的主张>` 或 `goto figures` 照此写。收尾模式没有这个阶段 |
+| figures 动机图、数据图、框架图和效果图 | Claude | 论文目录 figs/ | 可跳过；顺带把提纲“需补入文献池”的文献加进文献池 |
+| draft 写初稿 | Codex（论文目录可写） | 稿件、draft_notes.md | 按提纲写；只引用文献池和已核实的条目 |
 | polish 收尾改稿（只在收尾模式） | Codex（论文目录可写） | 稿件、polish_notes.md | 按发布会原则通读 ARIS 的稿件并最小改动，一并处理 lint 报告；数字、claim 范围、引用和结果行冻结；之后回到 lint |
-| lint 文稿与图表检查 | Claude | lint_report.md | 没有高级别问题 → 完成（收尾模式是 handback）；有 → 改稿（最多 2 轮，之后仍有就暂停）。收尾模式里第一次检查之后总是先交给 polish |
-| revise 改稿 | Codex（论文目录可写） | 稿件、revision_notes.md | 总是回到 lint 重新检查 |
+| lint 文稿与图表检查 | Claude | lint_report.md、refs_check.md | 期刊稿的结构与篇幅不达标（引言、相关工作偏短，参考文献不到门槛，讨论过短）和核对不上的参考文献都算高级别问题。没有高级别问题 → 完成（收尾模式是 handback）；有 → 改稿（最多 2 轮，之后仍有就暂停）。收尾模式里第一次检查之后总是先交给 polish |
+| revise 改稿 | Codex（论文目录可写） | 稿件、revision_notes.md | 最小改动；结构与篇幅的问题按提纲补写，文献从文献池补。总是回到 lint 重新检查 |
 | handback 交回 ARIS 复审（只在收尾模式） | Claude | 论文目录的 ARIS 审计文件 | 重跑 `/paper-claim-audit`、`/citation-audit`、`/paper-compile`，校验两个审计文件是收尾之后生成的；跑不了时 `done --skip --note`，结束时会提醒投稿前补跑 |
 
-自主程度：`init --autonomy checkpoints`（默认）在选候选、选方法、批准最终评测三处停下问用户；`--autonomy auto` 在前两处直接采用 Codex 的推荐，最终评测仍然要问。选方法时回答 `back 理由`，Codex 会拿到被否决的方案和理由重新找。另外，关口或审查连续多轮不通过、同一阶段两次校验失败时，流程自动暂停，等用户决定（`goto` 到某阶段，或修好后 `done`）；`goto diagnose --reason '<疑点>'` 是复核：保留当前锚点，重新量失效代价和上限，再由 Codex 重判关口一。`goto` 会把各项未通过轮次清零；加 `--reason '<结论>'` 时，这个结论会交给下一个 Codex 阶段并记进否定记录，例如 `goto methods --reason '机制探针：五项预测全部未得到支持'`；`goto problems --reason '<依据>'` 表示作者放弃当前锚点。`goto problems --seed '<机会>'` 把作者已经量过差距的机会交给下一轮候选。通过关口一的机会都留作锚点，`goto methods --anchor <编号>` 换到另一个锚点继续出候选（方法失败的次数按锚点分别记）；当前锚点被放弃后直接 `goto methods`，会接着用最近的那个锚点。`goto` 回到写方法卡之前的阶段时，关口二的结论、修订和探针状态一并清掉；回到找方法之前或越过关口二时，细化和补强的状态也清掉。`python <skill 目录>/scripts/funnel.py` 统计一个项目在各关口花了多少轮、初筛怎么结束、时间花在哪，并按规则给出提示。
+自主程度：`init --autonomy checkpoints`（默认）在选候选、选方法、批准最终评测三处停下问用户；`--autonomy auto` 在前两处直接采用 Codex 的推荐，最终评测仍然要问。选方法时回答 `back 理由`，Codex 会拿到被否决的方案和理由重新找。另外，关口或审查连续多轮不通过、同一阶段两次校验失败时，流程自动暂停，等用户决定（`goto` 到某阶段，或修好后 `done`）；`goto diagnose --reason '<疑点>'` 是复核：保留当前锚点，重新量失效代价和上限，再由 Codex 重判关口一。`goto` 会把各项未通过轮次清零；加 `--reason '<结论>'` 时，这个结论会交给下一个 Codex 阶段并记进否定记录，例如 `goto methods --reason '机制探针：五项预测全部未得到支持'`；`goto problems --reason '<依据>'` 表示作者放弃当前锚点。`goto problems --seed '<机会>'` 把作者已经量过差距的机会交给下一轮候选。写作阶段（profile 及之后）的 `--reason` 是作者对写作的要求，交给提纲、初稿和改稿，不记进否定记录，例如 `goto outline --reason '主结果换成同码率下的存储节省'`；`goto plan --reason '<要补的实验>'` 把要补的实验交给职责表。已经写完初稿的项目要按新的组织重写时，`goto profile` 从备料开始重走写作阶段。通过关口一的机会都留作锚点，`goto methods --anchor <编号>` 换到另一个锚点继续出候选（方法失败的次数按锚点分别记）；当前锚点被放弃后直接 `goto methods`，会接着用最近的那个锚点。`goto` 回到写方法卡之前的阶段时，关口二的结论、修订和探针状态一并清掉；回到找方法之前或越过关口二时，细化和补强的状态也清掉。`python <skill 目录>/scripts/funnel.py` 统计一个项目在各关口花了多少轮、初筛怎么结束、时间花在哪，并按规则给出提示。
 
 防止原地打转的几条规则（参考了 ARIS、autoresearch、AI Scientist 等自动科研流程的做法）：判断只排序、不否决，淘汰候选只看非创新清单、预算和实验结果；一轮出一组候选、用初筛排序，接近的细化而不是丢掉；每类循环都有轮数上限，到上限后下一轮必须下结论，不能再判待定；连续两轮没有新证据就换方向，换的是算子或插入点，不是在同一框架里继续调参；量过提升空间的锚点不因方法失败而放弃；否定结果写进否定记录，之后的候选必须避开；工具问题只降低证据可信度，不阻断科学结论。
 
@@ -98,7 +103,7 @@ Codex 每次运行的回复写进 `codex/<阶段>-<次数>.md`，最后一行是
 ## 5. 项目设置
 
 1. 论文仓库是一个 git 仓库（`codex exec` 默认只在 git 仓库里运行）。把 skill 里的 `assets/AGENTS.md` 和 `assets/CLAUDE.md` 拷到仓库根目录（Codex 读 AGENTS.md，Claude Code 读 CLAUDE.md），在 CLAUDE.md 顶部填好项目信息。
-2. Codex 装在运行 Claude Code 的同一台机器上并已登录，也就是有 GPU 和数据的那台；先在终端跑一次 `codex exec '回复 OK'` 确认能用。pipeline.py 生成的提示里写了 skill 目录的绝对路径，Codex 直接读那里的文件，所以不必再为 Codex 单独安装一份 skill（单独请 Codex 做事、不走流程时才需要）。
+2. 只用 Claude 模型时跳过这一步，第 3 步的 init 加 `--reasoner claude`（第 8 节）。否则 Codex 装在运行 Claude Code 的同一台机器上并已登录，也就是有 GPU 和数据的那台；先在终端跑一次 `codex exec '回复 OK'` 确认能用。pipeline.py 生成的提示里写了 skill 目录的绝对路径，Codex 直接读那里的文件，所以不必再为 Codex 单独安装一份 skill（单独请 Codex 做事、不走流程时才需要）。
 3. 在仓库根目录运行 `python <skill 目录>/scripts/pipeline.py init`（以 method-paper 插件安装时是 `method-paper-pipeline init`）。
 4. 把 `assets/claude-settings.json` 拷成仓库的 `.claude/settings.json`（路径按 skill 实际安装位置改）。它做两件事：`"effortLevel": "xhigh"` 让 Claude Code 在这个仓库里用 xhigh 思考强度（项目设置里的这个键对所有模型生效，也优先于用户设置里按模型保存的强度；但环境变量 `CLAUDE_CODE_EFFORT_LEVEL`、启动参数 `--effort` 和会话里的 `/effort` 会覆盖它，而 `/effort xhigh` 会把 xhigh 存成这个模型在所有项目里的默认值）；`permissions` 预先允许 `codex exec`、pipeline.py 和 code_lineage.py，免得每次询问。
 5. Codex 的思考强度由 pipeline.py 在每条命令里带上 `-c 'model_reasoning_effort="xhigh"'`，默认就是 xhigh；能用的强度取决于 Codex 的模型；当前模型不支持 xhigh 时，用 `pipeline.py set --codex-effort high` 改低一档，用 `set --codex-model <模型>` 指定模型，流程进度不受影响。不走流程、单独调用 Codex 时，可以在 `~/.codex/config.toml` 里写 `model_reasoning_effort = "xhigh"`。
@@ -127,3 +132,29 @@ cd /path/to/repo/paper && codex exec -c 'model_reasoning_effort="xhigh"' --sandb
 `codex` 没装、没登录或额度用完时，Claude Code 告诉用户，征得同意后才把 Codex 阶段交给一个独立子代理：只给它 method-paper skill、`research/prompts/<阶段>.md` 和 `pipeline.py next` 给出的输出文件路径，不给 Claude Code 自己的结论；完成后用 `pipeline.py done --by subagent`，流程记录里会写明这一阶段不是 Codex 做的。用户不同意就暂停，等 Codex 可用后继续。
 
 **Codex 的沙箱起不来时**（Docker 容器里常见，报 `bwrap: No permissions to create a new namespace`）：Codex 读文件要靠执行命令，沙箱起不来它就一个文件也读不到，这时它交出的判定没有依据，不能用。根治是在宿主机或容器启动参数上放开 bubblewrap 需要的权限。用户同意让容器充当唯一的沙箱时，用 `pipeline.py set --codex-sandbox none`（新项目 `init --codex-sandbox none`）：之后每条 Codex 命令带 `--dangerously-bypass-approvals-and-sandbox`，写稿改稿也不再用 `--sandbox workspace-write`。Codex 因此失去写保护，流程在每个 Codex 阶段开始时记下 `research/`（只读阶段还有论文目录）的文件内容，`done` 时逐个核对，有变化就不通过，并列出改动的文件。Codex 运行期间 Claude Code 不改这些文件。改回去用 `set --codex-sandbox default`。ARIS 的 codex MCP 桥用 `scripts/codex_nosandbox.sh` 做同样的事，见 aris.md 第 7 节。
+
+## 8. 只用 Claude 模型
+
+不装 Codex、推理与审查也用 Claude 时：新项目 `pipeline.py init --reasoner claude`，已有项目 `pipeline.py set --reasoner claude`，进度不受影响；在 `~/.bashrc` 里写 `export METHOD_PAPER_REASONER=claude`，之后新项目默认就是 Claude。模型用 `--claude-model` 指定（`opus`、`fable` 这类别名或完整模型名，默认用 Claude Code 自己的设置），强度用 `--claude-effort`（默认 xhigh，可以设 max；`default` 表示不传，沿用 Claude Code 的设置），init 和 set 都能改。
+
+这时 `pipeline.py next` 给出的命令是 `pipeline.py reason`，Claude Code 照样在仓库根目录后台运行它，结束后 `done`。`reason` 为当前阶段写好提示，单独起一个进程（`next` 的 runs 一行就是实际命令）：
+
+```bash
+# 只读阶段，在仓库根目录；需要检索文献的阶段工具里加 WebSearch、WebFetch
+claude -p --output-format text --no-session-persistence --strict-mcp-config --effort xhigh \
+  --tools Read,Grep,Glob --allowedTools 'Read Grep Glob' --disallowedTools 'Bash Edit Write NotebookEdit' \
+  --append-system-prompt '<推理方的角色说明>' < research/prompts/gate2.md
+
+# 写稿、改稿，在论文目录；acceptEdits 只放行当前目录里的修改
+cd /path/to/repo/paper && claude -p ... --permission-mode acceptEdits --tools Read,Grep,Glob,Edit,Write \
+  --allowedTools 'Read Grep Glob' --disallowedTools 'Bash NotebookEdit WebSearch WebFetch' ... < /path/to/repo/research/prompts/draft.md
+```
+
+- **独立。** 每个阶段都是新进程、全新上下文，只拿到提示和文件路径，看不到执行方的对话；`--no-session-persistence` 不留会话记录，`--strict-mcp-config` 不加载任何 MCP 服务。
+- **权限。** 没有 Bash，跑不了流程命令和实验；只读阶段没有写文件的工具；写稿阶段只能改论文目录（不要给 `Edit`、`Write` 加不带路径的允许规则，那样会放行任何位置）。和无沙箱的 Codex 一样，`done` 时核对 `research/`（只读阶段还有论文目录）没有变化。
+- **角色。** 仓库的 CLAUDE.md 是写给执行方的，推理进程也会读到它；系统提示和 CLAUDE.md 开头都写明，被流程调起的推理进程不按执行方的规则做事，按 AGENTS.md 和本次任务工作。
+- **输出。** 回复写进 `research/codex/<阶段>-<次数>.md`，进程结束时才出现；报错信息在同名的 `.log` 里。命令失败或最后一行不是合格的 PIPELINE 行时同样用 `retry`。
+- **版本。** 需要较新的 Claude Code（用到 `--tools`、`--effort`、`--strict-mcp-config`、`--no-session-persistence`）；日志里出现 unknown option 时先 `claude update`。执行方运行 `reason` 用的是 pipeline.py 的命令，`assets/claude-settings.json` 里已经预先允许。
+- **代价。** 推理方和执行方同属 Claude，交叉检查不如换一家模型：同一类模型容易有同样的盲点。补救是推理方不看执行方的上下文、用比执行方更强的模型并开最高强度，例如执行方用 Sonnet、推理方 `--claude-model opus --claude-effort max`；更重要的是初筛和实验里的阳性对照、同步训练的基线和等容量对照，它们不依赖任何一方的判断。
+
+ARIS 的审稿换成 Claude 见 aris.md 第 7 节。
