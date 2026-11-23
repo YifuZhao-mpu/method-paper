@@ -43,7 +43,7 @@
 | `outline.md` | Codex | 论文提纲：故事和主结果、继承与贡献、引言六段、动机图、相关工作各小节、主张—证据对应表、篇幅与文献目标（writing.md 第 4.1 节） |
 | `advisor_notes.md` | 作者 | 导师、合作者或审稿人的意见（可选）；提纲、初稿和改稿逐条落实，并列出每条的处理 |
 | `refs_check.md` | Claude Code（lit_pool.py check） | 稿件 .bib 逐条核对的结果：不一致、查不到的条目 |
-| `lint_report.md` | Claude Code | paper_lint（含结构与篇幅）、figure_table_check 和参考文献核对的输出 |
+| `lint_report.md` | Claude Code | paper_lint（含结构与篇幅、数字的用法）、figure_table_check 和参考文献核对的输出 |
 | `evidence_precheck.md` | pipeline.py | 每次结果审查前自动生成：每条运行的结果文件在不在、是否作废或证据不可恢复 |
 | `findings.md` | pipeline.py 汇总 | 否定记录（只追加）：关口未通过、换方法、机制预测落空、用户跳转时的原因和出处；之后所有 Codex 阶段先读它，新方案不落回这些做法 |
 | `draft_notes.md`、`revision_notes.md`、`polish_notes.md` | Codex | 写稿、改稿和收尾（ARIS 稿件）的修改摘要、需作者决策的问题 |
@@ -88,8 +88,8 @@ Codex 每次运行的回复写进 `codex/<阶段>-<次数>.md`，最后一行是
 | figures 动机图、数据图、框架图和效果图 | Claude | 论文目录 figs/ | 可跳过；顺带把提纲“需补入文献池”的文献加进文献池 |
 | draft 写初稿 | Codex（论文目录可写） | 稿件、draft_notes.md | 按提纲写；只引用文献池和已核实的条目 |
 | polish 收尾改稿（只在收尾模式） | Codex（论文目录可写） | 稿件、polish_notes.md | 按发布会原则通读 ARIS 的稿件并最小改动，一并处理 lint 报告；数字、claim 范围、引用和结果行冻结；之后回到 lint |
-| lint 文稿与图表检查 | Claude | lint_report.md、refs_check.md | 期刊稿的结构与篇幅不达标（引言、相关工作偏短，参考文献不到门槛，讨论过短）和核对不上的参考文献都算高级别问题。没有高级别问题 → 完成（收尾模式是 handback）；有 → 改稿（最多 2 轮，之后仍有就暂停）。收尾模式里第一次检查之后总是先交给 polish |
-| revise 改稿 | Codex（论文目录可写） | 稿件、revision_notes.md | 最小改动；结构与篇幅的问题按提纲补写，文献从文献池补。总是回到 lint 重新检查 |
+| lint 文稿与图表检查 | Claude | lint_report.md、refs_check.md | 期刊稿的结构与篇幅不达标（引言、相关工作偏短，参考文献不到门槛，讨论过短）、数字用得太密（摘要里的结果数值多于 3 个、实验正文每百词超过 2 个数值、一段里有 8 个以上数值）和核对不上的参考文献都算高级别问题。没有高级别问题 → 完成（收尾模式是 handback）；有 → 改稿（最多 2 轮，之后仍有就暂停）。收尾模式里第一次检查之后总是先交给 polish |
+| revise 改稿 | Codex（论文目录可写） | 稿件、revision_notes.md | 最小改动；结构与篇幅的问题按提纲补写，文献从文献池补；逐项报数的段落改写成结论加原因，数字留在表里。总是回到 lint 重新检查 |
 | handback 交回 ARIS 复审（只在收尾模式） | Claude | 论文目录的 ARIS 审计文件 | 重跑 `/paper-claim-audit`、`/citation-audit`、`/paper-compile`，校验两个审计文件是收尾之后生成的；跑不了时 `done --skip --note`，结束时会提醒投稿前补跑 |
 
 自主程度：`init --autonomy checkpoints`（默认）在选候选、选方法、批准最终评测三处停下问用户；`--autonomy auto` 在前两处直接采用 Codex 的推荐，最终评测仍然要问。选方法时回答 `back 理由`，Codex 会拿到被否决的方案和理由重新找。另外，关口或审查连续多轮不通过、同一阶段两次校验失败时，流程自动暂停，等用户决定（`goto` 到某阶段，或修好后 `done`）；`goto diagnose --reason '<疑点>'` 是复核：保留当前锚点，重新量失效代价和上限，再由 Codex 重判关口一。`goto` 会把各项未通过轮次清零；加 `--reason '<结论>'` 时，这个结论会交给下一个 Codex 阶段并记进否定记录，例如 `goto methods --reason '机制探针：五项预测全部未得到支持'`；`goto problems --reason '<依据>'` 表示作者放弃当前锚点。`goto problems --seed '<机会>'` 把作者已经量过差距的机会交给下一轮候选。写作阶段（profile 及之后）的 `--reason` 是作者对写作的要求，交给提纲、初稿和改稿，不记进否定记录，例如 `goto outline --reason '主结果换成同码率下的存储节省'`；`goto plan --reason '<要补的实验>'` 把要补的实验交给职责表。已经写完初稿的项目要按新的组织重写时，`goto profile` 从备料开始重走写作阶段。通过关口一的机会都留作锚点，`goto methods --anchor <编号>` 换到另一个锚点继续出候选（方法失败的次数按锚点分别记）；当前锚点被放弃后直接 `goto methods`，会接着用最近的那个锚点。`goto` 回到写方法卡之前的阶段时，关口二的结论、修订和探针状态一并清掉；回到找方法之前或越过关口二时，细化和补强的状态也清掉。`python <skill 目录>/scripts/funnel.py` 统计一个项目在各关口花了多少轮、初筛怎么结束、时间花在哪，并按规则给出提示。

@@ -522,8 +522,12 @@ def cmd_norms(a):
         except (OSError, ValueError):
             print(f"读不了 {f}，跳过")
             continue
+        num = s.get("numbers") or {}
         ex.append({"file": Path(f).name, "intro_words": s.get("intro", {}).get("words"), "related_words": s.get("related", {}).get("words"),
-                   "related_subsections": s.get("related", {}).get("subsections"), "refs": s.get("refs", {}).get("count")})
+                   "related_subsections": s.get("related", {}).get("subsections"), "refs": s.get("refs", {}).get("count"),
+                   "exp_values_per_100w": (num.get("experiments") or {}).get("values_per_100w"),
+                   "abstract_values": (num.get("abstract") or {}).get("values"),
+                   "figure_caption_words": (num.get("captions") or {}).get("figure_words_median")})
     if ex:
         measured["exemplars"] = ex
 
@@ -536,6 +540,13 @@ def cmd_norms(a):
             m = med(k)
             if m:
                 targets[k] = max(targets.get(k, 0), base[k], int(0.75 * m))
+        # how densely the exemplars report numbers: the default limits are relaxed when the venue's papers use more
+        dens = [x["exp_values_per_100w"] for x in ex if x.get("exp_values_per_100w") is not None]
+        if dens:
+            targets["exp_values_per_100w"] = max(2.0, round(1.5 * statistics.median(dens), 1))
+        absv = [x["abstract_values"] for x in ex if x.get("abstract_values") is not None]
+        if absv:
+            targets["abstract_values"] = max(3, max(absv))
     data = {"venue": a.venue or a.issn or "", "venue_type": a.venue_type, "issn": a.issn or "",
             "target_venue_regex": a.target_regex or "", "measured": measured, "targets": targets,
             "made": datetime.date.today().isoformat(), "year": year}

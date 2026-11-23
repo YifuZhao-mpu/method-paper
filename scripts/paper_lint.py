@@ -51,6 +51,8 @@ class Unit:
     line_starts: list = field(default_factory=list)  # [(offset, loc)] for multi-line paragraphs
     level: int = 0           # headings: 1 = top-level section, 2 = subsection, ...
     top: str = ""            # title of the top-level section the unit belongs to
+    raw: str = ""            # LaTeX only: the text with the numbers inside math kept, for counting
+    env: str = ""            # captions: "table" or "figure"
 
     def loc_at(self, off):
         loc = self.loc
@@ -143,6 +145,22 @@ def clean_tex(s):
     return re.sub(r"[ \t]+", " ", s)
 
 
+def num_tex(s):
+    """Like clean_tex, but keeps what is inside inline math, so that the numbers in a paragraph can be counted."""
+    s = re.sub(r"\\(cite[a-zA-Z]*|ref|eqref|autoref|cref|Cref|label|url|includegraphics|input|include|"
+               r"bibliography|bibliographystyle|graphicspath|vspace|hspace|footnotemark)\*?(\[[^\]]*\])*\{[^{}]*\}", " ", s)
+    s = re.sub(r"\\(?:SI|qty)\s*(?:\[[^\]]*\])?\{([^{}]*)\}\{([^{}]*)\}", lambda m: m.group(1) + " " + (
+        "%" if "percent" in m.group(2) else "dB" if "decibel" in m.group(2) else "ms" if "milli" in m.group(2) else ""), s)
+    s = re.sub(r"\\num\s*(?:\[[^\]]*\])?\{([^{}]*)\}", r"\1", s)
+    for a, b in (("\\%", "%"), ("\\times", "×"), ("\\pm", "±"), ("\\,", ""), ("\\;", " "), ("\\!", ""), ("\\ ", " "),
+                 ("~", " "), ("$", " "), ("\\(", " "), ("\\)", " ")):
+        s = s.replace(a, b)
+    for _ in range(3):
+        s = re.sub(r"\\[a-zA-Z]+\*?(?:\[[^\]]*\])?\{([^{}]*)\}", r"\1", s)
+    s = re.sub(r"\\[a-zA-Z]+\*?", " ", s)
+    return re.sub(r"[ \t]+", " ", s.replace("{", "").replace("}", ""))
+
+
 def read_tex(path):
     missing = []
     lines = list(expand_tex(path, missing=missing))
@@ -160,10 +178,14 @@ def read_tex(path):
         nonlocal buf, starts
         if buf:
             text, ls = "", []
-            for (loc, piece) in buf:
+            for (loc, piece, _) in buf:
                 ls.append((len(text), loc))
                 text += piece + " "
-            units.append(Unit(text.strip(), ls[0][1], section, pending["kind"] or kind_now(), ls))
+            k = pending["kind"] or kind_now()
+            env = ""
+            if k == "caption":
+                env = "table" if any(e.startswith(("table", "wraptable")) for e in env_stack) else "figure"
+            units.append(Unit(text.strip(), ls[0][1], section, k, ls, raw=" ".join(r for _, _, r in buf), env=env))
         pending["kind"] = None
         buf, starts = [], []
 
@@ -237,7 +259,7 @@ def read_tex(path):
                 continue
             c = clean_tex(tok).strip()
             if c:
-                buf.append((loc, c))
+                buf.append((loc, c, num_tex(tok).strip()))
         if not line.strip():
             flush()
     flush()
@@ -563,6 +585,9 @@ EXPID_RE = re.compile(r"\b(exp|run|ckpt|trial|checkpoint)[_-]?\d+\b|第[一二�
 SNAKE_RE = re.compile(r"(?<![\\\w])[a-z][a-z0-9]*(?:_[a-z0-9]+){1,}\b")
 
 
+PLACEHOLDER_RE = re.compile(r"\[\s*(?:TBD|TODO|FIXME|XXX|待补|待定|待填|占位)[^\]]{0,160}\]|\b(?:TBD|TODO|FIXME)\b|待补充")
+
+
 def sentences(text):
     out, start = [], 0
     for m in re.finditer(r"[。！？!?；;]|\.(?=\s+[A-Z\u4e00-\u9fff]|$)", text):
@@ -602,6 +627,9 @@ def lint_units(units, meta, path, cfg=None):
                     continue
                 F.append(Finding("Q", "高", u.loc_at(m.start()), u.section, snippet(t, m.start(), m.end()),
                                  "正文出现疑问句：改成陈述句"))
+            for m in PLACEHOLDER_RE.finditer(t):
+                F.append(Finding("P", "高", u.loc_at(m.start()), u.section, snippet(t, m.start(), m.end(), 16),
+                                 "稿件里留着占位符：补上内容；内容还没有时删掉这句，把缺的材料列给作者"))
         for a, b in sentences(t):
             sent = t[a:b]
             hits = {}  # code -> [severity, first offset, phrases, message]
@@ -642,6 +670,7 @@ def lint_units(units, meta, path, cfg=None):
     F += check_citations(units, meta, path)
     F += check_abstract(units)
     F += check_structure(units, meta, path, cfg)
+    F += check_numbers(units, meta, path, cfg)
     return F
 
 
@@ -1132,10 +1161,277 @@ def check_structure(units, meta, path, cfg):
     return F
 
 
+# --------------------------------------------------------------------------- numbers (rule D)
+# How published papers use numbers, measured on 28 full texts (references/writing-patterns.md, section 14):
+# experiments prose carries a median of 0.8 measured values per 100 words (nine in ten papers stay under 1.3),
+# a five-sentence stretch with five or more values is rare (5% of stretches), abstracts carry 0-1 result values
+# (at most 3), figure captions run to about 40 words and table captions to about 20.
+VAL_UNIT = r"%|％|×|x\b|dB|ms|fps|FPS|MB|GB|KB|Hz|pp\b|倍|个百分点|毫秒"
+NUM_RE = re.compile(r"(?<![A-Za-z\d.,\-])[+−-]?\d+(?:[.,]\d+)*\s?(?:" + VAL_UNIT + r")?(?![A-Za-z\d])")
+NUM_SKIP = re.compile(
+    r"\[[\d,\s–\-]+\]|\b(?:Tables?|Tab\.|Figures?|Figs?\.|Sections?|Sec\.|Eqs?\.|Equations?|Algorithms?|Alg\.|Appendix|"
+    r"App\.|Steps?|Stage|Phase|Rows?|Columns?)\s*\(?[A-Z]?[IVX\d]+[a-z]?\)?(?:\s*(?:and|,|–|-)\s*\(?[\dIVX]+[a-z]?\)?)*|"
+    r"[表图式节第]\s*\d+(?:\.\d+)*|\b[A-Za-z]+[-–]\d+\b|\b(?:19|20)\d\d\b")
+NEG_RE = re.compile(r"\b(not|cannot|rather than|without|neither|no longer|does not|do not|did not)\b", re.I)
+EXP_START = re.compile(r"^(experiments?|experimental|empirical|evaluations?|results|benchmarks?|performance evaluation|"
+                       r"实验|结果|评估|评测)", re.I)
+EXP_STOP = re.compile(r"^(conclusions?|concluding|discussions?|limitations?|related works?|acknowledge?ments?|references|"
+                      r"bibliography|broader impact|future work|appendix|supplementary|结论|总结|讨论|局限|相关工作|致谢|"
+                      r"参考文献|附录)", re.I)
+SETUP_NAME = re.compile(r"setup|setting|implementation|dataset|protocol|metric|detail|baseline|compared method|"
+                        r"hyper-?parameter|配置|设置|实现|数据集|指标|细节|对比方法|超参", re.I)
+ABS_DETAIL = re.compile(r"\[\s*[-+−]?\d[\d.]*\s*,\s*[-+−]?\d[\d.]*\s*\]|\b9[059]\s?%\s*(?:confidence|interval|CI)|"
+                        r"confidence interval|\bseeds?\b|bootstrap|\bpaired\b|置信区间|种子", re.I)
+PDF_SEC = re.compile(
+    r"^(introduction|related works?|background|preliminar(y|ies)|problem (statement|formulation|setup)|overview|"
+    r"(the |our |proposed )?(method|methods|methodology|approach|framework|model)\b.{0,40}|"
+    r"experiments?\b.{0,40}|experimental\b.{0,40}|evaluations?\b.{0,40}|results\b.{0,40}|benchmarks?\b.{0,30}|"
+    r"performance evaluation|ablation.{0,30}|analysis|discussions?\b.{0,40}|limitations?\b.{0,40}|"
+    r"conclusions?\b.{0,50}|future work|broader impact.{0,20}|acknowledge?ments?|references|bibliography|"
+    r"appendix.{0,40}|supplementary.{0,40})$", re.I)
+PDF_CAPTION = re.compile(r"^(Table|TABLE|Tab\.|Fig\.|Figure|FIGURE)\s*([IVX]+|\d+)\s*([.:|]\s|[.:|]?$)")
+PDF_NOISE = re.compile(r"has been accepted for publication|Authorized licensed use|content may change prior to final "
+                       r"publication|Personal use is permitted|^Citation information: DOI|©\s?20\d\d IEEE|"
+                       r"Permission to make digital")
+EN_ABBR = re.compile(r"\b(Fig|Figs|Tab|Eq|Eqs|Sec|e\.g|i\.e|et al|vs|cf|resp|approx|w\.r\.t|No|Ref)\.\s", re.I)
+NUM_NORMS = {"exp_values_per_100w": 2.0, "abstract_values": 3, "block_values": 5, "block_density": 4.0,
+             "figure_caption_words": 80, "table_caption_words": 60, "negation_share": 0.15, "exp_share": 0.42}
+
+
+def numerals(s):
+    return [m.group(0).strip() for m in NUM_RE.finditer(NUM_SKIP.sub(" ", s))]
+
+
+def is_value(n):
+    """A measured value rather than a count: it has decimals, a percent sign or a unit."""
+    return bool(re.search(r"\.\d|%|％|×|x$|dB|ms|fps|FPS|MB|GB|KB|倍|个百分点|毫秒", n))
+
+
+def values_in(s):
+    return [n for n in numerals(s) if is_value(n)]
+
+
+def n_decimals(n):
+    m = re.search(r"\.(\d+)", n)
+    return len(m.group(1)) if m else 0
+
+
+def en_sentences(text):
+    t = EN_ABBR.sub(lambda m: m.group(0).replace(". ", ".§"), text)
+    parts = re.split(r"(?<=[.!?。！？])\s*(?=[A-Z(\[“\"一-鿿])", t)
+    return [p.replace("§", " ").strip() for p in parts if len(p.split()) >= 4 or len(CJK_RE.findall(p)) >= 8]
+
+
+def _median(xs):
+    xs = sorted(xs)
+    return None if not xs else (xs[len(xs) // 2] if len(xs) % 2 else (xs[len(xs) // 2 - 1] + xs[len(xs) // 2]) / 2)
+
+
+def pdf_heading(line):
+    s = squeeze_smallcaps(line.strip())
+    if not s or len(s) > 62 or len(s.split()) > 8 or re.search(r"[.,;:!?]$", s):
+        return None
+    name = re.sub(r"^([IVX]{1,5}\.|\d{1,2}\.?)\s+", "", s)
+    if not PDF_SEC.match(name) or not name[0].isupper():
+        return None
+    return name if sum(c.isalpha() or c in " -&," for c in name) >= 0.9 * len(name) else None
+
+
+def pdf_split(lines):
+    """Prose text and captions of a stretch of a PDF text dump; table cells, axis labels and formulas are dropped."""
+    blocks, cur = [], []
+    for l in list(lines) + [""]:
+        if l.strip():
+            cur.append(l.strip())
+        elif cur:
+            blocks.append(cur)
+            cur = []
+    prose, caps = [], []
+    for b in blocks:
+        m = PDF_CAPTION.match(b[0])
+        if m:
+            keep = [b[0]]
+            for l in b[1:]:      # the caption ends where the table body or the plot labels begin
+                w = re.findall(r"[A-Za-z][A-Za-z\-']+", l)
+                if len(w) < 4 or len(w) < 0.6 * len(l.split()):
+                    break
+                keep.append(l)
+            caps.append(("table" if m.group(1).lower().startswith("tab") else "figure", " ".join(keep)))
+            continue
+        for l in b:
+            w = re.findall(r"[A-Za-z][A-Za-z\-']+", l)
+            if len(w) >= 6 and len(w) >= 0.6 * len(l.split()):
+                prose.append(l)
+    return re.sub(r"(\w)-\s+(\w)", r"\1\2", " ".join(prose)), caps
+
+
+def _exp_summary(blocks, caps, body_words, abstract, source):
+    """blocks: [(loc, section, text for counting, words, is_setup)]; caps: [(kind, loc, section, text)].
+
+    Paragraphs under a setup heading (datasets, implementation details, metrics) are left out of the counts:
+    their numbers are settings, not results."""
+    all_words = sum(b[3] for b in blocks)
+    blocks = [b for b in blocks if not b[4]]
+    words = sum(b[3] for b in blocks)
+    vals = [v for b in blocks for v in values_in(b[2])]
+    sents = [s for b in blocks for s in en_sentences(b[2])]
+    english = sum(len(CJK_RE.findall(b[2])) for b in blocks) < 0.2 * max(1, words)
+    fig = [size_words(c[3]) for c in caps if c[0] == "figure"]
+    tab = [size_words(c[3]) for c in caps if c[0] == "table"]
+    st = {"source": source, "abstract": abstract,
+          "experiments": {"words": words, "sentences": len(sents), "values": len(vals),
+                          "values_per_100w": round(100 * len(vals) / words, 2) if words else None,
+                          "value_sentence_share": round(sum(1 for s in sents if values_in(s)) / len(sents), 3) if sents else None,
+                          "negation_share": round(sum(1 for s in sents if NEG_RE.search(s)) / len(sents), 3) if sents and english else None,
+                          "decimals3_share": round(sum(1 for v in vals if n_decimals(v) >= 3) / len(vals), 3) if vals else None,
+                          "decimals4": sum(1 for v in vals if n_decimals(v) >= 4),
+                          "share_of_body": round(all_words / body_words, 2) if body_words else None,
+                          "body_words": body_words},
+          "captions": {"figures": len(fig), "figure_words_median": _median(fig), "tables": len(tab),
+                       "table_words_median": _median(tab),
+                       "with_3_values": sum(1 for c in caps if len(values_in(c[3])) >= 3)}}
+    return st
+
+
+def numbers_stats(units, meta, path):
+    """How the manuscript uses numbers in the abstract, the experiments prose and the captions."""
+    abstract = None
+    if meta.get("paragraphs_reliable") is False:          # plain text, usually a PDF dump
+        lines = []
+        raw = Path(path).read_text(encoding="utf-8", errors="ignore").splitlines()
+        nonblank = [l for l in raw if l.strip()]
+        front = sum(1 for l in nonblank if re.match(r"^\s*\d{1,4}\s{2,}\S", l)) >= 0.3 * max(1, len(nonblank))
+        alone = sum(1 for l in nonblank if re.fullmatch(r"\s*\d{3}\s*", l)) >= 0.15 * max(1, len(nonblank))
+        for l in raw:
+            if (front and re.match(r"^\s*\d{1,4}\s*$", l)) or (alone and re.fullmatch(r"\s*\d{3}\s*", l)) or PDF_NOISE.search(l):
+                continue
+            lines.append(re.sub(r"^\s*\d{1,4}\s{2,}(?=\S)", "", l) if front else l)
+        heads = [(pdf_heading(l), i) for i, l in enumerate(lines)]
+        heads = [(n, i) for n, i in heads if n]
+        text = "\n".join(lines)
+        m = re.search(r"\bA ?bstract\b\s*[—:\-.]?\s*|\bA ?BSTRACT\b\s*|摘\s*要\s*[:：]?\s*", text)
+        if m and m.start() < 6000:
+            rest = text[m.end(): m.end() + 4000]
+            end = re.search(r"\n\s*(Index Terms|Keywords?|Key words|关键词|CCS Concepts|(\d\.?|I\.)?\s*I ?ntroduction\s*\n|"
+                            r"(\d\.?|I\.)?\s*I ?NTRODUCTION\s*\n|\d\s*\n\s*Introduction)", rest)
+            ab = re.sub(r"(\w)-\s+(\w)", r"\1\2", " ".join(rest[: end.start() if end else 1700].split()))
+            abstract = {"words": size_words(ab), "values": len(values_in(ab)), "list": values_in(ab)[:16],
+                        "protocol_detail": bool(ABS_DETAIL.search(ab))}
+        a0 = next((i for n, i in heads if EXP_START.match(n)), None)
+        blocks, caps, body = [], [], 0
+        if a0 is not None:
+            b0 = next((i for n, i in heads if i > a0 and EXP_STOP.match(n)), len(lines))
+            prose, cps = pdf_split(lines[a0 + 1: b0])
+            ss = en_sentences(prose)
+            for k in range(0, len(ss), 5):                # five sentences stand in for a paragraph
+                chunk = " ".join(ss[k: k + 5])
+                blocks.append((f"实验第 {k + 1}–{min(k + 5, len(ss))} 句", "", chunk, size_words(chunk), False))
+            caps = [(kind, "图表说明", "", c) for kind, c in cps]
+            stop = next((i for n, i in heads if re.match(r"references|bibliography|appendix|supplementary|acknowledg", n, re.I)), len(lines))
+            body = size_words(pdf_split(lines[:stop])[0])
+        st = _exp_summary(blocks, caps, body, abstract, "text")
+    else:
+        base = assign_tops(units)
+        tops = [u.text for u in units if u.kind == "heading" and u.level <= base]
+        name = lambda s: re.sub(r"^[IVX\d.]+\s+", "", s).strip()
+        i0 = next((i for i, s in enumerate(tops) if EXP_START.match(name(s))), None)
+        exp = set()
+        if i0 is not None:
+            i1 = next((i for i in range(i0 + 1, len(tops)) if EXP_STOP.match(name(tops[i]))), len(tops))
+            exp = set(tops[i0:i1])
+        ab = " ".join((u.raw or u.text) for u in units if u.kind == "abstract")
+        if ab.strip():
+            abstract = {"words": size_words(ab), "values": len(values_in(ab)), "list": values_in(ab)[:16],
+                        "protocol_detail": bool(ABS_DETAIL.search(ab))}
+        blocks = [(u.loc, u.section, u.raw or u.text, size_words(u.text), bool(SETUP_NAME.search(u.section)))
+                  for u in units if u.kind == "prose" and u.top in exp]
+        caps = [(u.env or ("table" if re.match(r"\s*(表|Table|Tab\.)", u.text) else "figure"), u.loc, u.section, u.raw or u.text)
+                for u in units if u.kind == "caption" and u.top in exp]
+        stop = next((i for i, s in enumerate(tops) if re.match(r"references|bibliography|appendix|supplementary|acknowledg|"
+                                                               r"参考文献|附录|致谢", name(s), re.I)), len(tops))
+        keep = set(tops[:stop])
+        body = sum(size_words(u.text) for u in units if u.kind in ("prose", "list") and u.top in keep)
+        st = _exp_summary(blocks, caps, body, abstract, "units")
+    st["_blocks"], st["_caps"] = blocks, caps
+    return st
+
+
+def check_numbers(units, meta, path, cfg):
+    cfg = cfg or {}
+    n = dict(NUM_NORMS)
+    loaded = load_norms(None, cfg.get("norms"))
+    n.update({k: v for k, v in loaded.items() if k in NUM_NORMS})
+    st = numbers_stats(units, meta, path)
+    meta["numbers"] = {k: v for k, v in st.items() if not k.startswith("_")}
+    cap = cfg.get("severity")
+
+    def sev(s):
+        return cap if cap and SEV_ORDER[s] < SEV_ORDER[cap] else s
+    F = []
+    ab, ex, cp = st["abstract"], st["experiments"], st["captions"]
+    if ab:
+        if ab["values"] > n["abstract_values"]:
+            F.append(Finding("D", sev("高"), "摘要", "", "、".join(ab["list"][:8]) + ("…" if ab["values"] > 8 else ""),
+                             f"摘要里有 {ab['values']} 个结果数值（已发表论文通常 0–1 个，最多 {n['abstract_values']} 个）："
+                             "只留最硬的一两个，写清在哪个数据集、比谁、提升多少，其余留给实验一节"))
+        if ab["protocol_detail"]:
+            F.append(Finding("D", sev("中"), "摘要", "", "", "摘要里出现置信区间、种子数或检验方式：这些是实验细节，移到实验一节或表格"))
+    if not ex["words"]:
+        return F
+    d = ex["values_per_100w"]
+    hi = n["exp_values_per_100w"]
+    summary = (f"实验正文每百词 {d} 个数值，{round(100 * (ex['value_sentence_share'] or 0))}% 的句子带数值"
+               "（已发表论文的中位数是每百词 0.7 个、11% 的句子，九成论文每百词不超过 1.3 个）")
+    enough = ex["words"] >= 300          # a few paragraphs say little about the section as a whole
+    if not enough:
+        F.append(Finding("D", "提示", "实验", "", summary, "实验正文不足 300 词，只按段检查"))
+    elif d > hi:
+        F.append(Finding("D", sev("高"), "实验", "", summary, "数字报得太密：数字留在表和图里，正文每段写结论、指向图表、"
+                         "引一两个最关键的数，再解释原因（writing.md 第 4.6 节）"))
+    elif d > 0.65 * hi:
+        F.append(Finding("D", sev("中"), "实验", "", summary, "数字偏密：检查下面点名的段落，把逐项报数改成结论加原因"))
+    else:
+        F.append(Finding("D", "提示", "实验", "", summary, "数字的用量在常见范围内"))
+    dense = 0
+    for loc, sec, text, words, setup in st["_blocks"]:
+        v = len(values_in(text))
+        if setup or v < n["block_values"] or 100 * v / max(1, words) < n["block_density"]:
+            continue
+        dense += 1
+        F.append(Finding("D", sev("高" if v >= 8 else "中"), loc, sec, clean_tex(text)[:44].strip() + f"…（{v} 个数值，{words} 词）",
+                         "这一段在逐项报数：先写这组结果说明什么，指向表或图，只引最关键的一两个数（优先写相对量），"
+                         "再解释原因；其余数字留在表里"))
+    meta["numbers"]["experiments"]["dense_blocks"] = dense
+    if ex["decimals4"] >= 3:
+        ex4 = [v for b in st["_blocks"] if not b[4] for v in values_in(b[2]) if n_decimals(v) >= 4][:5]
+        F.append(Finding("D", sev("中"), "实验", "", "、".join(ex4), f"正文里有 {ex['decimals4']} 个数值保留四位以上小数"
+                         "（已发表论文的正文里几乎没有）：按指标的惯例取位；差别要到第四位小数才看得出时，这个差别通常撑不起主张"))
+    if enough and ex["sentences"] >= 20 and ex["negation_share"] is not None and ex["negation_share"] > n["negation_share"]:
+        F.append(Finding("D", sev("中"), "实验", "", f"{round(100 * ex['negation_share'])}% 的句子带否定或限定",
+                         "实验一节否定句偏多（已发表论文的中位数是 7%）：改成正面陈述，适用条件集中写在一处"))
+    if ex["body_words"] >= 1500 and ex["share_of_body"] and ex["share_of_body"] > n["exp_share"]:
+        F.append(Finding("D", sev("中"), "实验", "", f"实验占正文 {round(100 * ex['share_of_body'])}%",
+                         "实验一节偏长（已发表论文的中位数是 30%，九成不超过 38%）：不支撑主张的实验移到附录或补充材料"))
+    for kind, loc, sec, text in st["_caps"]:
+        w, v = size_words(text), len(values_in(text))
+        lim = n["figure_caption_words"] if kind == "figure" else n["table_caption_words"]
+        what = "图题" if kind == "figure" else "表题"
+        if w > lim or v >= 3:
+            why = []
+            if w > lim:
+                why.append(f"{w} 词（已发表论文的{what}中位数约 {40 if kind == 'figure' else 20} 词）")
+            if v >= 3:
+                why.append(f"含 {v} 个结果数值")
+            F.append(Finding("D", sev("中"), loc, sec, clean_tex(text)[:44].strip() + "…", f"{what}{'，'.join(why)}："
+                             f"{what}只写比较的是什么、怎么读这张{'图' if kind == 'figure' else '表'}，最多加一句结论；"
+                             "实验协议、结果复述和限定说明放到正文或附录"))
+    return F
+
+
 # --------------------------------------------------------------------------- report
 NAMES = {"Q": "疑问句", "A": "自我削弱", "B": "过度对冲", "C": "替审稿人总结弱点", "E": "过程叙述",
          "I": "改动前后混写", "J1": "文件名/路径/代码标识符", "J2": "条目式分段", "J3": "引用顺序", "K": "摘要三件事",
-         "S": "结构与篇幅"}
+         "S": "结构与篇幅", "D": "数字的用法", "P": "占位符"}
 
 
 def report(path, findings, maxn):
@@ -1147,7 +1443,7 @@ def report(path, findings, maxn):
     by_code = {}
     for f in findings:
         by_code.setdefault(f.code, []).append(f)
-    for code in ["S", "Q", "A", "B", "C", "E", "I", "J1", "J2", "J3", "K"]:
+    for code in ["S", "D", "P", "Q", "A", "B", "C", "E", "I", "J1", "J2", "J3", "K"]:
         fs = by_code.get(code)
         if not fs:
             continue
@@ -1177,7 +1473,8 @@ def main(argv=None):
     ap.add_argument("--norms", help="venue_norms.json with thresholds (default: research/writing_profile/venue_norms.json "
                                     "when it exists)")
     ap.add_argument("--structure-severity", choices=["高", "中", "低"],
-                    help="severity of the structure findings (default: 高 for journals, 中 for conferences)")
+                    help="highest severity of the structure (S) and number-use (D) findings "
+                         "(default for S: 高 for journals, 中 for conferences)")
     ap.add_argument("--stats", action="store_true", help="print the measured structure as JSON and exit")
     ap.add_argument("--year", type=int, help="current year for the 'recent references' count (default: today)")
     a = ap.parse_args(argv)
@@ -1200,6 +1497,7 @@ def main(argv=None):
             meta = {}
         n = load_norms(None, norms)
         st = structure_stats(units, meta, p, a.year, a.target_venue or n.get("_target_venue"))
+        st["numbers"] = {k: v for k, v in numbers_stats(units, meta, p).items() if not k.startswith("_")}
         print(json.dumps(st, ensure_ascii=False, indent=1))
         return 0
     findings = lint_units(units, meta, p, cfg)
